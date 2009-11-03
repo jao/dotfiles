@@ -1,3 +1,5 @@
+#/usr/bin/bash
+
 # PATH
 export PATH="~/scripts:${PATH}"
 export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:${PATH}"
@@ -5,27 +7,24 @@ export PATH="/sdks/android:${PATH}"
 export PATH="/Library/Frameworks/Python.framework/Versions/2.6/bin:${PATH}"
 
 export ANDROID_SWT="/sdks/android/tools/lib/x86/"
+export LC_MESSAGES="en"
 
 export EDITOR="/usr/bin/mate -wl1"
 export SVN_EDITOR="/usr/bin/mate -wl1"
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="1;33"
 
-export LC_MESSAGES="en"
-
 source ~/.git_completion.sh
-
-# regular PS1
-# export PS1='\[\e[01;33m\]\u\e[01;32m\]@\h\[\e[00m\] \[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 " (%s)") \$ '
 
 alias install="sudo port install"
 alias search="sudo port search"
 alias ls="ls -G"
 alias ll="ls -Glahs"
-alias psgrep="ps aux | egrep -v egrep | egrep"
+alias psgrep="ps aux | egrep -v egrep | egrep -i "
 alias showip="ifconfig | grep broadcast | sed 's/.*inet \(.*\) netmask.*/\1/'"
-alias myip="curl http://www.whatismyip.com/automation/n09230945.asp"
-alias lock="/System/Library/CoreServices/Menu\ Extras/user.menu/Contents/Resources/CGSession -suspend"
+alias myip="curl http://www.whatismyip.com/automation/n09230945.asp && echo "
+# alias lock="/System/Library/CoreServices/Menu\ Extras/user.menu/Contents/Resources/CGSession -suspend"
+alias lock="/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine &>/dev/null"
 alias top="top -o cpu"
 alias irb="irb --readline --prompt-mode simple"
 alias mysql="mysql --auto-rehash=TRUE"
@@ -53,26 +52,23 @@ tinyurl () {
     cat $tmp | pbcopy
 }
 
-# Colours
-BLUE="\[\e[0;34m\]"
-GRAY="\[\e[1;30m\]"
-GREEN="\[\e[0;32m\]"
-LIGHT_GRAY="\[\e[0;37m\]"
-LIGHT_GREEN="\[\e[1;32m\]"
-LIGHT_RED="\[\e[1;31m\]"
-RED="\[\e[0;31m\]"
-WHITE="\[\e[1;37m\]"
-YELLOW="\[\e[0;33m\]"
-NC="\[\e[0m\]" # no color
+# Colors
+BLUE="\e[0;34m"
+GRAY="\e[1;30m"
+GREEN="\e[0;32m"
+RED="\e[0;31m"
+WHITE="\e[1;37m"
+YELLOW="\e[0;33m"
+NC="\e[0m" # no color
 
 my-prompt () {
   local GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
   local SVNBRANCH=`svn info 2> /dev/null | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk|\w+$' | egrep -o '[^/]+$'`
-  local PC=$GREEN # base color
+  local BC=$GREEN # base color
   local STATE=" "
   
   # basic ps1
-  PS1="\[\e[01;33m\]\u\[\e[00m\]|\e[01;32m\]\h\[\e[00m\] \[\033[01;34m\]\w\[\033[00m\]"
+  PS1="\e[01;33m\u\e[00m|\e[01;32m\h\e[00m \033[01;34m\w\033[00m"
   
   if [ "$GITBRANCH" != "" ]; then
     local STATUS=`git status 2>/dev/null`
@@ -84,22 +80,22 @@ my-prompt () {
     local TO_BE_COMMITED="# Changes to be committed"
 
     if [[ "$STATUS" =~ "$DIVERGED" ]]; then
-      PC=$RED
+      BC=$RED
       STATE="${STATE}${RED}↕${NC}"
     elif [[ "$STATUS" =~ "$BEHIND" ]]; then
-      PC=$RED
+      BC=$RED
       STATE="${STATE}${RED}↓${NC}"
     elif [[ "$STATUS" =~ "$AHEAD" ]]; then
-      PC=$RED
+      BC=$RED
       STATE="${STATE}${RED}↑${NC}"
     elif [[ "$STATUS" =~ "$CHANGED" ]]; then
-      PC=$RED
+      BC=$RED
       STATE=""
     elif [[ "$STATUS" =~ "$TO_BE_COMMITED" ]]; then
-      PC=$RED
+      BC=$RED
       STATE=""
     else
-      PC=$GREEN
+      BC=$GREEN
       STATE=""
     fi
     
@@ -107,7 +103,7 @@ my-prompt () {
         STATE="${STATE}${YELLOW}*${NC}"
     fi
     
-    PS1="${PS1} (${PC}${GITBRANCH}${NC}${STATE})"
+    PS1="${PS1} (${BC}${GITBRANCH}${NC}${STATE})"
   fi
   
   if [[ "$SVNBRANCH" != "" ]]; then
@@ -118,14 +114,14 @@ my-prompt () {
     STATE=":${SVNREV}"
     
     if [ "$CHANGED" != "" ]; then
-      PC=$RED
+      BC=$RED
     fi  
     
     if [ "$UNTRACKED" != "" ]; then
       STATE="${STATE}${YELLOW}*${NC}"
     fi
     
-    PS1="${PS1} (${PC}${SVNBRANCH}${NC}${STATE})"
+    PS1="${PS1} (${BC}${SVNBRANCH}${NC}${STATE})"
   fi
   PS1="${PS1} \n\$ "
 }
