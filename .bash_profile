@@ -66,30 +66,30 @@ my-prompt () {
   local STATE=" "
   
   # basic ps1
-  PS1="\e[01;33m\u\e[00m|\e[01;32m\h\e[00m \033[01;34m\w\033[00m"
+  PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[00m \e[1;34m\w\e[0m"
   
   if [ "$GITBRANCH" != "" ]; then
     local STATUS=`git status 2>/dev/null`
-    local BEHIND="# Your branch is behind"
-    local AHEAD="# Your branch is ahead"
-    local UNTRACKED="# Untracked files"
-    local DIVERGED="have diverged"
-    local CHANGED="# Changed but not updated"
-    local TO_BE_COMMITED="# Changes to be committed"
+    local BEHIND=`echo ${STATUS} | grep -c '# Your branch is behind'`
+    local AHEAD=`echo ${STATUS} | grep -c '# Your branch is ahead'`
+    local UNTRACKED=`echo ${STATUS} | grep -c '# Untracked files'`
+    local DIVERGED=`echo ${STATUS} | grep -c 'have diverged'`
+    local CHANGED=`echo ${STATUS} | grep -c '# Changed but not updated'`
+    local TO_BE_COMMITED=`echo ${STATUS} | grep -c '# Changes to be committed'`
 
-    if [[ "$STATUS" =~ "$DIVERGED" ]]; then
+    if [[ "$DIVERGED" > 0 ]]; then
       BC=$RED
       STATE="${STATE}${RED}↕${NC}"
-    elif [[ "$STATUS" =~ "$BEHIND" ]]; then
+    elif [[ "$BEHIND" > 0 ]]; then
       BC=$RED
       STATE="${STATE}${RED}↓${NC}"
-    elif [[ "$STATUS" =~ "$AHEAD" ]]; then
+    elif [[ "$AHEAD" > 0 ]]; then
       BC=$RED
       STATE="${STATE}${RED}↑${NC}"
-    elif [[ "$STATUS" =~ "$CHANGED" ]]; then
+    elif [[ "$CHANGED" > 0 ]]; then
       BC=$RED
       STATE=""
-    elif [[ "$STATUS" =~ "$TO_BE_COMMITED" ]]; then
+    elif [[ "$TO_BE_COMMITED" > 0 ]]; then
       BC=$RED
       STATE=""
     else
@@ -97,7 +97,7 @@ my-prompt () {
       STATE=""
     fi
     
-    if [[ "$STATUS" =~ "$UNTRACKED" ]]; then
+    if [[ "$UNTRACKED" > 0 ]]; then
         STATE="${STATE}${YELLOW}*${NC}"
     fi
     
