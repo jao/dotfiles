@@ -7,6 +7,8 @@ export PATH="/Library/Frameworks/Python.framework/Versions/2.6/bin:${PATH}"
 export ANDROID_SWT="/sdks/android/tools/lib/x86/"
 export LC_MESSAGES="en"
 
+# export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home
+
 export EDITOR="/usr/bin/mate -wl1"
 export SVN_EDITOR="/usr/bin/mate -wl1"
 export GREP_OPTIONS="--color=auto"
