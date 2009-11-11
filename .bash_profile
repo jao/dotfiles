@@ -63,7 +63,7 @@ NC="\e[0m" # no color
 
 my-prompt () {
   local GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
-  local SVNBRANCH=`svn info 2> /dev/null | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk|\w+$' | egrep -o '[^/]+$'`
+  local SVNBRANCH=`svn info 2> /dev/null | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk|[^/]+$' | egrep -o -m 1 '[^/]+$'`
   local BC=$GREEN # base color
   local STATE=" "
   
@@ -100,7 +100,7 @@ my-prompt () {
     fi
     
     if [[ "$STATUS" =~ "$UNTRACKED" ]]; then
-        STATE="${STATE}${YELLOW}*${NC}"
+      STATE="${STATE}${YELLOW}*${NC}"
     fi
     
     PS1="${PS1} (${BC}${GITBRANCH}${NC}${STATE})"
@@ -110,7 +110,7 @@ my-prompt () {
     local SVNREV=`svn info 2>/dev/null | awk '/Revision:/ {print $2; }'`
     local UNTRACKED=`svn st | egrep -o '^\?'`
     local CHANGED=`svn st | egrep -o '^[ADM]'`
-
+    
     STATE=":${SVNREV}"
     
     if [ "$CHANGED" != "" ]; then
@@ -121,7 +121,7 @@ my-prompt () {
       STATE="${STATE}${YELLOW}*${NC}"
     fi
     
-    PS1="${PS1} (${BC}${SVNBRANCH}${NC}${STATE})"
+    PS1="${PS1} [${BC}${SVNBRANCH}${NC}${STATE}]"
   fi
   PS1="${PS1} \n\$ "
 }
