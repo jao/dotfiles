@@ -18,6 +18,9 @@ source ~/.git_completion.sh
 
 alias install="sudo port install"
 alias search="sudo port search"
+alias ss="script/server"
+alias sc="script/console"
+alias sr="script/runner"
 alias ls="ls -G"
 alias ll="ls -Glahs"
 alias psgrep="ps aux | egrep -v egrep | egrep -i "
