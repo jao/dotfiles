@@ -31,6 +31,7 @@ alias screensaver="/System/Library/Frameworks/ScreenSaver.framework/Resources/Sc
 alias top="top -o cpu"
 alias irb="irb --readline --prompt-mode simple"
 alias mysql="mysql --auto-rehash=TRUE"
+alias tjtest="ssh -t imp ssh tj@test"
 
 # reload source
 reload() { source ~/.bash_profile; }
@@ -42,7 +43,7 @@ cd() { builtin cd "${@:-$HOME}" && ls; }
 github-url () { git config remote.origin.url | sed -En 's/git(@|:\/\/)github.com(:|\/)(.+)\/(.+).git/https:\/\/github.com\/\3\/\4/p'; }
 github-go () { open $(github-url); }
 git-scoreboard () { git log | grep '^Author' | sort | uniq -ci | sort -r; }
-manp () { man -t $* | ps2pdf - - | open -f -a Preview; }
+man2pdf () { man -t $* | ps2pdf - - | open -f -a Preview; }
 
 # enter a recently created directory
 mkdir() { /bin/mkdir $@ && eval cd "\$$#"; }
@@ -115,6 +116,7 @@ my-prompt () {
     local CHANGED=`svn st | egrep -o '^[ADM]'`
     
     STATE=":${SVNREV}"
+    BC=$GREEN
     
     if [ "$CHANGED" != "" ]; then
       BC=$RED
