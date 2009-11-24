@@ -58,6 +58,7 @@ tinyurl () {
 
 # Colors
 BLUE="\e[0;34m"
+CYAN="\e[0;36m"
 GRAY="\e[1;30m"
 GREEN="\e[0;32m"
 RED="\e[0;31m"
@@ -71,6 +72,13 @@ my-prompt () {
   local BC=$GREEN # base color
   local STATE=" "
   
+  # delimiters
+  local GIT="("
+  local GITEND=")"
+  local SVN="["
+  local SVNEND="]"
+  local SVNDEL="|"
+  
   # basic ps1
   PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m"
   
@@ -82,7 +90,7 @@ my-prompt () {
     local DIVERGED="have diverged"
     local CHANGED="# Changed but not updated"
     local TO_BE_COMMITED="# Changes to be committed"
-
+    
     if [[ "$STATUS" =~ "$DIVERGED" ]]; then
       BC=$RED
       STATE="${STATE}${RED}↕${NC}"
@@ -107,7 +115,7 @@ my-prompt () {
       STATE="${STATE}${YELLOW}*${NC}"
     fi
     
-    PS1="${PS1} (${BC}${GITBRANCH}${NC}${STATE})"
+    PS1="${PS1} ${GIT}${BC}${GITBRANCH}${NC}${STATE}${GITEND}"
   fi
   
   if [[ "$SVNBRANCH" != "" ]]; then
@@ -115,7 +123,7 @@ my-prompt () {
     local UNTRACKED=`svn st | egrep -o '^\?'`
     local CHANGED=`svn st | egrep -o '^[ADM]'`
     
-    STATE=":${SVNREV}"
+    STATE="${SVNDEL}${SVNREV}"
     BC=$GREEN
     
     if [ "$CHANGED" != "" ]; then
@@ -126,7 +134,7 @@ my-prompt () {
       STATE="${STATE}${YELLOW}*${NC}"
     fi
     
-    PS1="${PS1} [${BC}${SVNBRANCH}${NC}${STATE}]"
+    PS1="${PS1} ${SVN}${BC}${SVNBRANCH}${NC}${STATE}${SVNEND}"
   fi
   PS1="${PS1} \n\$ "
 }
