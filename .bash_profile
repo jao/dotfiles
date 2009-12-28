@@ -1,5 +1,5 @@
 # PATH
-export PATH="~/scripts:${PATH}"
+export PATH="~/scripts:${PATH}:/opt/ruby-enterprise-1.8.7-2009.10/bin"
 export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:${PATH}"
 export PATH="/sdks/android:${PATH}"
 export PATH="/Library/Frameworks/Python.framework/Versions/2.6/bin:${PATH}"
