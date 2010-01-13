@@ -1,0 +1,40 @@
+#!/bin/bash
+
+DOTFILES=`pwd`
+
+cd ~
+
+HOME=`pwd`
+TMPDIR=`echo $DOTFILES | sed "s|$HOME/||"`
+
+# Files to link
+# .bash_completion.sh
+# .bash_profile
+# .gemrc
+# .git_completion.sh
+# .gitconfig
+# .gitignore
+
+for FILE in ".bash_profile" ".bash_completion.sh" ".gemrc" ".git_completion.sh" ".gitconfig" ".gitignore"
+do
+  # removing existing file, if exists
+  if [ -f $FILE ]; then
+    rm $FILE
+  fi
+  
+  # linking project file, if exists
+  if [ -f $TMPDIR/$FILE ]; then
+    ln -s $TMPDIR/$FILE $FILE
+  fi
+  
+  ls -laG $FILE
+  
+done
+
+# reading the profile
+source .bash_profile
+
+# listing symbolic links
+ls -laG | grep \>
+
+cd $DOTFILES
