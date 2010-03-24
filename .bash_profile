@@ -1,11 +1,10 @@
 # PATH
 # PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:~/scripts"
-PATH="${PATH}:~/scripts:~/.gem:~/.gem/ruby/1.8/bin"
-PATH="${PATH}:/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin"
-PATH="${PATH}:/sdks/android"
-PATH="${PATH}:/Library/Frameworks/Python.framework/Versions/2.6/bin"
-PATH="${PATH}:/opt/ruby-enterprise-1.8.7-2009.10/bin"
-export PATH
+export PATH="~/scripts:~/.gem:~/.gem/ruby/1.8/bin:${PATH}"
+export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:${PATH}"
+export PATH="/opt/ruby-enterprise-1.8.7-2009.10/bin:${PATH}"
+export PATH="/sdks/android:${PATH}"
+export PATH="/Library/Frameworks/Python.framework/Versions/2.6/bin:${PATH}"
 
 export ANDROID_SWT="/sdks/android/tools/lib/x86/"
 export LC_MESSAGES="en"
