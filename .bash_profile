@@ -56,10 +56,10 @@ mkdir () { /bin/mkdir $@ && eval cd "\$$#"; }
  
 # get the tinyurl
 tinyurl () {
-    local tmp=/tmp/tinyurl
-    rm $tmp 2>1 /dev/null
-    wget "http://tinyurl.com/api-create.php?url=${1}" -O $tmp 2>1 /dev/null
-    cat $tmp | pbcopy
+  local tmp=/tmp/tinyurl
+  rm $tmp 2>1 /dev/null
+  wget "http://tinyurl.com/api-create.php?url=${1}" -O $tmp 2>1 /dev/null
+  cat $tmp | pbcopy
 }
 
 # Colors
