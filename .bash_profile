@@ -1,10 +1,10 @@
 # PATH
-# PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/X11/bin:~/scripts"
-export PATH="~/scripts:~/.gem:~/.gem/ruby/1.8/bin:${PATH}"
-export PATH="/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:/usr/bin:${PATH}"
+export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/X11/bin"
 export PATH="/opt/ruby-enterprise-1.8.7-2009.10/bin:${PATH}"
-export PATH="/sdks/android:${PATH}"
-export PATH="/Library/Frameworks/Python.framework/Versions/2.6/bin:${PATH}"
+export PATH="~/scripts:~/.gem:~/.gem/ruby/1.8/bin:${PATH}"
+export PATH="${PATH}:/opt/local/bin:/opt/local/sbin"
+export PATH="${PATH}:/sdks/android"
+export PATH="${PATH}:/Library/Frameworks/Python.framework/Versions/2.6/bin"
 
 export ANDROID_SWT="/sdks/android/tools/lib/x86/"
 export LC_MESSAGES="en"
@@ -14,8 +14,6 @@ export EDITOR="/usr/bin/mate -wl1"
 export SVN_EDITOR="/usr/bin/mate -wl1"
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="0;30;43"
-
-source ~/.git_completion.sh
 
 alias pinstall="sudo port install"
 alias psearch="sudo port search"
@@ -34,9 +32,12 @@ alias irb="irb --readline --prompt-mode simple"
 alias mysql="mysql --auto-rehash=TRUE"
 alias tjtest="ssh -t imp ssh tj@test"
 
+# load git awesomeness
+source ~/.git_completion.sh
 
 # show path list
-pathlist () { echo "PATH list:"; echo $PATH | awk -F ":" '{ for(i=1; i<=NF; i++){print $i;} }' | sort -u; }
+pathlist () { echo $PATH | awk -F ":" '{ for(i=1; i<=NF; i++){print $i;} }' | uniq -i; }
+pathclean () { echo $PATH  | tr ':' '\n' | uniq | xargs | tr ' ' ':'; }
 
 # reload source
 reload () { source ~/.bash_profile; }
