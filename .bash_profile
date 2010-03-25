@@ -36,7 +36,7 @@ alias tjtest="ssh -t imp ssh tj@test"
 
 
 # show path list
-pathlist () { echo "PATH list:"; echo $PATH | awk -F ":" '{ for(i=1; i<=NF; i++){print $i;} }' | sort -u }
+pathlist () { echo "PATH list:"; echo $PATH | awk -F ":" '{ for(i=1; i<=NF; i++){print $i;} }' | sort -u; }
 
 # reload source
 reload () { source ~/.bash_profile; }
