@@ -3,7 +3,6 @@
 	email = jpcamargo+github@gmail.com
 [diff]
 	color = true
-
 [color]
   ui = auto
 [color "branch"]
@@ -20,14 +19,15 @@
   added = yellow
   changed = green
   untracked = cyan
-
 [core]
   whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
-
 [alias]
   st = status
   ci = commit
   ca = commit -a
-
+  cam = commit -a -m
 [branch]
   autosetupmerge = true
+[branch "master"]
+  remote = origin
+  merge = refs/heads/master
