@@ -1,11 +1,9 @@
 #!/bin/bash
 
 DOTFILES=`pwd`
+TMPDIR=`echo $DOTFILES | sed "s|$HOME/||"`
 
 cd ~
-
-HOME=`pwd`
-TMPDIR=`echo $DOTFILES | sed "s|$HOME/||"`
 
 # Files to link
 # .bash_completion.sh
@@ -14,8 +12,9 @@ TMPDIR=`echo $DOTFILES | sed "s|$HOME/||"`
 # .git_completion.sh
 # .gitconfig
 # .gitignore
+# .aprc
 
-for FILE in ".bash_profile" ".bash_completion.sh" ".gemrc" ".git_completion.sh" ".gitconfig" ".gitignore"
+for FILE in ".bash_profile" ".bash_completion.sh" ".gemrc" ".git_completion.sh" ".gitconfig" ".gitignore" ".aprc"
 do
   # removing existing file, if exists
   if [ -f $FILE ]; then
