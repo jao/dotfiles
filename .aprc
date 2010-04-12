@@ -1,0 +1,20 @@
+AwesomePrint.defaults = {
+  :multiline => true,
+  :plain  => false,
+  :indent => -2,
+  :colors => {
+    :array      => :white,
+    :bignum     => :blue,
+    :class      => :yellow,
+    :date       => :greenish,
+    :falseclass => :red,
+    :fixnum     => :blue,
+    :float      => :blue,
+    :hash       => :gray,
+    :nilclass   => :red,
+    :string     => :yellowish,
+    :symbol     => :cyanish,
+    :time       => :greenish,
+    :trueclass  => :green
+  }
+}
