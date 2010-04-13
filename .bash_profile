@@ -1,7 +1,7 @@
 # PATH
 export PATH="/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/X11/bin"
 export PATH="/opt/ruby-enterprise-1.8.7-2009.10/bin:${PATH}"
-export PATH="~/scripts:~/.gem:~/.gem/ruby/1.8/bin:${PATH}"
+export PATH="${HOME}/scripts:${HOME}/.gem:${HOME}/.gem/ruby/1.8/bin:${PATH}"
 export PATH="${PATH}:/usr/local/sbin:/opt/local/bin:/opt/local/sbin"
 export PATH="${PATH}:/sdks/android"
 export PATH="${PATH}:/Library/Frameworks/Python.framework/Versions/2.6/bin"
