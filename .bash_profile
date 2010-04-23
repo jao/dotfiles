@@ -63,6 +63,14 @@ tinyurl () {
   cat $tmp | pbcopy
 }
 
+# get the moourl awesomeness
+moourl () {
+  local tmp=/tmp/moourl
+  rm $tmp 2>1 /dev/null  
+  wget "http://moourl.com/create/?source=${1}" -O $tmp 2>1 /dev/null
+  cat $tmp | pbcopy
+}
+
 # Colors
 BLUE="\e[0;34m"
 CYAN="\e[0;36m"
