@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 DOTFILES=`pwd`
 TMPDIR=`echo $DOTFILES | sed "s|$HOME/||"`
@@ -8,13 +8,15 @@ cd $HOME
 # Files to link
 # .bash_completion.sh
 # .bash_profile
+# .bash_functions
 # .gemrc
 # .git_completion.sh
 # .gitconfig
 # .gitignore
 # .aprc
+# .rvmrc
 
-for FILE in ".bash_profile" ".bash_completion.sh" ".gemrc" ".git_completion.sh" ".gitconfig" ".gitignore" ".aprc" ".rvmrc"
+for FILE in ".bash_profile" ".bash_functions" ".bash_completion.sh" ".gemrc" ".git_completion.sh" ".gitconfig" ".gitignore" ".aprc" ".rvmrc"
 do
   # removing existing file, if exists
   if [ -f $FILE ]; then
