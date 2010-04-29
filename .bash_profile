@@ -94,8 +94,8 @@ my-prompt () {
   local SVNBRANCH=`svn info 2> /dev/null | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk|[^/]+$' | egrep -o -m 1 '[^/]+$'`
   local BC=$GREEN # base color
   local STATE=""
-  local RUBY=`$HOME/.rvm/bin/rvm-prompt i v`
-  local RVM="|\e[1;33m${RUBY}\e[0m| "
+  local RUBY=`~/.rvm/bin/rvm-prompt i v`
+  local RVM="|\e[33m${RUBY}\e[0m| "
   
   # basic ps1
   PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m"
