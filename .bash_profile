@@ -95,10 +95,10 @@ my-prompt () {
   local BC=$GREEN # base color
   local STATE=""
   local RUBY=`~/.rvm/bin/rvm-prompt i v`
-  local RVM="|\e[33m${RUBY}\e[0m| "
+  local RVM="|\e[33m${RUBY}\e[0m|"
   
   # basic ps1
-  PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m"
+  PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m ${RVM}"
   
   if [ "$GITBRANCH" != "" ]; then
     # delimiters
@@ -137,7 +137,7 @@ my-prompt () {
       STATE="${STATE}${YELLOW}*${NC}"
     fi
     
-    PS1="${PS1} ${RVM}${GIT}${BC}${GITBRANCH}${NC}${STATE}${GITEND}"
+    PS1="${PS1} ${GIT}${BC}${GITBRANCH}${NC}${STATE}${GITEND}"
   fi
   
   if [[ "$SVNBRANCH" != "" ]]; then
@@ -163,7 +163,7 @@ my-prompt () {
       STATE="${STATE}${YELLOW}*${NC}"
     fi
     
-    PS1="${PS1} ${RVM}${SVN}${BC}${SVNBRANCH}${NC}${STATE}${SVNEND}"
+    PS1="${PS1} ${SVN}${BC}${SVNBRANCH}${NC}${STATE}${SVNEND}"
   fi
   PS1="${PS1} \n\$ "
 }
