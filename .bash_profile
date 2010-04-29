@@ -39,9 +39,6 @@ alias mysql="mysql --auto-rehash=TRUE"
 # load git awesomeness
 source ~/.git_completion.sh
 
-# load rvm stuff
-source ~/.rvm/scripts/rvm
-
 # reload source
 reload () { source ~/.bash_profile; }
 
@@ -167,3 +164,6 @@ my-prompt () {
   PS1="${PS1} \n\$ "
 }
 PROMPT_COMMAND=my-prompt
+
+# load rvm stuff
+source ~/.rvm/scripts/rvm
