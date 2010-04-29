@@ -3,7 +3,7 @@
 DOTFILES=`pwd`
 TMPDIR=`echo $DOTFILES | sed "s|$HOME/||"`
 
-cd ~
+cd $HOME
 
 # Files to link
 # .bash_completion.sh
@@ -14,7 +14,7 @@ cd ~
 # .gitignore
 # .aprc
 
-for FILE in ".bash_profile" ".bash_completion.sh" ".gemrc" ".git_completion.sh" ".gitconfig" ".gitignore" ".aprc"
+for FILE in ".bash_profile" ".bash_completion.sh" ".gemrc" ".git_completion.sh" ".gitconfig" ".gitignore" ".aprc" ".rvmrc"
 do
   # removing existing file, if exists
   if [ -f $FILE ]; then
@@ -25,15 +25,13 @@ do
   if [ -f $TMPDIR/$FILE ]; then
     ln -s $TMPDIR/$FILE $FILE
   fi
-  
   ls -laG $FILE
-  
 done
 
 # reading the profile
 source .bash_profile
 
 # listing symbolic links
-ls -laG | grep \>
+ls -laG | grep '\>'
 
 cd $DOTFILES
