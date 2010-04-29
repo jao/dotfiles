@@ -43,14 +43,16 @@ source ~/.git_completion.sh
 reload () { source ~/.bash_profile; }
 
 # show path list
-pathlist () { echo $PATH | awk -F ":" '{ for(i=1; i<=NF; i++){print $i;} }' | uniq -i; }
-pathclean () { echo $PATH  | tr ':' '\n' | uniq -i | xargs | tr ' ' ':'; }
+# pathlist () { echo $PATH | awk -F ":" '{ for(i=1; i<=NF; i++){print $i;} }' | uniq -i; }
+# pathclean () { echo $PATH  | tr ':' '\n' | uniq -i | xargs | tr ' ' ':'; }
 
 # list directory after cd
-cd () { builtin cd "${@:-$HOME}" && ls; }
+# cd () { builtin cd "${@:-$HOME}" && ls; }
+# this might be bugging rvm behavior
 
 # enter a recently created directory
-mkdir () { /bin/mkdir $@ && eval cd "\$$#"; }
+# mkdir () { /bin/mkdir $@ && eval cd "\$$#"; }
+# this might be bugging rvm behavior
 
 man2pdf () { man -t $* | ps2pdf - - | open -f -a Preview; }
 
