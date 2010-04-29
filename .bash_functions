@@ -55,3 +55,69 @@ alias lock="/System/Library/CoreServices/Menu\ Extras/user.menu/Contents/Resourc
 alias screensaver="/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine &>/dev/null"
 alias mysql="mysql --auto-rehash=TRUE"
 # alias tjtest="ssh -t imp ssh tj@test"
+
+
+# Colors
+BLUE="\e[0;34m"
+CYAN="\e[0;36m"
+GRAY="\e[1;30m"
+GREEN="\e[0;32m"
+RED="\e[0;31m"
+WHITE="\e[1;37m"
+YELLOW="\e[0;33m"
+NC="\e[0m" # no color
+
+my-prompt () {
+  local STATE=""; local STATUS=""; local ini=""; local end=""; local BC=$GREEN # base color
+  local RVM="|\e[33m$(~/.rvm/bin/rvm-prompt i v)\e[0m|" # rvm rubies
+  PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m ${RVM}" # basic ps1
+  
+  local GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
+  if [ "$GITBRANCH" != "" ]; then
+    # delimiters
+    ini="("; end=")"
+    
+    local BEHIND="# Your branch is behind"
+    local AHEAD="# Your branch is ahead"
+    local UNTRACKED="# Untracked files"
+    local DIVERGED="have diverged"
+    local CHANGED="# Changed but not updated"
+    local TO_BE_COMMITED="# Changes to be committed"
+    STATUS=`git status 2>/dev/null`
+    
+    if [[ "$STATUS" =~ "$DIVERGED" ]]; then
+      BC=$RED; STATE="${STATE}${RED}↕${NC}"
+    elif [[ "$STATUS" =~ "$BEHIND" ]]; then
+      BC=$RED; STATE="${STATE}${RED}↓${NC}"
+    elif [[ "$STATUS" =~ "$AHEAD" ]]; then
+      BC=$RED; STATE="${STATE}${RED}↑${NC}"
+    elif [[ "$STATUS" =~ "$CHANGED" ]]; then
+      BC=$RED
+    elif [[ "$STATUS" =~ "$TO_BE_COMMITED" ]]; then
+      BC=$RED
+    else
+      BC=$GREEN
+    fi
+    if [[ "$STATUS" =~ "$UNTRACKED" ]]; then STATE="${STATE}${YELLOW}*${NC}"; fi
+    
+    PS1="${PS1} ${ini}${BC}${GITBRANCH}${NC}${STATE}${end}"
+  fi
+  
+  local SVNBRANCH=`svn info 2> /dev/null | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk|[^/]+$' | egrep -o -m 1 '[^/]+$'`
+  if [[ "$SVNBRANCH" != "" ]]; then
+    # delimiters
+    ini="["; end="]"; BC=$GREEN
+    
+    local REV=`svn info 2>/dev/null | awk '/Revision:/ {print $2;}'`; STATE="|${REV}"
+    STATUS=`svn st 2>/dev/null | awk '{print $1;}'`
+    local CHANGED=`echo $STATUS | egrep -o '[ADM]'`
+    local UNTRACKED=`echo $STATUS | egrep -o '\?'`
+    
+    if [[ "$UNTRACKED" != "" ]]; then STATE="${STATE}${YELLOW}*${NC}"; fi
+    if [[ "$CHANGED" != "" ]]; then BC=$RED; fi
+    
+    PS1="${PS1} ${ini}${BC}${SVNBRANCH}${NC}${STATE}${end}"
+  fi
+  PS1="${PS1} \n\$ "
+}
+PROMPT_COMMAND=my-prompt
