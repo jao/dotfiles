@@ -30,7 +30,7 @@ reload () { source ~/.bash_functions; }
 cd () { builtin cd "${@:-$HOME}" && ls; }
 
 # enter a recently created directory
-mkdir () { /bin/mkdir "${@}" && eval cd "\$$#"; }
+mkdircd () { /bin/mkdir "${@}" && eval cd "\$$#"; }
 # this is bugging rvm behavior
 
 man2pdf () { man -t $* | ps2pdf - - | open -f -a Preview; }
