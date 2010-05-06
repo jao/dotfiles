@@ -22,3 +22,6 @@ source ~/.rvm/scripts/rvm
 
 # load my functions
 source ~/.bash_functions
+
+# useless fun timesheet completion
+source ~/script/.work_completion.sh
