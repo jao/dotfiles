@@ -8,7 +8,7 @@ export GIT_EDITOR="/usr/bin/mate -wl1"
 export SVN_EDITOR="/usr/bin/mate -wl1"
 
 export GREP_OPTIONS="--color=auto"
-export GREP_COLOR="0;30;43"
+export GREP_COLOR="1;33;40"
 
 export ANDROID_SDK_ROOT="/usr/local/Cellar/android-sdk/r5"
 export LC_ALL="en_US.UTF-8"
@@ -23,4 +23,4 @@ source ~/.rvm/scripts/rvm
 source ~/.bash_functions
 
 # useless fun timesheet completion
-source ~/projects/timesheet/.work_completion.sh
+source ~/projects/timesheet/work_completion.sh

@@ -21,6 +21,7 @@ alias mysql="mysql --auto-rehash=TRUE"
 
 # reload source
 reload () { source ~/.bash_profile; }
+reload_functions () { source ~/.bash_functions; }
 
 # show path list
 # pathlist () { echo $PATH | awk -F ":" '{ for(i=1; i<=NF; i++){print $i;} }' | uniq -i; }
