@@ -20,7 +20,7 @@ alias mysql="mysql --auto-rehash=TRUE"
 # alias tjtest="ssh -t imp ssh tj@test"
 
 # reload source
-reload () { source ~/.bash_functions; }
+reload () { source ~/.bash_profile; }
 
 # show path list
 # pathlist () { echo $PATH | awk -F ":" '{ for(i=1; i<=NF; i++){print $i;} }' | uniq -i; }
