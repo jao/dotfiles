@@ -1,5 +1,5 @@
 # PATH
-export PATH="${HOME}/scripts:${HOME}/projects/timesheet"
+export PATH="${HOME}/scripts:${HOME}/projects/termite"
 export PATH="${PATH}:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11/bin"
 
 # configurations
@@ -23,4 +23,4 @@ source ~/.rvm/scripts/rvm
 source ~/.bash_functions
 
 # useless fun timesheet completion
-source ~/projects/timesheet/work_completion.sh
+source ~/projects/termite/termite_completion.sh
