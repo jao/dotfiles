@@ -30,9 +30,8 @@ reload_functions () { source ~/.bash_functions; }
 # list directory after cd
 cd () { builtin cd "${@:-$HOME}" && ls; }
 
-# enter a recently created directory
-mkdircd () { /bin/mkdir "${@}" && eval cd "\$$#"; }
-# this is bugging rvm behavior
+# mkdir, cd into it
+mkcd () { mkdir -p "$*"; cd "$*" }
 
 man2pdf () { man -t $* | ps2pdf - - | open -f -a Preview; }
 
