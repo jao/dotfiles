@@ -31,7 +31,7 @@ reload_functions () { source ~/.bash_functions; }
 cd () { builtin cd "${@:-$HOME}" && ls; }
 
 # mkdir, cd into it
-mkcd () { mkdir -p "$*"; cd "$*" }
+mkcd () { mkdir -p "$*"; cd "$*"; }
 
 man2pdf () { man -t $* | ps2pdf - - | open -f -a Preview; }
 
@@ -42,18 +42,12 @@ git-scoreboard () { git log | grep '^Author' | sort | uniq -ci | sort -r; }
  
 # get the tinyurl
 tinyurl () {
-  local tmp=/tmp/tinyurl
-  rm $tmp 2>1 /dev/null
-  curl "http://tinyurl.com/api-create.php?url=${1}" -O $tmp 2>1 /dev/null
-  cat $tmp | pbcopy
+  curl -G "http://tinyurl.com/api-create.php" --data-urlencode "url=${1}" 2> /dev/null | pbcopy;
 }
 
 # get the moourl awesomeness
 moourl () {
-  local tmp=/tmp/moourl
-  rm $tmp 2>1 /dev/null
-  curl "http://moourl.com/create/?source=${1}" -O $tmp 2>1 /dev/null
-  cat $tmp | pbcopy
+  curl -G "http://moourl.com/create/" --data-urlencode "source=${1}" --trace-ascii - 2> /dev/null | grep Location: | echo "http://moourl.com/$(egrep -o '\w+$')" | pbcopy
 }
 
 # Colors
@@ -67,8 +61,10 @@ YELLOW="\e[0;33m"
 NC="\e[0m" # no color
 
 my-prompt () {
-  local STATE=""; local STATUS=""; local ini=""; local end=""; local BC=$GREEN # base color
-  local RVM="|\e[33m$(~/.rvm/bin/rvm-prompt i v)\e[0m|" # rvm rubies
+  local STATE=''; local RVM=''; local STATUS=''; local ini=''; local end=''; local BC=$GREEN # base color
+  if [ -f ~/.rvm/bin/rvm-prompt ]; then
+    RVM="|\e[33m$(~/.rvm/bin/rvm-prompt i v)\e[0m|" # rvm rubies
+  fi
   PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m ${RVM}" # basic ps1
   
   local GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
