@@ -23,10 +23,11 @@ source ~/.rvm/scripts/rvm
 source ~/.bash_functions
 
 # useless fun timesheet completion
-source ~/projects/termite/termite_completion.sh
+# source ~/projects/termite/termite_completion.sh
+complete -C ~/projects/termite/_termite_completion -o default termite
 
 # rake completion
 complete -C ~/projects/dotfiles/rake_completion -o default rake
 
 # projects completion
-complete -C ~/projects/dotfiles/project_completion -o default p
+complete -C ~/projects/dotfiles/project_completion -o default pcd
