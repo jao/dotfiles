@@ -3,3 +3,4 @@ cache/
 *.svn/
 .svn/
 .DS_S*
+.rake_tasks*
