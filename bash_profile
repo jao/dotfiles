@@ -27,3 +27,6 @@ source ~/projects/termite/termite_completion.sh
 
 # rake completion
 complete -C ~/projects/dotfiles/rake_completion -o default rake
+
+# projects completion
+complete -C ~/projects/dotfiles/project_completion -o default p
