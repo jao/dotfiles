@@ -1,5 +1,5 @@
 # PATH
-export PATH="${HOME}/scripts:${HOME}/projects/termite"
+export PATH="${HOME}/scripts:${HOME}/projects/termite:${PATH}"
 export PATH="${PATH}:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11/bin"
 
 # configurations
