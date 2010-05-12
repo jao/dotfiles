@@ -14,7 +14,7 @@ export ANDROID_SDK_ROOT="/usr/local/Cellar/android-sdk/r5"
 export LC_ALL="en_US.UTF-8"
 
 # load git awesomeness
-source ~/.git_completion.sh
+source ~/.git_completion
 
 # load rvm stuff
 source ~/.rvm/scripts/rvm
@@ -24,3 +24,6 @@ source ~/.bash_functions
 
 # useless fun timesheet completion
 source ~/projects/termite/termite_completion.sh
+
+# rake completion
+# complete -C ~/projects/dotfiles/rake_completion -o default rake

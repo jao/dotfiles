@@ -1,9 +1,7 @@
 #!/usr/bin/env bash
 
 DOTFILES=`pwd`
-TMPDIR=`echo $DOTFILES | sed "s|$HOME/||"`
-
-cd $HOME
+DOTFILES_DIR=`echo $DOTFILES | sed "s|$HOME/||"`
 
 # Files to link
 # .bash_completion.sh
@@ -16,24 +14,21 @@ cd $HOME
 # .aprc
 # .rvmrc
 
-for FILE in ".bash_profile" ".bash_functions" ".bash_completion.sh" ".gemrc" ".git_completion.sh" ".gitconfig" ".gitignore" ".aprc" ".rvmrc"
+cd $HOME
+
+for FILE in "bash_profile" "bash_functions" "bash_completion" "gemrc" "git_completion" "gitconfig" "gitignore" "aprc" "rvmrc"
 do
   # removing existing file, if exists
-  if [ -f $FILE ]; then
-    rm $FILE
+  if [ -f .$FILE ]; then
+    rm .$FILE
   fi
   
   # linking project file, if exists
-  if [ -f $TMPDIR/$FILE ]; then
-    ln -s $TMPDIR/$FILE $FILE
+  if [ -f $DOTFILES_DIR/$FILE ]; then
+    ln -s $DOTFILES_DIR/$FILE .$FILE
   fi
-  ls -laG $FILE
+  ls -laG .$FILE
 done
 
 # reading the profile
 source .bash_profile
-
-# listing symbolic links
-ls -laG | grep '\>'
-
-cd $DOTFILES
