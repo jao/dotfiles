@@ -19,6 +19,9 @@ alias screensaver="/System/Library/Frameworks/ScreenSaver.framework/Resources/Sc
 alias mysql="mysql --auto-rehash=TRUE"
 # alias tjtest="ssh -t imp ssh tj@test"
 
+# changing directory to project
+p () { cd ~/projects/$1; }
+
 # reload source
 reload () { source ~/.bash_profile; }
 reload_functions () { source ~/.bash_functions; }
