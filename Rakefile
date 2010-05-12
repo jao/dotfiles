@@ -1,4 +1,6 @@
+#!/usr/bin/env ruby
 # forked from ryanb (http://github.com/ryanb/dotfiles)
+# Added because I'm trying to make the rake completion script to work
 
 require 'rake'
 require 'irb'

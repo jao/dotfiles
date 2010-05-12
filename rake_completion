@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# forked from ryanb (http://github.com/ryanb/dotfiles)
 
 # to install, add the following line to your .bash_profile or .bashrc
 # complete -C path/to/rake_completion -o default rake
