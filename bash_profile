@@ -26,4 +26,4 @@ source ~/.bash_functions
 source ~/projects/termite/termite_completion.sh
 
 # rake completion
-# complete -C ~/projects/dotfiles/rake_completion -o default rake
+complete -C ~/projects/dotfiles/rake_completion -o default rake
