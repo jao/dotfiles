@@ -66,7 +66,7 @@ NC="\e[0m" # no color
 my-prompt () {
   local STATE=''; local RVM=''; local STATUS=''; local ini=''; local end=''; local BC=$GREEN # base color
   if [ -f ~/.rvm/bin/rvm-prompt ]; then
-    RVM="|\e[33m$(~/.rvm/bin/rvm-prompt i v)\e[0m|" # rvm rubies
+    RVM="\e[1;30;43m $(~/.rvm/bin/rvm-prompt i v) \e[0m" # rvm rubies
   fi
   PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m ${RVM}" # basic ps1
   
