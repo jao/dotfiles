@@ -18,12 +18,15 @@ source ~/.git_completion
 
 # load rvm stuff
 source ~/.rvm/scripts/rvm
+source ~/.rvm/scripts/completion
 
 # load my functions
 source ~/.bash_functions
 
+# Homebrew
+source `brew --prefix`/Library/Contributions/brew_bash_completion.sh
+
 # useless fun timesheet completion
-# source ~/projects/termite/termite_completion.sh
 complete -C ~/projects/termite/_termite_completion -o default termite
 
 # rake completion
