@@ -1,7 +1,3 @@
-# PATH
-export PATH="${HOME}/scripts:${HOME}/projects/termite:${PATH}"
-export PATH="${PATH}:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11/bin"
-
 # configurations
 export EDITOR="/usr/bin/mate -wl1"
 export GIT_EDITOR="/usr/bin/mate -wl1"
@@ -10,8 +6,12 @@ export SVN_EDITOR="/usr/bin/mate -wl1"
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="1;33;40"
 
-export ANDROID_SDK_ROOT="/usr/local/Cellar/android-sdk/r5"
+export ANDROID_SDK_ROOT="/usr/local/Cellar/android-sdk/r6"
 export LC_ALL="en_US.UTF-8"
+# PATH
+export PATH="${HOME}/scripts:${HOME}/projects/termite:${PATH}"
+export PATH="${PATH}:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11/bin"
+export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
 
 # load git awesomeness
 source ~/.git_completion
