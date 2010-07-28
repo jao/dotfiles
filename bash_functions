@@ -63,6 +63,7 @@ WHITE="\e[1;37m"
 YELLOW="\e[0;33m"
 NC="\e[0m" # no color
 
+export GIT_PS1_SHOWDIRTYSTATE=1
 my-prompt () {
   local STATE=''; local RVM=''; local STATUS=''; local ini=''; local end=''; local BC=$GREEN # base color
   if [ -f ~/.rvm/bin/rvm-prompt ]; then
@@ -116,6 +117,6 @@ my-prompt () {
     
     PS1="${PS1} ${ini}${BC}${SVNBRANCH}${NC}${STATE}${end}"
   fi
-  PS1="${PS1} \n\$ "
+  PS1="${PS1} \n\$ " # `__git_ps1`
 }
 PROMPT_COMMAND=my-prompt
