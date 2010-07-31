@@ -10,8 +10,8 @@ export ANDROID_SDK_ROOT="/usr/local/Cellar/android-sdk/r6"
 export LC_ALL="en_US.UTF-8"
 
 # PATH
-export PATH="${HOME}/scripts:${HOME}/projects/termite:${PATH}"
-export PATH="${PATH}:/usr/local/bin:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11/bin"
+export PATH="${HOME}/scripts:${HOME}/projects/termite:/usr/local/bin:${PATH}"
+export PATH="${PATH}:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11/bin"
 export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
 
 # load git awesomeness
@@ -35,3 +35,6 @@ complete -C ~/projects/dotfiles/rake_completion -o default rake
 
 # projects completion
 complete -C ~/projects/dotfiles/project_completion -o default pcd
+
+# prime content tool
+source ~/scripts/_prime_completion
