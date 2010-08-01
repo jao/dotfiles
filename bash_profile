@@ -27,6 +27,9 @@ source ~/.bash_functions
 # Homebrew
 source `brew --prefix`/Library/Contributions/brew_bash_completion.sh
 
+# Prep - Prime content tool completion
+source ~/projects/prime/content-prep/_prep_completion
+
 # useless fun timesheet completion
 complete -C ~/projects/termite/_termite_completion -o default termite
 
@@ -35,6 +38,3 @@ complete -C ~/projects/dotfiles/rake_completion -o default rake
 
 # projects completion
 complete -C ~/projects/dotfiles/project_completion -o default pcd
-
-# prime content tool
-source ~/scripts/_prime_completion
