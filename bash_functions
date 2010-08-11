@@ -26,9 +26,9 @@ pcd () { cd ~/projects/$1; }
 reload () { source ~/.bash_profile; }
 reload_functions () { source ~/.bash_functions; }
 
-# show path list
-# pathlist () { echo $PATH | awk -F ":" '{ for(i=1; i<=NF; i++){print $i;} }' | uniq -i; }
-# pathclean () { echo $PATH  | tr ':' '\n' | uniq -i | xargs | tr ' ' ':'; }
+# linefeed conversions
+dos2unix () { [ -f $1 ] && sed 's/^M$//' $1 || exit 1; }
+unix2dos () { [ -f $1 ] && sed 's/$/^M/' $1 || exit 1; }
 
 # list directory after cd
 cd () { builtin cd "${@:-$HOME}" && ls; }
