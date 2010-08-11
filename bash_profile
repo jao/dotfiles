@@ -9,10 +9,15 @@ export GREP_COLOR="1;33;40"
 export ANDROID_SDK_ROOT="/usr/local/Cellar/android-sdk/r6"
 export LC_ALL="en_US.UTF-8"
 
+# Oracle stuff
+export ORACLE_HOME="${HOME}/Library/Oracle/instantclient"
+export DYLD_LIBRARY_PATH="${ORACLE_HOME}"
+export SQLPATH="${ORACLE_HOME}"
+
 # PATH
 export PATH="${HOME}/scripts:${HOME}/projects/termite:${HOME}/projects/prime/content-prep:/usr/local/bin:${PATH}"
 export PATH="${PATH}:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/X11/bin"
-export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
+export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools:${ORACLE_HOME}"
 
 # load git awesomeness
 source ~/.git_completion
