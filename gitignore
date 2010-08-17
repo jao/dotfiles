@@ -1,5 +1,5 @@
 cache/
-*.log
 .svn/
-.DS_S*
+*.log
+.DS*
 .rake_tasks*
