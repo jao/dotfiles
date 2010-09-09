@@ -67,7 +67,8 @@ my-prompt () {
   fi
   PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m${RVM}" # basic ps1
   
-  local GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
+  # GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
+  local GITBRANCH=`__git_ps1 "%s"`
   if [ "$GITBRANCH" != "" ]; then
     # delimiters
     ini="("; end=")"
@@ -119,6 +120,6 @@ my-prompt () {
   #   PS1="${PS1} ${ini}${BC}${SVNBRANCH}${NC}${STATE}${end}"
   # fi
   
-  PS1="${PS1} $(__git_ps1 "(${GREEN}%s${NC})") \n\$ "
+  PS1="${PS1} \n\$ "
 }
 PROMPT_COMMAND=my-prompt
