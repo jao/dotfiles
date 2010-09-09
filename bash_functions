@@ -93,13 +93,8 @@ my-prompt () {
       BC=$RED; STATE="${RED}✘${NC}"
     fi
     
-    if [ -z "$STATE" ]; then
-      BC=$GREEN
-    fi
-    
-    if [[ "$STATUS" =~ "$UNTRACKED" ]]; then
-      STATE="${STATE}${YELLOW}*${NC}"
-    fi
+    [ -z "$STATE" ] && BC=$GREEN
+    [[ "$STATUS" =~ "$UNTRACKED" ]] && STATE="${STATE}${YELLOW}*${NC}"
     
     PS1="${PS1} ${ini}${BC}${GITBRANCH}${NC}${STATE}${end}"
   fi
