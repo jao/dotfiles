@@ -90,7 +90,7 @@ my-prompt () {
     fi
     
     if [[ "$STATUS" =~ "$TO_BE_COMMITED" ]] || [[ "$STATUS" =~ "$CHANGED" ]]; then
-      BC=$RED
+      BC=$RED; STATE="${RED}✘${NC}"
     fi
     
     if [ -z "$STATE" ]; then
