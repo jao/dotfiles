@@ -86,9 +86,9 @@ my-prompt () {
     elif [[ "$STATUS" =~ "$AHEAD" ]]; then
       BC=$RED; STATE="${STATE}${RED}↑${NC}"
     elif [[ "$STATUS" =~ "$CHANGED" ]]; then
-      BC=$RED
+      BC=$RED; STATE="${STATE}${RED}?${NC}"
     elif [[ "$STATUS" =~ "$TO_BE_COMMITED" ]]; then
-      BC=$RED
+      BC=$RED; STATE="${STATE}${RED}!${NC}"
     else
       BC=$GREEN
     fi
