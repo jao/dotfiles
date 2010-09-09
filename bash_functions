@@ -24,11 +24,6 @@ pcd () { cd ~/projects/$1; }
 
 # reload source
 reload () { source ~/.bash_profile; }
-reload_functions () { source ~/.bash_functions; }
-
-# linefeed conversions
-dos2unix () { [ -f $1 ] && sed 's/^M$//' $1 || exit 1; }
-unix2dos () { [ -f $1 ] && sed 's/$/^M/' $1 || exit 1; }
 
 # list directory after cd
 cd () { builtin cd "${@:-$HOME}" && ls; }
@@ -102,21 +97,22 @@ my-prompt () {
     PS1="${PS1} ${ini}${BC}${GITBRANCH}${NC}${STATE}${end}"
   fi
   
-  local SVNBRANCH=`svn info 2> /dev/null | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk|[^/]+$' | egrep -o -m 1 '[^/]+$'`
-  if [[ "$SVNBRANCH" != "" ]]; then
-    # delimiters
-    ini="["; end="]"; BC=$GREEN
-    
-    local REV=`svn info 2>/dev/null | awk '/Revision:/ {print $2;}'`; STATE="|${REV}"
-    STATUS=`svn st 2>/dev/null | awk '{print $1;}'`
-    local CHANGED=`echo $STATUS | egrep -o '[ADM]'`
-    local UNTRACKED=`echo $STATUS | egrep -o '\?'`
-    
-    if [[ "$UNTRACKED" != "" ]]; then STATE="${STATE}${YELLOW}*${NC}"; fi
-    if [[ "$CHANGED" != "" ]]; then BC=$RED; fi
-    
-    PS1="${PS1} ${ini}${BC}${SVNBRANCH}${NC}${STATE}${end}"
-  fi
-  PS1="${PS1} \n\$ " # `__git_ps1`
+  # local SVNBRANCH=`svn info 2> /dev/null | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk|[^/]+$' | egrep -o -m 1 '[^/]+$'`
+  # if [[ "$SVNBRANCH" != "" ]]; then
+  #   # delimiters
+  #   ini="["; end="]"; BC=$GREEN
+  #   
+  #   local REV=`svn info 2>/dev/null | awk '/Revision:/ {print $2;}'`; STATE="|${REV}"
+  #   STATUS=`svn st 2>/dev/null | awk '{print $1;}'`
+  #   local CHANGED=`echo $STATUS | egrep -o '[ADM]'`
+  #   local UNTRACKED=`echo $STATUS | egrep -o '\?'`
+  #   
+  #   if [[ "$UNTRACKED" != "" ]]; then STATE="${STATE}${YELLOW}*${NC}"; fi
+  #   if [[ "$CHANGED" != "" ]]; then BC=$RED; fi
+  #   
+  #   PS1="${PS1} ${ini}${BC}${SVNBRANCH}${NC}${STATE}${end}"
+  # fi
+  
+  PS1="${PS1} $(__git_ps1 "(%s)") \n\$ "
 }
 PROMPT_COMMAND=my-prompt
