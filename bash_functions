@@ -53,6 +53,7 @@ BLUE="\e[0;34m"
 CYAN="\e[0;36m"
 GRAY="\e[1;30m"
 GREEN="\e[0;32m"
+PINK="\e[0;35m"
 RED="\e[0;31m"
 WHITE="\e[1;37m"
 YELLOW="\e[0;33m"
@@ -80,19 +81,24 @@ my-prompt () {
     STATUS=`git status 2>/dev/null`
     
     if [[ "$STATUS" =~ "$DIVERGED" ]]; then
-      BC=$RED; STATE="${STATE}${RED}↕${NC}"
+      BC=$RED; STATE="${RED}↕${NC}"
     elif [[ "$STATUS" =~ "$BEHIND" ]]; then
-      BC=$RED; STATE="${STATE}${RED}↓${NC}"
+      BC=$RED; STATE="${RED}↓${NC}"
     elif [[ "$STATUS" =~ "$AHEAD" ]]; then
-      BC=$RED; STATE="${STATE}${RED}↑${NC}"
-    elif [[ "$STATUS" =~ "$CHANGED" ]]; then
-      BC=$RED; STATE="${STATE}${RED}?${NC}"
-    elif [[ "$STATUS" =~ "$TO_BE_COMMITED" ]]; then
-      BC=$RED; STATE="${STATE}${RED}!${NC}"
-    else
+      BC=$RED; STATE="${RED}↑${NC}"
+    fi
+    
+    if [[ "$STATUS" =~ "$TO_BE_COMMITED" ]] || [[ "$STATUS" =~ "$CHANGED" ]]; then
+      BC=$RED
+    fi
+    
+    if [ -z "$STATE" ]; then
       BC=$GREEN
     fi
-    if [[ "$STATUS" =~ "$UNTRACKED" ]]; then STATE="${STATE}${YELLOW}*${NC}"; fi
+    
+    if [[ "$STATUS" =~ "$UNTRACKED" ]]; then
+      STATE="${STATE}${YELLOW}*${NC}"
+    fi
     
     PS1="${PS1} ${ini}${BC}${GITBRANCH}${NC}${STATE}${end}"
   fi
@@ -113,6 +119,6 @@ my-prompt () {
   #   PS1="${PS1} ${ini}${BC}${SVNBRANCH}${NC}${STATE}${end}"
   # fi
   
-  PS1="${PS1} $(__git_ps1 "(%s)") \n\$ "
+  PS1="${PS1} $(__git_ps1 "(${GREEN}%s${NC})") \n\$ "
 }
 PROMPT_COMMAND=my-prompt
