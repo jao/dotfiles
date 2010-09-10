@@ -6,7 +6,7 @@ export SVN_EDITOR="/usr/bin/mate -wl1"
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="1;33;40"
 
-export ANDROID_SDK_ROOT="/usr/local/Cellar/android-sdk/r6"
+export ANDROID_SDK_ROOT="/usr/local/Cellar/android-sdk/r7"
 export LC_ALL="en_US.UTF-8"
 
 # Oracle stuff
