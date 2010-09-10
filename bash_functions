@@ -7,7 +7,7 @@ alias irb="irb --readline --prompt-mode simple"
 # ls aliases
 alias ls="ls -G"
 alias ll="ls -Glh"
-alias la="ls -Glah"
+alias la="ls -GlAh" # list all but hide . and ..
 
 # bash aliases/utilities
 alias myip="curl http://www.whatismyip.com/automation/n09230945.asp && echo "
@@ -39,14 +39,10 @@ github () { open $(github-url); }
 git-scoreboard () { git log | grep '^Author' | sort | uniq -ci | sort -r; }
  
 # get the tinyurl
-tinyurl () {
-  curl -G "http://tinyurl.com/api-create.php" --data-urlencode "url=${1}" 2> /dev/null | pbcopy;
-}
+tinyurl () { curl -G "http://tinyurl.com/api-create.php" --data-urlencode "url=${1}" 2> /dev/null | pbcopy; }
 
 # get the moourl awesomeness
-moourl () {
-  curl -G "http://moourl.com/create/" --data-urlencode "source=${1}" --trace-ascii - 2> /dev/null | grep Location: | echo "http://moourl.com/$(egrep -o '\w+$')" | pbcopy
-}
+moourl () { curl -G "http://moourl.com/create/" --data-urlencode "source=${1}" --trace-ascii - 2> /dev/null | grep Location: | echo "http://moourl.com/$(egrep -o '\w+$')" | pbcopy; }
 
 # Colors
 BLUE="\e[0;34m"
@@ -61,10 +57,10 @@ NC="\e[0m" # no color
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 my-prompt () {
-  local STATE=''; local RVM=''; local STATUS=''; local ini=''; local end=''; local BC=$GREEN # base color
-  if [ -f ~/.rvm/bin/rvm-prompt ]; then
-    RVM=" \e[1;30;43m $(~/.rvm/bin/rvm-prompt i v) \e[0m" # rvm rubies
-  fi
+  # basic variables
+  local STATE=''; local RVM=''; local STATUS=''; local ini=''; local end='';
+  local BC=$GREEN # base color
+  [ -f ~/.rvm/bin/rvm-prompt ] && RVM=" \e[1;30;43m $(~/.rvm/bin/rvm-prompt i v) \e[0m" # rvm rubies
   PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m${RVM}" # basic ps1
   
   # GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
@@ -90,7 +86,7 @@ my-prompt () {
     fi
     
     if [[ "$STATUS" =~ "$TO_BE_COMMITED" ]] || [[ "$STATUS" =~ "$CHANGED" ]]; then
-      BC=$RED; STATE="${RED}✘${NC}"
+      BC=$RED; STATE=" ${YELLOW}✘${NC}"
     fi
     
     [ -z "$STATE" ] && BC=$GREEN
@@ -98,22 +94,6 @@ my-prompt () {
     
     PS1="${PS1} ${ini}${BC}${GITBRANCH}${NC}${STATE}${end}"
   fi
-  
-  # local SVNBRANCH=`svn info 2> /dev/null | grep '^URL:' | egrep -o '(tags|branches)/[^/]+|trunk|[^/]+$' | egrep -o -m 1 '[^/]+$'`
-  # if [[ "$SVNBRANCH" != "" ]]; then
-  #   # delimiters
-  #   ini="["; end="]"; BC=$GREEN
-  #   
-  #   local REV=`svn info 2>/dev/null | awk '/Revision:/ {print $2;}'`; STATE="|${REV}"
-  #   STATUS=`svn st 2>/dev/null | awk '{print $1;}'`
-  #   local CHANGED=`echo $STATUS | egrep -o '[ADM]'`
-  #   local UNTRACKED=`echo $STATUS | egrep -o '\?'`
-  #   
-  #   if [[ "$UNTRACKED" != "" ]]; then STATE="${STATE}${YELLOW}*${NC}"; fi
-  #   if [[ "$CHANGED" != "" ]]; then BC=$RED; fi
-  #   
-  #   PS1="${PS1} ${ini}${BC}${SVNBRANCH}${NC}${STATE}${end}"
-  # fi
   
   PS1="${PS1} \n\$ "
 }
