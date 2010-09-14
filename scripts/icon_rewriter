@@ -107,6 +107,7 @@ for basedir in `find . -type d -d 1`; do
                 fi
                 _create_icon "ICO_WEB.GIF" 200
                 _create_icon "ICO_WAP.GIF" 30
+                _create_icon "ICO.GIF" 200
               fi
               cd ..
             fi
