@@ -72,7 +72,7 @@ _create_icon () {
 
 # download newer remote files using rsync
 echo -e "\033[33mDownloading new/updated files from the remote server, please wait...\033[0m"
-rsync -Prtlhvm --include "+ [^t]*/" --include "+ **/ICO*.*" --include "+ **/800X800*_PREVIEW.*" --include "+ **/[4-7][0-8]0X[4-7][0-8]0*_PREVIEW.*" --exclude "*" root@web1:/var/www.old/previews/ .
+rsync -Prtlhvm --include "+ [^t]*/" --include "+ **/ICO*.*" --include "+ **/ANI*.*" --include "+ **/SPLASH*.*" --include "+ **/800X800*_PREVIEW.*" --include "+ **/[4-7][0-8]0X[4-7][0-8]0*_PREVIEW.*" --exclude "*" root@web1:/var/www.old/previews/ .
 echo ""
 
 # setting file and directory permissions
@@ -108,6 +108,10 @@ for basedir in `find . -type d -d 1`; do
                 _create_icon "ICO_WEB.GIF" 200
                 _create_icon "ICO_WAP.GIF" 30
                 _create_icon "ICO.GIF" 200
+                _create_icon "SPLASH.GIF" 200
+              fi
+              if [ -f "TEMP.GIF" ]; then
+                rm "TEMP.GIF"
               fi
               cd ..
             fi
@@ -135,6 +139,9 @@ for basedir in `find . -type d -d 1`; do
                   _create_icon "ICO_WEB_${image_name}.GIF" 200
                   _create_icon "ICO_WAP_${image_name}.GIF" 30
                 fi
+                if [ -f "TEMP_${image_name//\\/}.GIF" ]; then
+                  rm "TEMP_${image_name//\\/}.GIF"
+                fi
               done
             fi
           ;;
@@ -155,6 +162,9 @@ for basedir in `find . -type d -d 1`; do
                   fi
                   _create_icon "ICO_WEB.GIF" 200
                   _create_icon "ICO_WAP.GIF" 30
+                fi
+                if [ -f "TEMP.GIF" ]; then
+                  rm "TEMP.GIF"
                 fi
                 cd ..
               fi
@@ -183,6 +193,9 @@ for basedir in `find . -type d -d 1`; do
                   _create_icon "ICO_WEB_${image_name}.GIF" 200
                   _create_icon "ICO_WAP_${image_name}.GIF" 30
                 fi
+                if [ -f "TEMP_${image_name//\\/}.GIF" ]; then
+                  rm "TEMP_${image_name//\\/}.GIF"
+                fi
               done
             fi
           ;;
@@ -201,7 +214,7 @@ echo ""
 
 # updates remote files using rsync
 echo -e "\033[33mUploading modified files to remote server, please wait...\033[0m"
-rsync -Prlthvm --include "+ [^t]*/" --include "+ **/ICO*.*" --exclude "*" . root@web1:/var/www.old/previews/
+rsync -Prlthvm --include "+ [^t]*/" --include "+ **/ICO*.*" --include "+ **/ANI*.*" --include "+ **/SPLASH*.*" --exclude "*" . root@web1:/var/www.old/previews/
 echo ""
 
 exit $?
