@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+require 'rubygems'
+require 'oci8'
+OCI8.new('tjw_api','tj','oracle_database:1521/stewie').exec('select * from tjs_campaign.campaign') do |r|
+  puts r.join(',')
+end

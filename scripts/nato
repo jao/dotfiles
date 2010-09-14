@@ -1,0 +1,114 @@
+#!/usr/bin/env ruby
+
+nato = {
+  :a => 'alpha',
+  :b => 'beta',
+  :c => 'charlie',
+  :d => 'delta',
+  :e => 'echo',
+  :f => 'foxtrot',
+  :g => 'golf',
+  :h => 'hotel',
+  :i => 'india',
+  :j => 'juliet',
+  :k => 'kilo',
+  :l => 'lima',
+  :m => 'mike',
+  :n => 'november',
+  :o => 'oscar',
+  :p => 'papa',
+  :q => 'quebec',
+  :r => 'romeo',
+  :s => 'sierra',
+  :t => 'tango',
+  :u => 'uniform',
+  :v => 'victor',
+  :w => 'whiskey',
+  :x => 'xray',
+  :y => 'yankee',
+  :z => 'zulu',
+  1 => 'one',
+  2 => 'two',
+  3 => 'three',
+  4 => 'four',
+  5 => 'five',
+  6 => 'six',
+  7 => 'seven',
+  8 => 'eight',
+  9 => 'nine',
+  0 => 'zero'
+}
+
+morse = {
+  :a => '.-',
+  :b => '-...',
+  :c => '-.-.',
+  :d => '-..',
+  :e => '.',
+  :f => '..-.',
+  :g => '--.',
+  :h => '....',
+  :i => '..',
+  :j => '.---',
+  :k => '-.-',
+  :l => '.-..',
+  :m => '--',
+  :n => '-.',
+  :o => '---',
+  :p => '.--.',
+  :q => '--.-',
+  :r => '.-.',
+  :s => '...',
+  :t => '-',
+  :u => '..-',
+  :v => '...-',
+  :w => '.--',
+  :x => '-..-',
+  :y => '-.--',
+  :z => '--..',
+  1 => '.----',
+  2 => '..---',
+  3 => '...--',
+  4 => '....-',
+  5 => '.....',
+  6 => '-....',
+  7 => '--...',
+  8 => '---..',
+  9 => '----.',
+  0 => '-----'
+}
+
+options = []
+ARGV.map {|item|
+  puts item
+  if item =~ /\-\w+/i
+    options << item.strip
+    ARGV.delete(item)
+  end
+}
+
+if !(['-help','-h']&options).empty? or options.empty?
+  puts "Help:\nUsage: nato.rb [options] message\n\nOptions:\n  -n, -nato Nato letters\n  -m, -morse  Morse code\n  -a, -all  Both translations"
+end
+
+if !(['-n','-nato','-a','-all']&options).empty?
+  nato_string = ''
+  ARGV.each do |word|
+    nato_string += "" if nato_string.size > 0
+    word.each_char do |c|
+      nato_string +="#{nato[c.to_sym]} "
+    end
+  end
+  puts "your message spelt in nato code:\n#{nato_string}"
+end
+
+if !(['-m','-morse','-a','-all']&options).empty?
+  morse_string = ''
+  ARGV.each do |word|
+    morse_string += "/ " if morse_string.size > 0
+    word.each_char do |c|
+      morse_string += "#{morse[c.to_sym]} "
+    end
+  end
+  puts "your message in morse code:\n#{morse_string}"
+end

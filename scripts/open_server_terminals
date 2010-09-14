@@ -1,0 +1,9 @@
+#!/bin/bash
+for x in "server1" "server2"; do
+  osascript <<END 
+    tell application "Terminal"
+      tell application "System Events" to tell process "Terminal" to keystroke "t" using command down
+      do script "ssh $x tail -f .bash_history" in first window
+    end tell
+END
+done

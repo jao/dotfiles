@@ -1,0 +1,4 @@
+#!/bin/bash
+figlist | while read font; do
+  figlet -f $font "$font"
+done

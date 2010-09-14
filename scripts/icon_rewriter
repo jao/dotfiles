@@ -1,0 +1,206 @@
+#!/bin/bash
+_get_image_size () {
+  width=0
+  height=0
+  animated=""
+  if [ -f "$1" ]; then
+    local img_info=`identify "$1" 2>&1 | head -n 1`
+    local bad_header=`echo "$img_info" | grep -o 'improper image header'`
+    if [ "$bad_header" == "improper image header" ]; then
+      echo -e "\033[37;41;1m=> $bad_header\033[0m"
+      echo -e "\033[31m  REMOVING THE FILE - ${1}  \033[0m"
+      rm "${1}"
+      return
+    fi
+    local res=`echo "$img_info" | awk '{print $3}'`
+    width=`echo "$res" | awk -Fx '{ print $1 }'`
+    height=`echo "$res" | awk -Fx '{ print $2 }'`
+    animated=`echo "$img_info" | awk '{ print $1 }' | grep '\[0\]'`
+  fi
+}
+
+_find_source_image () {
+  ref_height=0
+  ref_width=0
+  source_img_name=""
+  source_animated=""
+  for img in `ls -t | grep -Ei "${1}"`; do
+    _get_image_size "${img//\\/}"
+    if [ "$width" -ge $ref_width ] && [ "$height" -ge $ref_height ]; then
+      ref_height=$height
+      ref_width=$width
+      # if [ -n "$source_img_name" ] && [ -f "$source_img_name" ] && [ "${source_img_name:0:3}" != "ICO" ]; then
+      #   echo -e "\033[31;1mRemoving unused image $source_img_name\033[0m"
+      #   rm "${source_img_name}"
+      # fi
+      source_img_name="$img"
+      source_animated="$animated"
+    fi
+  done
+  if [ -n $source_img_name ] && [ $ref_width -gt 0 ] && [ $ref_height -gt 0 ]; then
+    echo -e "\033[36m   found ${source_img_name} | ${ref_width}x${ref_height}\033[0m"
+  fi
+}
+
+_create_icon () {
+  if [ ! -f "$source_img_name" ]; then
+    echo -e "\033[31m $source_img_name not found in `dirname .`\033[0m"
+    return
+  fi
+  local ico="${1//\\/}"
+  local min_size=$2
+  _get_image_size "${ico}"
+  local img_name=""
+  if [ -n "$source_animated" ]; then
+    img_name="${source_img_name}[0]"
+  else
+    img_name="${source_img_name}"
+  fi
+  if [ -f "${ico}" ] && [ "$ref_width" -gt $width ] && [ "$ref_height" -gt $height ] && [ "$width" -ne $min_size ] && [ "$height" -ne $min_size ]; then
+    # resize the icon
+    echo -e "\033[35m     resize ${ico} | ${width}x${height} > ${min_size}x${min_size} << $source_img_name ${ref_width}x${ref_height}\033[0m"
+    convert -size ${min_size}x${min_size} "${img_name}" -thumbnail ${min_size}x${min_size}! "${ico}"
+  elif [ -f "${ico}" ] && [ $width -eq $min_size ] && [ $height -eq $min_size ]; then
+    # icon exists and appears correct
+    echo "     found ${ico} | ${width}x${height}"
+  else
+    # create a WEB icon
+    echo -e "\033[35m     create ${ico} > ${min_size}x${min_size} << $source_img_name ${ref_width}x${ref_height}\033[0m"
+    convert -size ${min_size}x${min_size} "${img_name}" -thumbnail ${min_size}x${min_size}! "${ico}"
+  fi
+}
+
+# download newer remote files using rsync
+echo -e "\033[33mDownloading new/updated files from the remote server, please wait...\033[0m"
+rsync -Prtlhvm --include "+ [^t]*/" --include "+ **/ICO*.*" --include "+ **/800X800*_PREVIEW.*" --include "+ **/[4-7][0-8]0X[4-7][0-8]0*_PREVIEW.*" --exclude "*" root@web1:/var/www.old/previews/ .
+echo ""
+
+# setting file and directory permissions
+echo -e "\033[33mSetting new files and directories' permissions, please wait...\033[0m"
+direc_count=`find . -type d -newer . -exec chmod 775 {} ';' -print | wc -l | awk '{ print $1 }'`
+files_count=`find . -type f -newer . -exec chmod 664 {} ';' -print | wc -l | awk '{ print $1 }'`
+echo "set permissions of ${direc_count} directories and ${files_count} files."
+echo ""
+
+echo -e "\033[33mChecking/fixing the new files, please wait...\033[0m"
+for basedir in `find . -type d -d 1`; do
+  basedir=${basedir#*/}
+  if [ -d $basedir ]; then
+    cd $basedir
+    echo -e "\033[32;1mReading files in ${basedir}\033[0m"
+    for contentpack in `find . -type d -newer ../.. -d 1`; do
+      contentpack=${contentpack#*/}
+      if [ -d $contentpack ]; then
+        cd $contentpack
+        case $basedir in
+          games)
+            echo -e "\033[33m ${basedir}/${contentpack}/ \033[0m"
+            if [ -d 'IMG' ]; then
+              cd IMG
+              _find_source_image "\.(JPG|GIF)$"
+              if [ -n "$source_img_name" ] && [ -f "$source_img_name" ]; then
+                if [ "$source_img_name" == "ICO_WEB.GIF" ]; then
+                  if [ $ref_width -ne 200 ] || [ $ref_height -ne 200 ]; then
+                    mv -v "ICO_WEB.GIF" "TEMP.GIF"
+                    source_img_name="TEMP.GIF"
+                  fi
+                fi
+                _create_icon "ICO_WEB.GIF" 200
+                _create_icon "ICO_WAP.GIF" 30
+              fi
+              cd ..
+            fi
+          ;;
+          images)
+            echo -e "\033[33m ${basedir}/${contentpack}/ \033[0m"
+            content_names=(`find -E . -type f -newer ../.. -d 1 -iregex '^\.\/([0-9]+X[0-9]+|ICO_WEB|ICO_WAP)_[^\.]+(_PREVIEW)?\.(JPG|GIF)$' | sed -E 's/^\.\/([0-9]+X[0-9]+|ICO_WEB|ICO_WAP)_([^\.]+)(_PREVIEW)?\.(JPG|GIF)$/\2/g' | grep -vi '_PREVIEW' | sort -u`)
+            if [ ${#content_names[@]} -gt 0 ]; then
+              echo -e "\033[32m Found ${#content_names[@]} different name patterns:\033[0m"
+              for image_name in ${content_names[@]}; do
+                image_name="${image_name//_PREVIEW/}"
+                image_name="${image_name//\(/\(}"
+                image_name="${image_name//\)/\)}"
+                image_name="${image_name//\[/\[}"
+                image_name="${image_name//\]/\]}"
+                _find_source_image "^([0-9]+X[0-9]+|ICO_WEB|ICO_WAP)_${image_name}(_PREVIEW)?\.(JPG|GIF)$"
+                echo -e "\033[32m     ${basedir}/${contentpack}/${source_img_name} - ${image_name//\\/} \033[0m"
+                if [ -n "$source_img_name" ] && [ -f "$source_img_name" ]; then
+                  if [ "$source_img_name" == "ICO_WEB_${image_name//\\/}.GIF" ]; then
+                    if [ $ref_width -ne 200 ] || [ $ref_height -ne 200 ]; then
+                      mv -v "ICO_WEB_${image_name//\\/}.GIF" "TEMP_${image_name//\\/}.GIF"
+                      source_img_name="TEMP_${image_name//\\/}.GIF"
+                    fi
+                  fi
+                  _create_icon "ICO_WEB_${image_name}.GIF" 200
+                  _create_icon "ICO_WAP_${image_name}.GIF" 30
+                fi
+              done
+            fi
+          ;;
+          songs)
+            echo -e "\033[33m ${basedir}/${contentpack}/ \033[0m"
+            for song in `find . -type d -newer ../.. -d 1`; do
+              song=${song#*/}
+              if [ -d "$song" ]; then
+                cd $song
+                _find_source_image "\.(JPG|GIF)$"
+                if [ -n "$source_img_name" ] && [ -f "$source_img_name" ]; then
+                  echo -e "\033[32m     ${basedir}/${contentpack}/${song}/${source_img_name} \033[0m"
+                  if [ "$source_img_name" == "ICO_WEB.GIF" ]; then
+                    if [ $ref_width -ne 200 ] || [ $ref_height -ne 200 ]; then
+                      mv -v "ICO_WEB.GIF" "TEMP.GIF"
+                      source_img_name="TEMP.GIF"
+                    fi
+                  fi
+                  _create_icon "ICO_WEB.GIF" 200
+                  _create_icon "ICO_WAP.GIF" 30
+                fi
+                cd ..
+              fi
+            done
+          ;;
+          videos)
+            echo -e "\033[33m ${basedir}/${contentpack}/ \033[0m"
+            content_names=(`find -E . -type f -newer ../.. -d 1 -iregex '^\.\/ICO_W(EB|AP)_[^\.]+\.(JPG|GIF)$' | sed -E 's/^\.\/ICO_W(EB|AP)_([^\.]+)\.(JPG|GIF)$/\2/g' | sort -u`)
+            if [ ${#content_names[@]} -gt 0 ]; then
+              echo -e "\033[32m Found ${#content_names[@]} different name patterns:\033[0m"
+              for image_name in ${content_names[@]}; do
+                image_name="${image_name//_PREVIEW/}"
+                image_name="${image_name//\(/\(}"
+                image_name="${image_name//\)/\)}"
+                image_name="${image_name//\[/\[}"
+                image_name="${image_name//\]/\]}"
+                _find_source_image "^ICO_W(EB|AP)_${image_name}\.(JPG|GIF)$"
+                if [ -n "$source_img_name" ] && [ -f "$source_img_name" ]; then
+                  echo -e "\033[32m     ${basedir}/${contentpack}/${source_img_name} - ${image_name//\\/} \033[0m"
+                  if [ "$source_img_name" == "ICO_WEB_${image_name//\\/}.GIF" ]; then
+                    if [ $ref_width -ne 200 ] || [ $ref_height -ne 200 ]; then
+                      mv -v "ICO_WEB_${image_name//\\/}.GIF" "TEMP_${image_name//\\/}.GIF"
+                      source_img_name="TEMP_${image_name//\\/}.GIF"
+                    fi
+                  fi
+                  _create_icon "ICO_WEB_${image_name}.GIF" 200
+                  _create_icon "ICO_WAP_${image_name}.GIF" 30
+                fi
+              done
+            fi
+          ;;
+        esac
+        cd ..
+      else
+        echo -e "\033[31mSomehow, ${contentpack} is not a dir.\033[0m"
+      fi
+    done
+    cd ..
+  fi
+done
+
+# touch .
+echo ""
+
+# updates remote files using rsync
+echo -e "\033[33mUploading modified files to remote server, please wait...\033[0m"
+rsync -Prlthvm --include "+ [^t]*/" --include "+ **/ICO*.*" --exclude "*" . root@web1:/var/www.old/previews/
+echo ""
+
+exit $?
