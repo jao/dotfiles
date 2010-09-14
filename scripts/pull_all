@@ -77,7 +77,7 @@ for dir in `ls`; do
   if [ -d $dir/.git ]; then
     cd $dir
     title "Pulling ${dir}"
-    info "`git pull`"
+    git pull
     echo;
     cd ..
   fi
