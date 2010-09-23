@@ -259,3 +259,6 @@ for dir in `ls`; do
     _fix_video "${dir}"
   fi
 done
+
+# rsync -Prtlmn --exclude "**/*.GIF" --exclude "**/*.dm" . root@salt1:/user/local/multimedia/BRAZIL/videos/
+
