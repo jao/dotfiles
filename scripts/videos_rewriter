@@ -235,9 +235,9 @@ _fix_video () {
           if [ $new_size -le $max_size ]; then
             colorize "    ${resolution} :: ${videoname} :: ${extension} :: ${new_size}Kb < ${max_size}Kb" 32
           elif [ $new_size -le $(( $max_size + ($max_size)/10 )) ]; then
-            colorize "    ${resolution} :: ${videoname} :: ${extension} :: ${new_size}Kb > ${max_size}Kb :: CLOSE ENOUGH?" 33
+            colorize "    CLOSE ENOUGH? :: ${new_size}Kb > ${max_size}Kb :: ${resolution} :: ${videoname} :: ${extension}" 33
           else
-            colorize "    ${resolution} :: ${videoname} :: ${extension} :: ${new_size}Kb > ${max_size}Kb :: TOO BIG" 31
+            colorize "    TOO BIG :: ${new_size}Kb > ${max_size}Kb :: ${resolution} :: ${videoname} :: ${extension}" 31
           fi
         fi
         
