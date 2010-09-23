@@ -72,259 +72,167 @@ rename_claimed_resolutions () {
 _fix_video () {
   dir="$1"
   cd "$dir"
-  colorize "  Working files inside '${dir}' ..." 32
+  colorize " Working files inside '${dir}' ...  " 30 42
   
-  # fix permissions inside the current structure
-  # fix_file_permissions
+  # parameters
+  video_options="-b 100k -r 13"
+  audio_options="-ab 30k -ar 22050"
+  qcomp=" -qcomp 0.5" # compression
   
-  # remove spaces
-  # rename_files_no_spaces
-  
-  # rename resolution text to lowercase
-  # rename_claimed_resolutions
-  
-  # notdir=0
-  # for file in `ls`; do
-  #   if [ -d $file ]; then
-  #     mv -vi $file/* .
-  #     rmdir $file
-  #   fi
-  # done
-  
-  # first make sure the videos have the resolution they claim to have
-  # for video in `ls | grep -Ei '(mp4|3gp)$'`; do
-  #   video_res=`ffmpeg -i $video 2>&1 | grep -oE ' [0-9]{3}x[0-9]{2,3}' | sed 's/ //'`
-  #   name_res="${video%%_*}"
-  #   if [ "$video_res" != "$name_res" ] && [ -n "$video_res" ]; then
-  #     mv -vn $video "${video_res}_${video#*_}"
-  #   fi
-  # done
-  
-  # sizes
-  # sizes=('128x96' '160x120' '176x144' '320x240' '352x288' '480x320')
-  # # parameters
-  # video_options="-b 100k -r 13"
-  # audio_options="-ab 30k -ar 22050"
-  # qcomp=" -qcomp 0.5" # compression
-  
-  videos=(`ls | grep -Ei '(mp4|3gp)$' | sed -E 's/^[0-9]+x[0-9]+_([[:alnum:]]+)\.[[:alnum:]]{3}$/\1/g' | grep -Eiv '(mp4|3gp)$' | sort -u`)
-  for videoname in ${videos[@]}; do
-    colorize "  working with pattern: ${videoname}" 33
-    # # MP4
-    # # starter values (minimum values to generate at least one video)
-    # ref_width_mp4=128
-    # ref_height_mp4=96
-    # source_video_mp4=''
-    # for video in `ls *_${videoname}.* | grep -Ei 'mp4$' 2> /dev/null`; do
-    #   res="${video%%_*}"
-    #   if [ -n "${res}" ]; then 
-    #     width=`echo "$res" | awk -Fx '{ print $1 }'`
-    #     height=`echo "$res" | awk -Fx '{ print $2 }'`
-    #   
-    #     if [ "$width" -ge $ref_width_mp4 ] && [ "$height" -ge $ref_height_mp4 ]; then
-    #       source_video_mp4="$video"
-    #       ref_width_mp4=$width
-    #       ref_height_mp4=$height
-    #     fi
-    #   fi
-    # done
-    # if [ -n "$source_video_mp4" ]; then
-    #   colorize "    found mp4 source video: ${source_video_mp4}" 36
-    # fi
-    # 
-    # # 3GP
-    # # starter values (minimum values to generate at least one video)
-    # ref_width_3gp=128
-    # ref_height_3gp=96
-    # source_video_3gp=''
-    # for video in `ls *_${videoname}.* | grep -Ei '3gp$' 2> /dev/null`; do
-    #   res="${video%%_*}"
-    #   if [ -n $res ]; then
-    #     width=`echo "$res" | awk -Fx '{ print $1 }'`
-    #     height=`echo "$res" | awk -Fx '{ print $2 }'`
-    #   
-    #     if [ "$width" -ge $ref_width_3gp ] && [ "$height" -ge $ref_height_3gp ]; then
-    #       source_video_3gp="$video"
-    #       ref_width_3gp=$width
-    #       ref_height_3gp=$height
-    #     fi
-    #   fi
-    # done
-    # if [ -n $source_video_3gp ]; then
-    #   colorize "    found 3gp source video: ${source_video_3gp}" 36
-    # fi
-    # 
-    # if [ -z $source_video_mp4 ] && [ -z $source_video_3gp ]; then
-    #   colorize "Could not define the source videos for directory ${dir}." 31
-    #   exit $E_FILE_NOTFOUND    
-    # fi
-    # 
-    # if [ -n $source_video_mp4 ]; then
-    #   colorize "  fixing ${dir}'s files using ${source_video_mp4}:"
-    #   
-    #   for size in ${sizes[@]}; do
-    #     new_width=`echo "$size" | awk -Fx '{ print $1 }'`
-    #     new_height=`echo "$size" | awk -Fx '{ print $2 }'`
-    #     
-    #     if [ $new_width -le $ref_width_mp4 ] && [ $new_height -le $ref_height_mp4 ]; then
-    #       if [ $(($new_width / 4)) -eq $(($new_height / 3)) ]; then
-    #         aspect="4:3"
-    #         aspect_param=" -aspect 4:3"
-    #       elif [ $(($new_width / 3)) -eq $(($new_height / 2)) ]; then
-    #         aspect="3:2"
-    #         aspect_param=" -aspect 3:2"
-    #       elif [ $(($new_width / 16)) -eq $(($new_height / 9)) ]; then
-    #         aspect="16:9"
-    #         aspect_param=" -aspect 16:9"
-    #       elif [ $(($new_width / 11)) -eq $(($new_height / 9)) ]; then
-    #         aspect="11:9"
-    #         aspect_param=" -aspect 11:9"
-    #       else
-    #         aspect="unknown"
-    #         aspect_param=""
-    #       fi
-    #       
-    #       # mp4
-    #       if [ ! -f "${size}_${videoname}.mp4" ]; then
-    #         colorize "    creating MP4 using ${aspect} ratio: ${source_video_mp4} => ${size}_${videoname}.mp4"
-    #         `ffmpeg -i ${source_video_mp4} -vcodec mpeg4 ${video_options} -acodec copy -s ${size}${aspect_param}${qcomp} -y -f mp4 ${size}_${videoname}.mp4 2>&1 | grep -Ei '(damaged|error|problem|failed)'`
-    #       fi
-    #       
-    #       # 3gp
-    #       if [ ! -f "${size}_${videoname}.3gp" ] && [ -z $source_video_3gp ]; then
-    #         colorize "    creating 3GP from MP4 using ${aspect} ratio: ${source_video_mp4} => ${size}_${videoname}.3gp"
-    #         `ffmpeg -i ${source_video_mp4} -vcodec mpeg4 ${video_options} -acodec copy -s ${size}${aspect_param}${qcomp} -y -f 3gp ${size}_${videoname}.3gp 2>&1 | grep -Ei '(damaged|error|problem|failed)'`
-    #       fi
-    #     fi
-    #   done
-    # fi
-    # 
-    # for video in `ls *_${videoname}.* | grep -Ei '(mp4|3gp)$'`; do
-    #   size=`du -k "${video}" | awk '{print $1;};'`
-    #   if [ $size -eq 0 ]; then
-    #     colorize "  ${video} size ${size}Kb"
-    #     colorize "  - removing video ${video}, size: zero kb. Will try to generate it again" 31
-    #     rm $video
-    #   fi
-    # done
-    # 
-    # if [ -n $source_video_3gp ]; then
-    #   colorize "  fixing ${dir}'s files using ${source_video_3gp}:"
-    #   
-    #   for size in ${sizes[@]}; do
-    #     new_width=`echo $size | awk -Fx '{ print $1 }'`
-    #     new_height=`echo $size | awk -Fx '{ print $2 }'`
-    #     
-    #     if [ $new_width -le $ref_width_3gp ] && [ $new_height -le $ref_height_3gp ]; then
-    #       if [ $(($new_width / 4)) -eq $(($new_height / 3)) ]; then
-    #         aspect="4:3"
-    #         aspect_param=" -aspect 4:3"
-    #       elif [ $(($new_width / 3)) -eq $(($new_height / 2)) ]; then
-    #         aspect="3:2"
-    #         aspect_param=" -aspect 3:2"
-    #       elif [ $(($new_width / 16)) -eq $(($new_height / 9)) ]; then
-    #         aspect="16:9"
-    #         aspect_param=" -aspect 16:9"
-    #       elif [ $(($new_width / 11)) -eq $(($new_height / 9)) ]; then
-    #         aspect="11:9"
-    #         aspect_param=" -aspect 11:9"
-    #       else
-    #         aspect="unknown"
-    #         aspect_param=""
-    #       fi
-    #       # 3gp
-    #       if [ ! -f "${size}_${videoname}.3gp" ] && [ ! -f "${size}_${videoname}.3GP" ]; then
-    #         colorize "    creating 3GP using ${aspect} ratio: ${source_video_3gp} => ${size}_${videoname}.3gp"
-    #         ffmpeg -i ${source_video_3gp} -vcodec mpeg4 ${video_options} -acodec copy -s ${size}${aspect_param}${qcomp} -y -f 3gp ${size}_${videoname}.3gp 2>&1 | grep -Ei '(damaged|error|problem|failed)'
-    #       fi
-    #       
-    #       #mp4
-    #       if [ ! -f "${size}_${videoname}.mp4" ] && [ ! -f "${size}_${videoname}.MP4" ] && [ -z $source_video_mp4 ]; then
-    #         colorize "    creating MP4 from 3GP using ${aspect} ratio: ${source_video_3gp} => ${size}_${videoname}.mp4"
-    #         ffmpeg -i ${source_video_3gp} -vcodec mpeg4 ${video_options} -acodec copy -s ${size}${aspect_param}${qcomp} -y -f mp4 ${size}_${videoname}.mp4 2>&1 | grep -Ei '(damaged|error|problem|failed)'
-    #       fi
-    #     fi
-    #   done
-    # fi
-    
-    # make sure the videos have the resolution they claim to have in their names
-    for video in `ls *_${videoname}.* | grep -Ei '(mp4|3gp)$'`; do
-      issue=`ffmpeg -i $video 2>&1 | grep -Ei '(damaged|error|problem|failed)'`
-      if [ -n "$issue" ]; then
-        colorize "  $issue :: you should remove this video file '$video'." 31
-        # rm $video
+  # make sure the videos don't have damaged headers
+  for video in `ls -S | grep -Ei '(mp4|3gp)$'`; do
+    issue=`ffmpeg -i $video 2>&1 | grep -Ei '(damaged|error|problem|failed)'`
+    if [ -n "$issue" ]; then
+      colorize "  $issue :: you should remove this video file '$video'." 31
+      # rm $video
+      videoname=`echo "$video" | sed -E 's/^[0-9]+X[0-9]+_([[:alnum:]]+)\.[[:alnum:]]{3}$/\1/g' | grep -Eiv '(mp4|3gp)$' | sort -u`
+      resolution=`echo "${video%%_*}" | tr "[:upper:]" "[:lower:]"`
+      extension="${video##*.}"
+      format=`echo "${extension}" | tr "[:upper:]" "[:lower:]"`
+      colorize "  ${resolution} -> ${videoname} -> ${extension}" 33
+      
+      # starter values (minimum values to generate at least one video)
+      ref_width=`echo "$resolution" | awk -Fx '{ print $1 }'`
+      ref_height=`echo "$resolution" | awk -Fx '{ print $2 }'`
+      source_video=''
+      for videofile in `ls *_${videoname}.* | grep -Ei "(mp4|3gp)$" 2> /dev/null`; do
+        res="${videofile%%_*}"
+        if [ -n "${res}" ]; then 
+          width=`echo "$res" | awk -FX '{ print $1 }'`
+          height=`echo "$res" | awk -FX '{ print $2 }'`
+        
+          if [ "$width" -ge $ref_width ] && [ "$height" -ge $ref_height ]; then
+            source_video="${videofile}"
+            ref_width=$width
+            ref_height=$height
+          fi
+        fi
+      done
+      if [ -n "$source_video" ]; then
+        colorize "    found source video: ${source_video}" 36
+        
+        # new video name
+        new_video_name="${resolution/x/X}_${videoname}.${extension}"
+        
+        new_width=`echo "$resolution" | awk -Fx '{ print $1 }'`
+        new_height=`echo "$resolution" | awk -Fx '{ print $2 }'`
+        
+        if [ $new_width -le $ref_width ] && [ $new_height -le $ref_height ]; then
+          if [ $(($new_width / 4)) -eq $(($new_height / 3)) ]; then
+            aspect="4:3"
+            aspect_param=" -aspect 4:3"
+          elif [ $(($new_width / 3)) -eq $(($new_height / 2)) ]; then
+            aspect="3:2"
+            aspect_param=" -aspect 3:2"
+          elif [ $(($new_width / 16)) -eq $(($new_height / 9)) ]; then
+            aspect="16:9"
+            aspect_param=" -aspect 16:9"
+          elif [ $(($new_width / 11)) -eq $(($new_height / 9)) ]; then
+            aspect="11:9"
+            aspect_param=" -aspect 11:9"
+          else
+            aspect="unknown"
+            aspect_param=""
+          fi
+          # if [ ! -f "${new_video_name}" ]; then
+            colorize "    creating ${extension} using ${aspect} ratio: ${source_video} => ${new_video_name}"
+            colorize "      ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp} -y -f ${format} ${new_video_name}" 35
+            `ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp} -y -f ${format} ${new_video_name}` #  2>&1 | grep -Ei '(damaged|error|problem|failed)'
+          # fi          
+        fi
+      else
+        colorize "    try looking for another video type" 35
       fi
-      size=`du -k "${video}" | awk '{print $1;};'`
-      colorize "  ${video} size ${size}Kb"
-      if [ $size -eq 0 ]; then
-        colorize "  -> removing ${video}, size: zero kb" 35
-        # rm $video
-      fi
-    done
+    fi
+    size=`du -k "${video}" | awk '{ print $1 }'`
+    # colorize "  ${video} size ${size}Kb"
+    videoname=`echo "$video" | sed -E 's/^[0-9]+X[0-9]+_([[:alnum:]]+)\.[[:alnum:]]{3}$/\1/g' | grep -Eiv '(mp4|3gp)$' | sort -u`
+    resolution=`echo "${video%%_*}" | tr "[:upper:]" "[:lower:]"`
+    extension="${video##*.}"
     
-    # for size in ${sizes[@]}; do
-    #   new_width=`echo $size | awk -Fx '{ print $1 }'`
-    #   new_height=`echo $size | awk -Fx '{ print $2 }'`
-    #   
-    #   if [ $new_width -le $ref_width_mp4 ] && [ $new_height -le $ref_height_mp4 ]; then
-    #     if [ $(($new_width / 4)) -eq $(($new_height / 3)) ]; then
-    #       aspect="4:3"
-    #       aspect_param=" -aspect 4:3"
-    #     elif [ $(($new_width / 3)) -eq $(($new_height / 2)) ]; then
-    #       aspect="3:2"
-    #       aspect_param=" -aspect 3:2"
-    #     elif [ $(($new_width / 16)) -eq $(($new_height / 9)) ]; then
-    #       aspect="16:9"
-    #       aspect_param=" -aspect 16:9"
-    #     elif [ $(($new_width / 11)) -eq $(($new_height / 9)) ]; then
-    #       aspect="11:9"
-    #       aspect_param=" -aspect 11:9"
-    #     else
-    #       aspect="unknown"
-    #       aspect_param=""
-    #     fi
-    #     
-    #     # 3gp
-    #     if [ ! -f "${size}_${videoname}.3gp" ]; then
-    #       colorize "    creating 3GP from MP4 using ${aspect} ratio: ${source_video_mp4} => ${size}_${videoname}.3gp"
-    #       ffmpeg -i ${source_video_mp4} -vcodec mpeg4 ${video_options} -acodec copy -s ${size}${aspect_param}${qcomp} -y -f 3gp ${size}_${videoname}.3gp 2>&1 | grep -Ei '(damaged|error|problem|failed)'
-    #     fi
-    #   fi
-    # done
-    # 
-    # deleted_files=0
-    # for file in `ls *_${videoname}.*`; do
-    #   size=`du -k "${file}" | awk '{print $1;};'`
-    #   colorize "  ${file} size ${size}Kb"
-    #   if [ $size -eq 0 ]; then
-    #     ((deleted_files+=1))
-    #     colorize "  -> removing ${file}, size: zero kb" 31
-    #     rm $file
-    #   fi
-    # done
-    # 
-    # # make sure the videos have the resolution they claim to have in their names
-    # for video in `ls *_${videoname}.* | grep -Ei '(mp4|3gp)$'`; do
-    #   video_res=`ffmpeg -i $video 2>&1 | grep -oE ' [0-9]{3}x[0-9]{2,3}' | sed 's/ //'`
-    #   name_res="${video%%_*}"
-    #   if [ "$video_res" != "$name_res" ] && [ -n "$video_res" ]; then
-    #     mv -vn $video "${video_res}_${video#*_}"
-    #   fi
-    # done
-    # 
-    # if [ $deleted_files -gt 0 ]; then
-    #   colorize "Please run the fix again, one of the files for this directory had to be removed due to zero kb size." 31
-    #   exit $E_INVALID_FORMAT
-    # fi
+    cur_width=`echo "$resolution" | awk -Fx '{ print $1 }'`
+    cur_height=`echo "$resolution" | awk -Fx '{ print $2 }'`
+    
+    max_size=(( ($cur_width + $cur_height) * 1.25 ))
+    
+    if [ $size -eq 0 ]; then
+      colorize "  -> removing ${video}, size: zero kb" 35
+      # rm $video
+    elif [ $size -gt $max_size ]; then
+      colorize "  '${video}' is too big (${size}kb) ==> should be smaller than ${max_size}kb" 31
+      format=`echo "${extension}" | tr "[:upper:]" "[:lower:]"`
+      colorize "  ${resolution} -> ${videoname} -> ${extension}" 33
+      
+      # starter values (minimum values to generate at least one video)
+      ref_width=`echo "$resolution" | awk -Fx '{ print $1 }'`
+      ref_height=`echo "$resolution" | awk -Fx '{ print $2 }'`
+      source_video=''
+      for videofile in `ls *_${videoname}.* | grep -Ei "(mp4|3gp)$" 2> /dev/null`; do
+        res="${videofile%%_*}"
+        if [ -n "${res}" ]; then 
+          width=`echo "$res" | awk -FX '{ print $1 }'`
+          height=`echo "$res" | awk -FX '{ print $2 }'`
+          
+          if [ "$width" -ge $ref_width ] && [ "$height" -ge $ref_height ]; then
+            source_video="${videofile}"
+            ref_width=$width
+            ref_height=$height
+          fi
+        fi
+      done
+      if [ -n "$source_video" ]; then
+        colorize "    found source video: ${source_video}" 36
+        
+        # new video name
+        new_video_name="${resolution/x/X}_${videoname}.${extension}"
+        
+        if [ "${source_video}" == "$video" ] && [[ ! $video =~ '-TEMP' ]]; then
+          colorize "    source video is too big, rename it to a temporary file and use it to regenerate the video file using a larger compression rate" 33
+          mv $video "${resolution}_${videoname}-TEMP.${extension}"
+          source_video="${resolution}_${videoname}-TEMP.${extension}"
+        fi
+        
+        new_width=`echo "$resolution" | awk -Fx '{ print $1 }'`
+        new_height=`echo "$resolution" | awk -Fx '{ print $2 }'`
+        
+        if [ $new_width -le $ref_width ] && [ $new_height -le $ref_height ]; then
+          if [ $(($new_width / 4)) -eq $(($new_height / 3)) ]; then
+            aspect="4:3"
+            aspect_param=" -aspect 4:3"
+          elif [ $(($new_width / 3)) -eq $(($new_height / 2)) ]; then
+            aspect="3:2"
+            aspect_param=" -aspect 3:2"
+          elif [ $(($new_width / 16)) -eq $(($new_height / 9)) ]; then
+            aspect="16:9"
+            aspect_param=" -aspect 16:9"
+          elif [ $(($new_width / 11)) -eq $(($new_height / 9)) ]; then
+            aspect="11:9"
+            aspect_param=" -aspect 11:9"
+          else
+            aspect="unknown"
+            aspect_param=""
+          fi
+          colorize "    creating ${extension} using ${aspect} ratio: ${source_video} => ${new_video_name}"
+          colorize "      ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp} -y -f ${format} ${new_video_name}" 35
+          `ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp} -y -f ${format} ${new_video_name}` #  2>&1 | grep -Ei '(damaged|error|problem|failed)'
+          
+          new_size=`du -k "${new_video_name}" | awk '{ print $1 }'`
+          colorize "      '${new_video_name}' is now ${new_size}kb  " 32
+        fi
+        
+        if [ -f "${resolution}_${videoname}-TEMP.${extension}" ]; then
+          colorize "    remove temporary file '${resolution}_${videoname}-TEMP.${extension}'"
+          rm "${resolution}_${videoname}-TEMP.${extension}"
+        fi
+      fi
+    fi
   done
-  
+  echo ""
   cd ..
-  # touch ".fixed_$dir"
 }
 
 for dir in `ls`; do
-  if [ -d "${dir}" ] && [ ! -f ".fixed_$dir" ]; then
-    colorize "  fixing files in ${dir}" 36
+  if [ -d "${dir}" ]; then
     _fix_video "${dir}"
   fi
 done
