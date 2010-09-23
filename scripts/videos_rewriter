@@ -153,7 +153,7 @@ _fix_video () {
     cur_width=`echo "$resolution" | awk -Fx '{ print $1 }'`
     cur_height=`echo "$resolution" | awk -Fx '{ print $2 }'`
     
-    max_size=(( ($cur_width + $cur_height) * 1.25 ))
+    max_size=$(( $cur_width + $cur_height + (($cur_width + $cur_height)/2) ))
     
     if [ $size -eq 0 ]; then
       colorize "  -> removing ${video}, size: zero kb" 35
@@ -217,7 +217,15 @@ _fix_video () {
           `ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp} -y -f ${format} ${new_video_name}` #  2>&1 | grep -Ei '(damaged|error|problem|failed)'
           
           new_size=`du -k "${new_video_name}" | awk '{ print $1 }'`
-          colorize "      '${new_video_name}' is now ${new_size}kb  " 32
+          if [ $new_size -lt $max_size ]; then
+            colorize "      '${new_video_name}' is now ${new_size}kb" 32
+          elif [ $new_size -eq $max_size ]; then
+            colorize "      '${new_video_name}' is now ${new_size}kb" 33
+          else
+            colorize "      '${new_video_name}' is now ${new_size}kb ==> still too big" 31
+          fi
+        elif [ $size -le $max_size ]; then
+          colorize "      '${new_video_name}' is ${new_size}kb"
         fi
         
         if [ -f "${resolution}_${videoname}-TEMP.${extension}" ]; then
