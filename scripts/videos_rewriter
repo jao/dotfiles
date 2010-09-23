@@ -75,12 +75,13 @@ _fix_video () {
   colorize " Working files inside '${dir}' ...  " 30 42
   
   # parameters
-  video_options="-b 100k -r 13"
+  video_options="-b 80k -r 13"
   audio_options="-ab 30k -ar 22050"
-  qcomp=" -qcomp 0.5" # compression
+  qcomp="0.5" # compression
+  qcomp_param=" -qcomp ${qcomp}"
   
   # make sure the videos don't have damaged headers
-  for video in `ls -S | grep -Ei '(mp4|3gp)$'`; do
+  for video in `ls -S | grep -Ei '^[0-9]+X[0-9]+_([[:alnum:]]+)\.(mp4|3gp)$'`; do
     issue=`ffmpeg -i $video 2>&1 | grep -Ei '(damaged|error|problem|failed)'`
     if [ -n "$issue" ]; then
       colorize "  $issue :: you should remove this video file '$video'." 31
@@ -134,18 +135,17 @@ _fix_video () {
             aspect="unknown"
             aspect_param=""
           fi
-          # if [ ! -f "${new_video_name}" ]; then
-            colorize "    creating ${extension} using ${aspect} ratio: ${source_video} => ${new_video_name}"
-            colorize "      ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp} -y -f ${format} ${new_video_name}" 35
-            `ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp} -y -f ${format} ${new_video_name}` #  2>&1 | grep -Ei '(damaged|error|problem|failed)'
-          # fi          
+          colorize "    creating ${extension} using ${aspect} ratio: ${source_video} => ${new_video_name}"
+          colorize "      ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp_param} -y -f ${format} ${new_video_name}" 35
+          ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp_param} -y -f ${format} ${new_video_name} 2> /dev/null
         fi
       else
         colorize "    try looking for another video type" 35
       fi
     fi
+    # check and enforce file size limits now
+    
     size=`du -k "${video}" | awk '{ print $1 }'`
-    # colorize "  ${video} size ${size}Kb"
     videoname=`echo "$video" | sed -E 's/^[0-9]+X[0-9]+_([[:alnum:]]+)\.[[:alnum:]]{3}$/\1/g' | grep -Eiv '(mp4|3gp)$' | sort -u`
     resolution=`echo "${video%%_*}" | tr "[:upper:]" "[:lower:]"`
     extension="${video##*.}"
@@ -155,13 +155,9 @@ _fix_video () {
     
     max_size=$(( $cur_width + $cur_height + (($cur_width + $cur_height)/2) ))
     
-    if [ $size -eq 0 ]; then
-      colorize "  -> removing ${video}, size: zero kb" 35
-      # rm $video
-    elif [ $size -gt $max_size ]; then
-      colorize "  '${video}' is too big (${size}kb) ==> should be smaller than ${max_size}kb" 31
-      format=`echo "${extension}" | tr "[:upper:]" "[:lower:]"`
-      colorize "  ${resolution} -> ${videoname} -> ${extension}" 33
+    if [ $size -ge $max_size ] || [ $size -eq 0 ]; then
+      colorize "  ${resolution} :: ${videoname} :: ${extension} :: ${size}Kb ==> ${max_size}Kb" 33
+      colorize "    '${video}' is too big (${size}kb) ==> should be smaller than ${max_size}kb" 31
       
       # starter values (minimum values to generate at least one video)
       ref_width=`echo "$resolution" | awk -Fx '{ print $1 }'`
@@ -212,27 +208,31 @@ _fix_video () {
             aspect="unknown"
             aspect_param=""
           fi
-          colorize "    creating ${extension} using ${aspect} ratio: ${source_video} => ${new_video_name}"
-          colorize "      ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp} -y -f ${format} ${new_video_name}" 35
-          `ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp} -y -f ${format} ${new_video_name}` #  2>&1 | grep -Ei '(damaged|error|problem|failed)'
+          
+          format=`echo "${extension}" | tr "[:upper:]" "[:lower:]"`
+          
+          colorize "    generating ${extension} using ${aspect} ratio, ${qcomp} compression rate :: ${source_video} => ${new_video_name}"
+          colorize "      ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp_param} -y -f ${format} ${new_video_name}" 35
+          ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp_param} -y -f ${format} ${new_video_name} 2> /dev/null
           
           new_size=`du -k "${new_video_name}" | awk '{ print $1 }'`
-          if [ $new_size -lt $max_size ]; then
-            colorize "      '${new_video_name}' is now ${new_size}kb" 32
-          elif [ $new_size -eq $max_size ]; then
-            colorize "      '${new_video_name}' is now ${new_size}kb" 33
+          
+          if [ $new_size -le $max_size ]; then
+            colorize "    ${resolution} :: ${videoname} :: ${extension} :: ${new_size}Kb < ${max_size}Kb" 32
+          elif [ $new_size -le $(( $max_size + ($max_size)/10 )) ]; then
+            colorize "    ${resolution} :: ${videoname} :: ${extension} :: ${new_size}Kb > ${max_size}Kb :: CLOSE ENOUGH?" 33
           else
-            colorize "      '${new_video_name}' is now ${new_size}kb ==> still too big" 31
+            colorize "    ${resolution} :: ${videoname} :: ${extension} :: ${new_size}Kb > ${max_size}Kb :: TOO BIG" 31
           fi
-        elif [ $size -le $max_size ]; then
-          colorize "      '${new_video_name}' is ${new_size}kb"
         fi
         
         if [ -f "${resolution}_${videoname}-TEMP.${extension}" ]; then
-          colorize "    remove temporary file '${resolution}_${videoname}-TEMP.${extension}'"
+          colorize "    removing temporary file ${resolution}_${videoname}-TEMP.${extension}"
           rm "${resolution}_${videoname}-TEMP.${extension}"
         fi
       fi
+    elif [ $size -le $max_size ]; then
+      colorize "  ${resolution} :: ${videoname} :: ${extension} :: ${size}Kb < ${max_size}Kb" 32
     fi
   done
   echo ""
