@@ -99,7 +99,7 @@ _get_video_size_ratio () {
 # extension, format, aspect, aspect_param, qcomp, qcomp_param, video_options, video_bitrate, video_frames, resolution, source_video, new_video_name
 _generate_video_with_ffmpeg () {
   colorize "    generating ${extension} video using ${aspect} ratio, ${qcomp} compression rate, video bitrate ${video_bitrate}, ${video_frames} fps, from ${source_video} ==> ${new_video_name}"
-  # colorize "      ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp_param} -y -f ${format} ${new_video_name}" 35
+  colorize "      ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp_param} -y -f ${format} ${new_video_name}" 34
   ffmpeg -i ${source_video} -vcodec mpeg4 ${video_options} -acodec copy -s ${resolution}${aspect_param}${qcomp_param} -y -f ${format} ${new_video_name} 2> /dev/null
 }
 
@@ -211,7 +211,7 @@ _fix_video () {
             ref_max_size=$(( $width + $height + (($width + $height)/4) + (560 - $cur_width + $cur_height) ))
           fi
           
-          if [ "$width" -ge $ref_width ] && [ "$height" -ge $ref_height ] && [ $ref_size -le $ref_max_size ]; then
+          if [ "$width" -ge $ref_width ] && [ "$height" -ge $ref_height ] && [ "$ref_size" -gt 50 ] && [ "$ref_size" -le $ref_max_size ]; then
             source_video="${videofile}"
             ref_width=$width
             ref_height=$height
@@ -241,12 +241,12 @@ _fix_video () {
           _generate_video_with_ffmpeg
           
           new_size=`du -k "${new_video_name}" | awk '{ print $1 }'`
-          
-          if [ $new_size -le $max_size ]; then
+                    
+          if [ "$new_size" -le $max_size ]; then
             colorize "    ${resolution} :: ${videoname} :: ${extension} :: ${new_size}Kb < ${max_size}Kb" 32
-          elif [ $new_size -eq $size ]; then
+          elif [ "$new_size" -eq $size ]; then
             colorize "    NO CHANGE IN SIZE :: ${size}Kb :: ${resolution} :: ${videoname} :: ${extension}" 35
-          elif [ $new_size -le $(( $max_size + ($max_size)/10 )) ]; then
+          elif [ "$new_size" -le $(( $max_size + ($max_size)/10 )) ]; then
             colorize "    CLOSE ENOUGH? :: ${new_size}Kb > ${max_size}Kb :: ${resolution} :: ${videoname} :: ${extension}" 33
           else
             colorize "    TOO BIG :: ${new_size}Kb > ${max_size}Kb :: ${resolution} :: ${videoname} :: ${extension}" 31
@@ -264,15 +264,16 @@ _fix_video () {
   cd ..
 }
 
-# rsync -Prtlpmhn --exclude "**/*.GIF" --exclude "**/*.dm" root@salt1:/user/local/multimedia/BRAZIL/videos/ .
+# rsync -Prtlpmhn --exclude "**/*.GIF" --exclude "**/*.dm" root@salt1:/usr/local/multimedia/BRAZIL/videos/ .
 
 for dir in `ls`; do
   if [ -d "${dir}" ]; then
     _fix_video "${dir}"
+    rm "1.*%" 2> /dev/null
     echo ""
   fi
 done
 
-# rsync -Prtlpmhn --exclude "**/*.GIF" --exclude "**/*.dm" . root@salt1:/user/local/multimedia/BRAZIL/videos/
+# rsync -Prtlpmhn --exclude "**/*.GIF" --exclude "**/*.dm" . root@salt1:/usr/local/multimedia/BRAZIL/videos/
 
 exit $?
