@@ -1,4 +1,10 @@
 #!/bin/bash
+
+# Basic variables
+SCRIPT_NAME=`basename $0`
+SCRIPT_DIR=`dirname $0`
+source "${SCRIPT_DIR}/_function_colorize";
+
 _get_image_size () {
   width=0
   height=0
