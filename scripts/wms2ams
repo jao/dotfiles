@@ -23,32 +23,32 @@ _get_image_size () {
   height=0
   if [ -f "$1" ]; then
     local img_info=`identify "$1" 2>&1 | head -n 1`
-    local bad_header=`echo "$img_info" | grep -o 'improper image header'`
-    if [ "$bad_header" == "improper image header" ]; then
-      colorize " => $bad_header  " 37 41 1
-      colorize "  REMOVING THE FILE - ${1}" 31
+    local bad_header=`echo "${img_info}" | grep -o 'improper image header'`
+    if [ "${bad_header}" == "improper image header" ]; then
+      colorize "  => ${bad_header}  " 37 41 1
+      colorize "  YOU SHOULD REMOVE THIS FILE -> ${1}" 31
       return
     fi
-    local res=`echo "$img_info" | awk '{print $3}'`
+    local res=`echo "${img_info}" | awk '{ print $3 }'`
     width=`echo "$res" | awk -Fx '{ print $1 }'`
     height=`echo "$res" | awk -Fx '{ print $2 }'`
   fi
 }
 
 _find_source_image () {
-  ref_height=0
   ref_width=0
-  source_img_name=""
-  for img in `ls -t | grep -Ei "${1}"`; do
+  ref_height=0
+  source_image=''
+  for img in `ls | grep -Ei "${1}"`; do
     _get_image_size "${img//\\/}"
-    if [ "$width" -ge $ref_width ] && [ "$height" -ge $ref_height ]; then
-      ref_height=$height
+    if [ "${width}" -ge $ref_width ] && [ "${height}" -ge $ref_height ]; then
       ref_width=$width
-      source_img_name="$img"
+      ref_height=$height
+      source_image="$img"
     fi
   done
-  if [ -n $source_img_name ] && [ $ref_width -gt 0 ] && [ $ref_height -gt 0 ]; then
-    colorize "    found ${source_img_name} | ${ref_width}x${ref_height}" 36
+  if [ -n $source_image ] && [ $ref_width -gt 0 ] && [ $ref_height -gt 0 ]; then
+    colorize "    Found ${source_image} | ${ref_width}x${ref_height}" 36
   fi
 }
 
@@ -58,58 +58,68 @@ _find_source_image () {
 cd "${CONTENT_SOURCE_DIRECTORY}"
 for content_dir in `ls`; do
   if [ -d "${content_dir}" ]; then
+    cd "${content_dir}"
     case $content_dir in
       games)
         # copy the TXT files, IMG files, and JAVA files to a simpler file structure
         banner "Copying game files" 37 44
-        cd "${content_dir}"
         
         for dir in `ls`; do
           if [ -d "${dir}" ]; then
             colorize "  working with files in ${dir}" 36
             
             provider="${dir##*_}"
-            provider_name=`echo "$provider" | tr "[:upper:]" "[:lower:]"`
+            if [ -z "${provider}" ]; then
+              colorize "    Could not find the provider's name" 31
+              exit 1
+            fi
+            provider_name=`echo "${provider}" | tr "[:upper:]" "[:lower:]"`
+            
             game="${dir%_*}"
             game="${game%jogo*}"
             game="${game%Jogo*}"
-            game_name=`echo "$game" | tr "[:upper:]" "[:lower:]"`
+            game_name=`echo "${game}" | tr "[:upper:]" "[:lower:]"`
             
             target_dir="${CONTENT_TARGET_DIRECTORY}/games/${provider_name}/${game_name}"
             [ ! -d "${target_dir}" ] && mkdir -p "${target_dir}"
+            colorize "    target directory is ${target_dir}"
             
             cd "${dir}"
             files_in_target_dir=`ls | wc -w | sed 's/ //'`
             if [ "${files_in_target_dir}" -eq 0 ]; then
-              colorize "    copying game files to ${target_dir}/"
+              colorize "    copying game files from ${dir}"
               cp IMG/*.GIF "${target_dir}/"
               cp TXT/*.TXT "${target_dir}/"
               cp FILES/*/*.JA* "${target_dir}/"
             else
-              colorize "    there are files in ${target_dir} already, please fix this" 35
+              colorize "      There are files in ${target_dir} already, please fix this" 35
+              exit 1
             fi
             cd ..
             
           fi
         done
         
-        cd ..
         colorize "Game files copied." 32
       ;;
       images)
         # copy only the larger resolution image files to a simpler file structure
         banner "Copying image files" 37 44
-        cd "${content_dir}"
         
         for dir in `ls`; do
           if [ -d "${dir}" ]; then
             colorize "  working with files inside ${dir}" 36
             
             provider="${dir##*_}"
-            provider_name=`echo "$provider" | tr "[:upper:]" "[:lower:]"`
+            if [ -z "${provider}" ]; then
+              colorize "    Could not find the provider's name" 31
+              exit 1
+            fi
+            provider_name=`echo "${provider}" | tr "[:upper:]" "[:lower:]"`
             
             target_dir="${CONTENT_TARGET_DIRECTORY}/images/${provider_name}"
             [ ! -d "${target_dir}" ] && mkdir -p "${target_dir}"
+            colorize "    target directory is ${target_dir}"
             
             cd "${dir}"
             # find the name patterns inside this directory
@@ -124,11 +134,22 @@ for content_dir in `ls`; do
                 
                 # find the larger resolution image available that follows that name pattern
                 _find_source_image "^[0-9]+X[0-9]+_${image_name}(_PREVIEW)?\.(JPG|GIF)$"
-                if [ -n "${source_img_name}" ] && [ -f "${source_img_name}" ] && [ ! -f "${target_dir}/${source_img_name}"]; then
+                if [ -n "${source_image}" ] && [ -f "${source_image}" ] && [ ! -f "${target_dir}/${source_image}"]; then
+                  extension=`identify "${source_image}" | awk '{ print $2 }' | tr "[:upper:]" "[:lower:]" | sed 's/e//g'`
+                  name_extension=`echo "${souce_image##*.}" | tr "[:upper:]" "[:lower:]"`
                   # copy it to the target directory
-                  cp "${source_img_name}" "${target_dir}/"
+                  colorize "    copying image ${source_image} from ${dir}"
+                  if [ $name_extension != $extension ] && [ $extension == "jpg" ]; then
+                    cp -nv "${source_image}" "${target_dir}/${source_image%.*}.jpg"
+                  elif [ $extension != "jpg" ]; then
+                    convert "${source_image}" "${source_image%.*}.jpg"
+                    cp -nv "${source_image%.*}.jpg" "${target_dir}/"
+                  else
+                    cp -nv "${source_image}" "${target_dir}/"
+                  fi
                 else
-                  colorize "      Something prevented '${source_img_name}' to be copied, please fix this and try again."
+                  colorize "      Something prevented '${source_image}' to be copied, please fix this and try again."
+                  exit 1
                 fi
               done
             fi
@@ -136,35 +157,40 @@ for content_dir in `ls`; do
           fi
         done
         
-        cd ..
         colorize "Image files copied." 32
       ;;
       songs)
         # copy the sound files to a simpler file structure
         banner "Copying song files" 37 44
-        cd "${content_dir}"
         
         for dir in `ls`; do
           if [ -d "${dir}" ]; then
             colorize "  working with files inside ${dir}" 36
             
             provider="${dir##*_}"
-            provider_name=`echo "$provider" | tr "[:upper:]" "[:lower:]"`
+            if [ -z "${provider}" ]; then
+              colorize "    Could not find the provider's name" 31
+              exit 1
+            fi
+            provider_name=`echo "${provider}" | tr "[:upper:]" "[:lower:]"`
             
             cd "${dir}"
-            for song_dir in `ls`
-              song_name="${song_dir}"
+            for songpack in `ls`
+              song_name=`echo "${songpack}" | tr "[:upper:]" "[:lower:]"`
+              
               target_dir="${CONTENT_TARGET_DIRECTORY}/songs/${provider_name}/${song_name}"
               [ ! -d "${target_dir}" ] && mkdir -p "${target_dir}"
+              colorize "    target directory is ${target_dir}"
               
-              cd "${song_dir}"
-              files_in_target_dir=`ls | wc -w | sed 's/ //'`
+              cd "${songpack}"
+              files_in_target_dir=`ls | wc -w | sed 's/ //g'`
               if [ "${files_in_target_dir}" -eq 0 ]; then
-                colorize "    copying song files to ${target_dir}/"
+                colorize "    copying song files from ${songpack}"
                 cp * "${target_dir}/"
                 cp REAL/* "${target_dir}/"
               else
-                colorize "    there are files in ${target_dir} already, please fix this" 35
+                colorize "      There are files in ${target_dir} already, please fix this" 35
+                exit 1
               fi
               cd ..
             done
@@ -173,29 +199,32 @@ for content_dir in `ls`; do
           fi
         done
         
-        cd ..
         colorize "Song files copied." 32
       ;;
       videos)
         # copy the larger resolution video files to a simpler file structure
         banner "Copying video files" 37 44
-        cd "${content_dir}"
         
         for dir in `ls`; do
           if [ -d "${dir}" ]; then
             colorize "  working with files inside ${dir}" 36
             
             provider="${dir##*_}"
-            provider_name=`echo "$provider" | tr "[:upper:]" "[:lower:]"`
+            if [ -z "${provider}" ]; then
+              colorize "    Could not find the provider's name" 31
+              exit 1
+            fi
+            provider_name=`echo "${provider}" | tr "[:upper:]" "[:lower:]"`
             
             target_dir="${CONTENT_TARGET_DIRECTORY}/videos/${provider_name}"
             [ ! -d "${target_dir}" ] && mkdir -p "${target_dir}"
+            colorize "    target directory is ${target_dir}"
             
             cd "${dir}"
             # find the name patterns inside this directory
             content_names=(`ls | grep -Ei '(mp4|3gp)$' | sed -E 's/^[0-9]+x[0-9]+_(\[?[[:alnum:]\_]+\]?)\.[[:alnum:]]{3}$/\1/g' | grep -Eiv '(mp4|3gp)$' | sort -u`)
             if [ ${#content_names[@]} -gt 0 ]; then
-              colorize "    Found ${#content_names[@]} different name pattern(s)"
+              colorize "    found ${#content_names[@]} different name pattern(s)"
               for videoname in ${content_names[@]}; do
                 # find the larger resolution video available that follows that name pattern
                 ref_width=128
@@ -216,12 +245,13 @@ for content_dir in `ls`; do
                   fi
                 done
                 
-                if [ -n "${source_video}" ] && [ ! -f "${target_dir}/${source_video}" ]; then
-                  colorize "    found source video: ${source_video}" 36
+                if [ -n "${source_video}" ] && [ -f "${source_video}" ] && [ ! -f "${target_dir}/${source_video}" ]; then
+                  colorize "    copying ${source_video} from ${dir} to ${target_dir}" 36
                   # copy it to the target directory
-                  cp "${source_video}" "${target_dir}/"
+                  cp ${source_video%.*}.* "${target_dir}/"
                 else
                   colorize "      Something prevented '${source_video}' to be copied, please fix this and try again."
+                  exit 1
                 fi
               done
             fi
@@ -229,10 +259,10 @@ for content_dir in `ls`; do
           fi
         done
         
-        cd ..
         colorize "Video files copied." 32
       ;;
     esac
+    cd ..
   fi
 done
 
