@@ -1,6 +1,6 @@
 #!/bin/bash
 # 
-# wms_content_to_ams:
+# wms to ams:
 # this script is meant to copy the main files from the italian content format
 # to a new structure that will be used to create the AMS XML files to import
 # the contents into the german platorm.
@@ -16,6 +16,41 @@ source "${SCRIPT_DIR}/_function_colorize"
 
 CONTENT_SOURCE_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/remote"
 CONTENT_TARGET_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/ams"
+
+# content measuring functions
+_get_image_size () {
+  width=0
+  height=0
+  if [ -f "$1" ]; then
+    local img_info=`identify "$1" 2>&1 | head -n 1`
+    local bad_header=`echo "$img_info" | grep -o 'improper image header'`
+    if [ "$bad_header" == "improper image header" ]; then
+      colorize " => $bad_header  " 37 41 1
+      colorize "  REMOVING THE FILE - ${1}" 31
+      return
+    fi
+    local res=`echo "$img_info" | awk '{print $3}'`
+    width=`echo "$res" | awk -Fx '{ print $1 }'`
+    height=`echo "$res" | awk -Fx '{ print $2 }'`
+  fi
+}
+
+_find_source_image () {
+  ref_height=0
+  ref_width=0
+  source_img_name=""
+  for img in `ls -t | grep -Ei "${1}"`; do
+    _get_image_size "${img//\\/}"
+    if [ "$width" -ge $ref_width ] && [ "$height" -ge $ref_height ]; then
+      ref_height=$height
+      ref_width=$width
+      source_img_name="$img"
+    fi
+  done
+  if [ -n $source_img_name ] && [ $ref_width -gt 0 ] && [ $ref_height -gt 0 ]; then
+    colorize "    found ${source_img_name} | ${ref_width}x${ref_height}" 36
+  fi
+}
 
 # script starts here
 
@@ -76,12 +111,28 @@ for content_dir in `ls`; do
             target_dir="${CONTENT_TARGET_DIRECTORY}/images/${provider_name}"
             [ ! -d "${target_dir}" ] && mkdir -p "${target_dir}"
             
+            cd "${dir}"
             # find the name patterns inside this directory
-            
-            # find the larger resolution image available that follows that name pattern
-            
-            # copy it to the target directory
-            
+            content_names=(`ls | grep -Ei '(jpg|gif)$' | sed -E 's/^[0-9]+X[0-9]+_([^\.]+)(_PREVIEW)?\.(JPG|GIF)$/\1/g' | grep -v '_PREVIEW' | sort -u`)
+            if [ ${#content_names[@]} -gt 0 ]; then
+              colorize "    Found ${#content_names[@]} different name pattern(s)"
+              for image_name in ${content_names[@]}; do
+                image_name="${image_name//\(/\(}"
+                image_name="${image_name//\)/\)}"
+                image_name="${image_name//\[/\[}"
+                image_name="${image_name//\]/\]}"
+                
+                # find the larger resolution image available that follows that name pattern
+                _find_source_image "^[0-9]+X[0-9]+_${image_name}(_PREVIEW)?\.(JPG|GIF)$"
+                if [ -n "${source_img_name}" ] && [ -f "${source_img_name}" ] && [ ! -f "${target_dir}/${source_img_name}"]; then
+                  # copy it to the target directory
+                  cp "${source_img_name}" "${target_dir}/"
+                else
+                  colorize "      Something prevented '${source_img_name}' to be copied, please fix this and try again."
+                fi
+              done
+            fi
+            cd ..
           fi
         done
         
@@ -140,12 +191,41 @@ for content_dir in `ls`; do
             target_dir="${CONTENT_TARGET_DIRECTORY}/videos/${provider_name}"
             [ ! -d "${target_dir}" ] && mkdir -p "${target_dir}"
             
+            cd "${dir}"
             # find the name patterns inside this directory
-            
-            # find the larger resolution video available that follows that name pattern
-            
-            # copy it to the target directory
-            
+            content_names=(`ls | grep -Ei '(mp4|3gp)$' | sed -E 's/^[0-9]+x[0-9]+_(\[?[[:alnum:]\_]+\]?)\.[[:alnum:]]{3}$/\1/g' | grep -Eiv '(mp4|3gp)$' | sort -u`)
+            if [ ${#content_names[@]} -gt 0 ]; then
+              colorize "    Found ${#content_names[@]} different name pattern(s)"
+              for videoname in ${content_names[@]}; do
+                # find the larger resolution video available that follows that name pattern
+                ref_width=128
+                ref_height=96
+                source_video=''
+                for videofile in `ls *_${videoname}.* | grep -Ei "(mp4|3gp)$" 2> /dev/null`; do
+                  res=`ffmpeg -i $videofile 2>&1 | grep -oE ' [0-9]{3}x[0-9]{2,3}' | sed 's/ //'`
+                  # res="${videofile%%_*}"
+                  if [ -n "${res}" ]; then
+                    width=`echo "$res" | awk -Fx '{ print $1 }'`
+                    height=`echo "$res" | awk -Fx '{ print $2 }'`
+                    
+                    if [ "$width" -ge $ref_width ] && [ "$height" -ge $ref_height ]; then
+                      source_video="${videofile}"
+                      ref_width=$width
+                      ref_height=$height
+                    fi
+                  fi
+                done
+                
+                if [ -n "${source_video}" ] && [ ! -f "${target_dir}/${source_video}" ]; then
+                  colorize "    found source video: ${source_video}" 36
+                  # copy it to the target directory
+                  cp "${source_video}" "${target_dir}/"
+                else
+                  colorize "      Something prevented '${source_video}' to be copied, please fix this and try again."
+                fi
+              done
+            fi
+            cd ..
           fi
         done
         

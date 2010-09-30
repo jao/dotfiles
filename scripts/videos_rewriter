@@ -201,7 +201,6 @@ _fix_video () {
 for dir in `ls`; do
   if [ -d "${dir}" ]; then
     _fix_video "${dir}"
-    rm 1.* 2> /dev/null
     echo ""
   fi
 done
