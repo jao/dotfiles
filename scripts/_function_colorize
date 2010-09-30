@@ -1,0 +1,73 @@
+#!/bin/bash
+
+###########################################################
+# Appearance
+###########################################################
+# BLACK=30, RED=31, GREEN=32, YELLOW=33, BLUE=34, PINK=35, CYAN=36, WHITE=37
+# BLACK=40, RED=41, GREEN=42, YELLOW=43, BLUE=44, PINK=45, CYAN=46, WHITE=47
+
+# Examples of colored boxes (default colors)
+# title "Testing a title box"
+# info "Testing an information box"
+# warning "Testing a warning box"
+# error "Testing an error box"
+# colorize "text message" #fg #bg #format
+
+# Terminal size
+COLUMNS=`tput cols`
+
+colorize () {
+  # Default color values
+  local D_FG=39
+  local D_BG=49
+  local D_FM=0
+  [ -n "$1" ] || return 65;
+  local FC="\033["
+  local RC="\033[0m"
+  [ -n "$4" ] && FC="${FC}${4};" || FC="${FC}${D_FM};";
+  [ -n "$2" ] && FC="${FC}${2};" || FC="${FC}${D_FG};";
+  [ -n "$3" ] && FC="${FC}${3}m" || FC="${FC}${D_BG}m";
+  msg="$1"
+  echo -e "${FC}${msg}${RC}";
+}
+
+center () {
+  msg=" $1 ";
+  while [ ${#msg} -lt $COLUMNS ]; do
+    [ $((${#msg} % 2)) -eq 0 ] && msg="$msg " || msg=" $msg"
+  done
+}
+
+banner () {
+  msg=" $1 ";
+  while [ ${#msg} -lt $COLUMNS ]; do
+    msg="$msg "
+  done
+}
+
+banner_right () {
+  msg=" $1 ";
+  while [ ${#msg} -lt $COLUMNS ]; do
+    msg=" $msg"
+  done
+}
+
+title () {
+  banner "$1";
+  colorize "$msg" 30 42 1;
+}
+
+warning () {
+  banner "$1";
+  colorize "$msg" 30 43 1;
+}
+
+error () {
+  banner "$1";
+  colorize "$msg" 37 41 1;
+}
+
+info () {
+  banner "$1";
+  colorize "$msg" 34 47 1;
+}

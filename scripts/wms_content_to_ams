@@ -1,0 +1,138 @@
+#!/bin/bash
+# 
+# wms_content_to_ams:
+# this script is meant to copy the main files from the italian content format
+# to a new structure that will be used to create the AMS XML files to import
+# the contents into the german platorm.
+# 
+# There will be another script to generate the XML files, filling all the
+# available information.
+# 
+
+# Basic variables
+SCRIPT_NAME=`basename $0`
+SCRIPT_DIR=`dirname $0`
+source "${SCRIPT_DIR}/_function_colorize";
+
+CONTENT_SOURCE_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/remote"
+CONTENT_TARGET_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/ams"
+
+# script starts here
+
+# make sure the target subdirectories exist
+# if [ ! -e "$CONTENT_TARGET_DIRECTORY" ]; then
+#   mkdir -p "$CONTENT_TARGET_DIRECTORY"
+#   mkdir -p "$CONTENT_TARGET_DIRECTORY/games"
+#   mkdir -p "$CONTENT_TARGET_DIRECTORY/images"
+#   mkdir -p "$CONTENT_TARGET_DIRECTORY/songs"
+#   mkdir -p "$CONTENT_TARGET_DIRECTORY/videos"
+# fi
+
+# go to the content's source directory
+cd "${CONTENT_SOURCE_DIRECTORY}"
+for content in `ls`; do
+  case $content in
+    games)
+      # copy the TXT files, IMG files, and JAVA files to a simpler file structure
+      colorize "Copying game files" 33
+      cd "${$content}"
+      
+      for dir in `ls`; do
+        if [ -d "${dir}" ]; then
+          colorize "  working with files in ${dir}" 36
+          
+          provider="${dir##*_}"
+          provider_name=`echo "$provider" | tr "[:upper:]" "[:lower:]"`
+          game="${dir%_*}"
+          game="${game%jogo*}"
+          game="${game%Jogo*}"
+          game_name=`echo "$game" | tr "[:upper:]" "[:lower:]"`
+          
+          target_dir="$CONTENT_TARGET_DIRECTORY/games/${provider_name}/${game_name}"
+          
+          if [ ! -d "${target_dir}" ]; then
+            mkdir -p "${target_dir}"
+          fi
+          
+          cp "${dir}/IMG/*.GIF" "${target_dir}/"
+          cp "${dir}/TXT/*.TXT" "${target_dir}/"
+          cp "${dir}/FILES/*/*.JA*" "${target_dir}/"
+          
+        fi
+      done
+      
+      colorize "Game files copied." 32
+    ;;
+    images)
+      # copy only the larger resolution image files to a simpler file structure
+      colorize "Copying image files" 33
+      cd "${$content}"
+      
+      for dir in `ls`; do
+        if [ -d "${dir}" ]; then
+          colorize "  working with files in ${dir}" 36
+          
+          provider="${dir##*_}"
+          provider_name=`echo "$provider" | tr "[:upper:]" "[:lower:]"`
+          
+          target_dir="$CONTENT_TARGET_DIRECTORY/images/${provider_name}"
+          
+          if [ ! -d "${target_dir}" ]; then
+            mkdir -p "${target_dir}"
+          fi
+          
+        fi
+      done      
+      
+      colorize "Image files copied." 32
+    ;;
+    songs)
+      # copy the sound files to a simpler file structure
+      colorize "Copying song files" 33
+      cd "${$content}"
+      
+      for dir in `ls`; do
+        if [ -d "${dir}" ]; then
+          colorize "  working with files in ${dir}" 36
+          
+          provider="${dir##*_}"
+          provider_name=`echo "$provider" | tr "[:upper:]" "[:lower:]"`
+          
+          target_dir="$CONTENT_TARGET_DIRECTORY/songs/${provider_name}"
+          
+          if [ ! -d "${target_dir}" ]; then
+            mkdir -p "${target_dir}"
+          fi
+          
+        fi
+      done
+      
+      colorize "Song files copied." 32
+    ;;
+    videos)
+      # copy the larger resolution video files to a simpler file structure
+      colorize "Copying video files" 33
+      cd "${$content}"
+      
+      for dir in `ls`; do
+        if [ -d "${dir}" ]; then
+          colorize "  working with files in ${dir}" 36
+          
+          provider="${dir##*_}"
+          provider_name=`echo "$provider" | tr "[:upper:]" "[:lower:]"`
+          
+          target_dir="$CONTENT_TARGET_DIRECTORY/videos/${provider_name}"
+          
+          if [ ! -d "${target_dir}" ]; then
+            mkdir -p "${target_dir}"
+          fi
+          
+        fi
+      done
+      
+      colorize "Video files copied to ." 32
+    ;;
+  esac
+done
+
+exit $?
