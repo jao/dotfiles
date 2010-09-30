@@ -62,7 +62,8 @@ for content_dir in `ls`; do
     case $content_dir in
       games)
         # copy the TXT files, IMG files, and JAVA files to a simpler file structure
-        banner "Copying game files" 37 44
+        banner "Copying game files"
+        colorize "$msg" 37 44
         
         for dir in `ls`; do
           if [ -d "${dir}" ]; then
@@ -104,7 +105,8 @@ for content_dir in `ls`; do
       ;;
       images)
         # copy only the larger resolution image files to a simpler file structure
-        banner "Copying image files" 37 44
+        banner "Copying image files"
+        colorize "$msg" 37 44
         
         for dir in `ls`; do
           if [ -d "${dir}" ]; then
@@ -161,7 +163,8 @@ for content_dir in `ls`; do
       ;;
       songs)
         # copy the sound files to a simpler file structure
-        banner "Copying song files" 37 44
+        banner "Copying song files"
+        colorize "$msg" 37 44
         
         for dir in `ls`; do
           if [ -d "${dir}" ]; then
@@ -203,7 +206,8 @@ for content_dir in `ls`; do
       ;;
       videos)
         # copy the larger resolution video files to a simpler file structure
-        banner "Copying video files" 37 44
+        banner "Copying video files"
+        colorize "$msg" 37 44
         
         for dir in `ls`; do
           if [ -d "${dir}" ]; then
