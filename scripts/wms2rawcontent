@@ -1,6 +1,6 @@
 #!/bin/bash
 # 
-# wms to raw:
+# wms to raw content:
 # this script is meant to copy the main files from the italian content format
 # to a new structure that will be used to create the AMS XML files to import
 # the contents into the german platorm.
