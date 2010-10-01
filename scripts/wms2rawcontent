@@ -15,7 +15,7 @@ SCRIPT_DIR=`dirname $0`
 source "${SCRIPT_DIR}/_function_colorize"
 
 CONTENT_SOURCE_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/remote"
-CONTENT_TARGET_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/ams"
+CONTENT_TARGET_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/raw_content"
 
 # content measuring functions
 _get_image_size () {
@@ -29,9 +29,9 @@ _get_image_size () {
       colorize "  YOU SHOULD REMOVE THIS FILE -> ${1}" 31
       return
     fi
-    local res=`echo "${img_info}" | awk '{ print $3 }'`
-    width=`echo "$res" | awk -Fx '{ print $1 }'`
-    height=`echo "$res" | awk -Fx '{ print $2 }'`
+    local resolution=`echo "${img_info}" | awk '{ print $3 }'`
+    width=`echo "${resolution}" | awk -Fx '{ print $1 }'`
+    height=`echo "${resolution}" | awk -Fx '{ print $2 }'`
   fi
 }
 
@@ -59,7 +59,7 @@ cd "${CONTENT_SOURCE_DIRECTORY}"
 for content_dir in `ls`; do
   if [ -d "${content_dir}" ]; then
     cd "${content_dir}"
-    case $content_dir in
+    case ${content_dir} in
       games)
         # copy the TXT files, IMG files, and JAVA files to a simpler file structure
         banner "Copying game files"
@@ -125,10 +125,10 @@ for content_dir in `ls`; do
             
             cd "${dir}"
             # find the name patterns inside this directory
-            content_names=(`ls | grep -Ei '(jpg|gif)$' | sed -E 's/^[0-9]+X[0-9]+_([^\.]+)(_PREVIEW)?\.(JPG|GIF)$/\1/g' | grep -v '_PREVIEW' | sort -u`)
-            if [ ${#content_names[@]} -gt 0 ]; then
-              colorize "    Found ${#content_names[@]} different name pattern(s)"
-              for image_name in ${content_names[@]}; do
+            image_names=(`ls | grep -Ei '(jpg|gif)$' | sed -E 's/^[0-9]+X[0-9]+_([^\.]+)(_PREVIEW)?\.(JPG|GIF)$/\1/g' | grep -v '_PREVIEW' | sort -u`)
+            if [ ${#image_names[@]} -gt 0 ]; then
+              colorize "    Found ${#image_names[@]} different name pattern(s)"
+              for image_name in ${image_names[@]}; do
                 image_name="${image_name//\(/\(}"
                 image_name="${image_name//\)/\)}"
                 image_name="${image_name//\[/\[}"
@@ -189,8 +189,8 @@ for content_dir in `ls`; do
               files_in_target_dir=`ls | wc -w | sed 's/ //g'`
               if [ "${files_in_target_dir}" -eq 0 ]; then
                 colorize "    copying song files from ${songpack}"
-                cp * "${target_dir}/"
-                cp REAL/* "${target_dir}/"
+                cp *.* "${target_dir}/"
+                cp REAL/*.* "${target_dir}/"
               else
                 colorize "      There are files in ${target_dir} already, please fix this" 35
                 exit 1
@@ -226,10 +226,10 @@ for content_dir in `ls`; do
             
             cd "${dir}"
             # find the name patterns inside this directory
-            content_names=(`ls | grep -Ei '(mp4|3gp)$' | sed -E 's/^[0-9]+x[0-9]+_(\[?[[:alnum:]\_]+\]?)\.[[:alnum:]]{3}$/\1/g' | grep -Eiv '(mp4|3gp)$' | sort -u`)
-            if [ ${#content_names[@]} -gt 0 ]; then
-              colorize "    found ${#content_names[@]} different name pattern(s)"
-              for videoname in ${content_names[@]}; do
+            video_names=(`ls | grep -Ei '(mp4|3gp)$' | sed -E 's/^[0-9]+x[0-9]+_(\[?[[:alnum:]\_]+\]?)\.[[:alnum:]]{3}$/\1/g' | grep -Eiv '(mp4|3gp)$' | sort -u`)
+            if [ ${#video_names[@]} -gt 0 ]; then
+              colorize "    found ${#video_names[@]} different name pattern(s)"
+              for videoname in ${video_names[@]}; do
                 # find the larger resolution video available that follows that name pattern
                 ref_width=128
                 ref_height=96
@@ -252,7 +252,10 @@ for content_dir in `ls`; do
                 if [ -n "${source_video}" ] && [ -f "${source_video}" ] && [ ! -f "${target_dir}/${source_video}" ]; then
                   colorize "    copying ${source_video} from ${dir} to ${target_dir}" 36
                   # copy it to the target directory
-                  cp ${source_video%.*}.* "${target_dir}/"
+                  cp -nv ${source_video%.*}.* "${target_dir}/"
+                  
+                  # copy videos with 176x144 resolution to the target dir as well
+                  cp -nv 176X144_${videoname}* "${target_dir}/"
                 else
                   colorize "      Something prevented '${source_video}' to be copied, please fix this and try again."
                   exit 1
