@@ -59,7 +59,7 @@ cd "${CONTENT_SOURCE_DIRECTORY}"
 for content_dir in `ls`; do
   if [ -d "${content_dir}" ]; then
     cd "${content_dir}"
-    case ${content_dir} in
+    case $content_dir in
       games)
         # copy the TXT files, IMG files, and JAVA files to a simpler file structure
         banner "Copying game files"
@@ -74,27 +74,28 @@ for content_dir in `ls`; do
               colorize "    Could not find the provider's name" 31
               exit 1
             fi
-            provider_name=`echo "${provider}" | tr "[:upper:]" "[:lower:]"`
+            provider_name=`echo "${provider}" | tr "[[:upper:]]" "[[:lower:]]"`
             
             game="${dir%_*}"
             game="${game%jogo*}"
             game="${game%Jogo*}"
-            game_name=`echo "${game}" | tr "[:upper:]" "[:lower:]"`
+            game="${game%JOGO*}"
+            game_name=`echo "${game}" | tr "[[:upper:]]" "[[:lower:]]"`
             
             target_dir="${CONTENT_TARGET_DIRECTORY}/games/${provider_name}/${game_name}"
             [ ! -d "${target_dir}" ] && mkdir -p "${target_dir}"
             colorize "    target directory is ${target_dir}"
             
             cd "${dir}"
-            files_in_target_dir=`ls | wc -w | sed 's/ //'`
-            if [ "${files_in_target_dir}" -eq 0 ]; then
+            files_in_target_dir=`ls "${target_dir}/" 2> /dev/null | wc -w | sed 's/ //g'`
+            if [ "$files_in_target_dir" -eq 0 ]; then
               colorize "    copying game files from ${dir}"
-              cp IMG/*.GIF "${target_dir}/"
-              cp TXT/*.TXT "${target_dir}/"
-              cp FILES/*/*.JA* "${target_dir}/"
+              cp -nv IMG/*.GIF "${target_dir}/"
+              cp -nv TXT/*.TXT "${target_dir}/"
+              cp -nv FILES/*/*.JA* "${target_dir}/"
             else
               colorize "      There are files in ${target_dir} already, please fix this" 35
-              exit 1
+              # exit 1
             fi
             cd ..
             
@@ -117,7 +118,7 @@ for content_dir in `ls`; do
               colorize "    Could not find the provider's name" 31
               exit 1
             fi
-            provider_name=`echo "${provider}" | tr "[:upper:]" "[:lower:]"`
+            provider_name=`echo "${provider}" | tr "[[:upper:]]" "[[:lower:]]"`
             
             target_dir="${CONTENT_TARGET_DIRECTORY}/images/${provider_name}"
             [ ! -d "${target_dir}" ] && mkdir -p "${target_dir}"
@@ -175,11 +176,11 @@ for content_dir in `ls`; do
               colorize "    Could not find the provider's name" 31
               exit 1
             fi
-            provider_name=`echo "${provider}" | tr "[:upper:]" "[:lower:]"`
+            provider_name=`echo "${provider}" | tr "[[:upper:]]" "[[:lower:]]"`
             
             cd "${dir}"
-            for songpack in `ls`
-              song_name=`echo "${songpack}" | tr "[:upper:]" "[:lower:]"`
+            for songpack in `ls`; do
+              song_name=`echo "${songpack}" | tr "[[:upper:]]" "[[:lower:]]"`
               
               target_dir="${CONTENT_TARGET_DIRECTORY}/songs/${provider_name}/${song_name}"
               [ ! -d "${target_dir}" ] && mkdir -p "${target_dir}"
@@ -218,7 +219,7 @@ for content_dir in `ls`; do
               colorize "    Could not find the provider's name" 31
               exit 1
             fi
-            provider_name=`echo "${provider}" | tr "[:upper:]" "[:lower:]"`
+            provider_name=`echo "${provider}" | tr "[[:upper:]]" "[[:lower:]]"`
             
             target_dir="${CONTENT_TARGET_DIRECTORY}/videos/${provider_name}"
             [ ! -d "${target_dir}" ] && mkdir -p "${target_dir}"
