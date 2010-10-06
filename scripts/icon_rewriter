@@ -35,10 +35,6 @@ _find_source_image () {
     if [ "$width" -ge $ref_width ] && [ "$height" -ge $ref_height ]; then
       ref_height=$height
       ref_width=$width
-      # if [ -n "$source_img_name" ] && [ -f "$source_img_name" ] && [ "${source_img_name:0:3}" != "ICO" ]; then
-      #   echo -e "\033[31;1mRemoving unused image $source_img_name\033[0m"
-      #   rm "${source_img_name}"
-      # fi
       source_img_name="$img"
       source_animated="$animated"
     fi
@@ -78,7 +74,7 @@ _create_icon () {
 
 # download newer remote files using rsync
 echo -e "\033[33mDownloading new/updated files from the remote server, please wait...\033[0m"
-rsync -Prtlhvm --include "+ [^t]*/" --include "+ **/ICO*.*" --include "+ **/ANI*.*" --include "+ **/SPLASH*.*" --include "+ **/800X800*_PREVIEW.*" --include "+ **/[4-7][0-8]0X[4-7][0-8]0*_PREVIEW.*" --exclude "*" root@web1:/var/www.old/previews/ .
+rsync -Prtlhvm --include "+ [^t_]*/" --include "+ **/ICO*.*" --include "+ **/ANI*.*" --include "+ **/SPLASH*.*" --include "+ **/800X800*_PREVIEW.*" --include "+ **/[4-7][0-8]0X[4-7][0-8]0*_PREVIEW.*" --exclude "- /videos_backup" --exclude "*" root@web1:/var/www.old/previews/ .
 echo ""
 
 # setting file and directory permissions
@@ -220,7 +216,7 @@ echo ""
 
 # updates remote files using rsync
 echo -e "\033[33mUploading modified files to remote server, please wait...\033[0m"
-rsync -Prlthvm --include "+ [^t]*/" --include "+ **/ICO*.*" --include "+ **/ANI*.*" --include "+ **/SPLASH*.*" --exclude "*" . root@web1:/var/www.old/previews/
+rsync -Prlthvm --include "+ [^t]*/" --include "+ **/ICO*.*" --include "+ **/ANI*.*" --include "+ **/SPLASH*.*" --exclude "- /videos_backup" --exclude "*" . root@web1:/var/www.old/previews/
 echo ""
 
 exit $?
