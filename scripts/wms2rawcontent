@@ -13,6 +13,7 @@
 SCRIPT_NAME=`basename $0`
 SCRIPT_DIR=`dirname $0`
 source "${SCRIPT_DIR}/_function_colorize"
+
 SERVER_NAME=`uname -n`
 if [ "$SERVER_NAME" == 'fail.local' ]; then
   CONTENT_SOURCE_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/remote"
@@ -92,7 +93,7 @@ for content_dir in `ls`; do
             colorize "    target directory is ${target_dir}"
             
             cd "${dir}"
-            files_in_target_dir=`ls "${target_dir}/" 2> /dev/null | wc -w | sed 's/ //g'`
+            files_in_target_dir=`ls "${target_dir}/" 2>&1 | wc -w | sed 's/ //g'`
             if [ "$files_in_target_dir" -eq 0 ]; then
               colorize "    copying game files from ${dir}"
               cp -nv IMG/*.GIF "${target_dir}/"
@@ -191,13 +192,13 @@ for content_dir in `ls`; do
               colorize "    target directory is ${target_dir}"
               
               cd "${songpack}"
-              files_in_target_dir=`ls | wc -w | sed 's/ //g'`
+              files_in_target_dir=`ls "${target_dir}/" 2>&1 | wc -w | sed 's/ //g'`
               if [ "${files_in_target_dir}" -eq 0 ]; then
                 colorize "    copying song files from ${songpack}"
                 cp -nv *.* "${target_dir}/"
                 cp -nv REAL/*.* "${target_dir}/"
               else
-                colorize "      There are files in ${target_dir} already, please fix this" 35
+                colorize "      There are files in ${target_dir} already, please fix this and try again." 35
               fi
               cd ..
             done
