@@ -6,7 +6,7 @@
 # the contents into the german platorm.
 # 
 # There will be another script to generate the XML files, filling all the
-# available information.
+# available information. And the script will be called "rawcontent2ams"
 # 
 
 # Basic variables
@@ -152,7 +152,6 @@ for content_dir in `ls`; do
                   fi
                 else
                   colorize "      Something prevented '${source_image}' to be copied, please fix this and try again."
-                  exit 1
                 fi
               done
             fi
@@ -190,11 +189,10 @@ for content_dir in `ls`; do
               files_in_target_dir=`ls | wc -w | sed 's/ //g'`
               if [ "${files_in_target_dir}" -eq 0 ]; then
                 colorize "    copying song files from ${songpack}"
-                cp *.* "${target_dir}/"
-                cp REAL/*.* "${target_dir}/"
+                cp -nv *.* "${target_dir}/"
+                cp -nv REAL/*.* "${target_dir}/"
               else
                 colorize "      There are files in ${target_dir} already, please fix this" 35
-                exit 1
               fi
               cd ..
             done
@@ -256,10 +254,9 @@ for content_dir in `ls`; do
                   cp -nv ${source_video%.*}.* "${target_dir}/"
                   
                   # copy videos with 176x144 resolution to the target dir as well
-                  cp -nv 176X144_${videoname}* "${target_dir}/"
+                  cp -nv 176X144_${videoname}* "${target_dir}/" 2> /dev/null
                 else
                   colorize "      Something prevented '${source_video}' to be copied, please fix this and try again."
-                  exit 1
                 fi
               done
             fi
