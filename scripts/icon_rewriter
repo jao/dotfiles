@@ -74,7 +74,7 @@ _create_icon () {
 
 # download newer remote files using rsync
 echo -e "\033[33mDownloading new/updated files from the remote server, please wait...\033[0m"
-rsync -Prtlhvm --include "+ [^t_]*/" --include "+ **/ICO*.*" --include "+ **/ANI*.*" --include "+ **/SPLASH*.*" --include "+ **/800X800*_PREVIEW.*" --include "+ **/[4-7][0-8]0X[4-7][0-8]0*_PREVIEW.*" --exclude "- /videos_backup" --exclude "*" root@web1:/var/www.old/previews/ .
+rsync -Prtlhvm --include "+ [^tb]*/" --include "+ **/ICO*.*" --include "+ **/ANI*.*" --include "+ **/SPLASH*.*" --include "+ **/800X800*_PREVIEW.*" --include "+ **/[4-7][0-8]0X[4-7][0-8]0*_PREVIEW.*" --exclude "*" root@web1:/var/www.old/previews/ .
 echo ""
 
 # setting file and directory permissions
@@ -216,7 +216,7 @@ echo ""
 
 # updates remote files using rsync
 echo -e "\033[33mUploading modified files to remote server, please wait...\033[0m"
-rsync -Prlthvm --include "+ [^t]*/" --include "+ **/ICO*.*" --include "+ **/ANI*.*" --include "+ **/SPLASH*.*" --exclude "- /videos_backup" --exclude "*" . root@web1:/var/www.old/previews/
+rsync -Prlthvm --include "+ [^tb]*/" --include "+ **/ICO*.*" --include "+ **/ANI*.*" --include "+ **/SPLASH*.*" --exclude "*" . root@web1:/var/www.old/previews/
 echo ""
 
 exit $?
