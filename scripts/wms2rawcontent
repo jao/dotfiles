@@ -54,7 +54,7 @@ _find_source_image () {
     fi
   done
   if [ -n $source_image ] && [ $ref_width -gt 0 ] && [ $ref_height -gt 0 ]; then
-    colorize "    Found ${source_image} | ${ref_width}x${ref_height}" 36
+    colorize "      found ${source_image} | ${ref_width}x${ref_height}"
   fi
 }
 
@@ -100,7 +100,7 @@ for content_dir in `ls`; do
               cp -nv TXT/*.TXT "${target_dir}/"
               cp -nv FILES/*/*.JA* "${target_dir}/"
             else
-              colorize "      There are files in ${target_dir} already, please fix this" 35
+              colorize "      There are files in ${target_dir} already, please fix this and try again." 35
               # exit 1
             fi
             cd ..
@@ -132,32 +132,36 @@ for content_dir in `ls`; do
             
             cd "${dir}"
             # find the name patterns inside this directory
-            image_names=(`ls | grep -Ei '(jpg|gif)$' | sed -E 's/^[0-9]+X[0-9]+_([^\.]+)(_PREVIEW)?\.(JPG|GIF)$/\1/g' | grep -v '_PREVIEW' | sort -u`)
+            image_names=(`ls | grep -Ei '\.(jpg|gif)$' | sed -E 's/^[0-9]+X[0-9]+_([^\.]+)\.(JPG|GIF)$/\1/g' | grep -v '_PREVIEW' | grep -v 'ICO_' | grep -v '.JPG' | sort -u`)
             if [ ${#image_names[@]} -gt 0 ]; then
               colorize "    Found ${#image_names[@]} different name pattern(s)"
               for image_name in ${image_names[@]}; do
+                colorize "    working with '${image_name}' pattern..." 33
                 image_name="${image_name//\(/\(}"
                 image_name="${image_name//\)/\)}"
-                image_name="${image_name//\[/\[}"
-                image_name="${image_name//\]/\]}"
+                image_name="${image_name//[/\[}"
+                image_name="${image_name//]/\]}"
                 
                 # find the larger resolution image available that follows that name pattern
-                _find_source_image "^[0-9]+X[0-9]+_${image_name}(_PREVIEW)?\.(JPG|GIF)$"
-                if [ -n "${source_image}" ] && [ -f "${source_image}" ] && [ ! -f "${target_dir}/${source_image}"]; then
-                  extension=`identify "${source_image}" | awk '{ print $2 }' | tr "[:upper:]" "[:lower:]" | sed 's/e//g'`
-                  name_extension=`echo "${souce_image##*.}" | tr "[:upper:]" "[:lower:]"`
+                _find_source_image "^[0-9]+X[0-9]+_${image_name}\.(JPG|GIF)$"
+                if [ -n "${source_image}" ] && [ -f "${source_image}" ] && [ ! -f "${target_dir}/${source_image}" ]; then
+                  extension=`identify "${source_image}" | awk '{ print $2 }' | tr "[[:upper:]]" "[[:lower:]]" | sed 's/e//g'`
+                  name_extension=`echo "${souce_image##*.}" | tr "[[:upper:]]" "[[:lower:]]"`
+                  
                   # copy it to the target directory
-                  colorize "    copying image ${source_image} from ${dir}"
-                  if [ $name_extension != $extension ] && [ $extension == "jpg" ]; then
+                  colorize "      copying image ${source_image} from ${content_dir}/${dir}"
+                  if [ "$name_extension" != "$extension" ] && [ "$extension" == "jpg" ]; then
                     cp -nv "${source_image}" "${target_dir}/${source_image%.*}.jpg"
-                  elif [ $extension != "jpg" ]; then
+                  elif [ "$extension" != "jpg" ]; then
                     convert "${source_image}" "${source_image%.*}.jpg"
                     cp -nv "${source_image%.*}.jpg" "${target_dir}/"
                   else
                     cp -nv "${source_image}" "${target_dir}/"
                   fi
+                elif [ -f "${target_dir}/${source_image}" ]; then
+                  colorize "      '${target_dir}/${source_image}' already exists, skipping it." 34
                 else
-                  colorize "      Something prevented '${source_image}' to be copied, please fix this and try again."
+                  colorize "      Something prevented '${source_image}' to be copied, please fix this and try again." 35
                 fi
               done
             fi
@@ -235,12 +239,13 @@ for content_dir in `ls`; do
             if [ ${#video_names[@]} -gt 0 ]; then
               colorize "    found ${#video_names[@]} different name pattern(s)"
               for videoname in ${video_names[@]}; do
+                colorize "    working with '${videoname}' pattern..." 33
                 # find the larger resolution video available that follows that name pattern
                 ref_width=128
                 ref_height=96
                 source_video=''
                 for videofile in `ls *_${videoname}.* | grep -Ei "(mp4|3gp)$" 2> /dev/null`; do
-                  res=`ffmpeg -i $videofile 2>&1 | grep -oE ' [0-9]{3}x[0-9]{2,3}' | sed 's/ //'`
+                  res=`ffmpeg -i $videofile 2>&1 | grep -oEi ' [0-9]{3}x[0-9]{2,3}' | sed 's/ //g'`
                   # res="${videofile%%_*}"
                   if [ -n "${res}" ]; then
                     width=`echo "$res" | awk -Fx '{ print $1 }'`
@@ -261,8 +266,13 @@ for content_dir in `ls`; do
                   
                   # copy videos with 176x144 resolution to the target dir as well
                   cp -nv 176X144_${videoname}* "${target_dir}/" 2> /dev/null
+                  
+                  # copy the images relate to this video
+                  cp -nv ICO_W*${videoname}.* "${target_dir}/"
+                elif [ -f "${target_dir}/${source_video}" ]; then
+                  colorize "      '${target_dir}/${source_video}' already exists, skipping it." 34
                 else
-                  colorize "      Something prevented '${source_video}' to be copied, please fix this and try again."
+                  colorize "      Something prevented '${source_video}' to be copied, please fix this and try again." 35
                 fi
               done
             fi
