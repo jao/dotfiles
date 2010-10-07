@@ -66,7 +66,7 @@ for content_dir in `ls`; do
   if [ -d "${content_dir}" ]; then
     cd "${content_dir}"
     case $content_dir in
-      games-temp)
+      games)
         # copy the TXT files, IMG files, and JAVA files to a simpler file structure
         banner "Copying game files"
         colorize "$msg" 37 44
@@ -95,7 +95,7 @@ for content_dir in `ls`; do
             cd "${dir}"
             files_in_target_dir=`ls "${target_dir}/" 2>&1 | wc -w | sed 's/ //g'`
             if [ "$files_in_target_dir" -eq 0 ]; then
-              colorize "    copying game files from ${dir}"
+              colorize "    copying game files from ${dir}" 34
               cp -nv IMG/*.GIF "${target_dir}/"
               cp -nv TXT/*.TXT "${target_dir}/"
               cp -nv FILES/*/*.JA* "${target_dir}/"
@@ -110,7 +110,7 @@ for content_dir in `ls`; do
         
         colorize "Game files copied." 32
       ;;
-      images-temp)
+      images)
         # copy only the larger resolution image files to a simpler file structure
         banner "Copying image files"
         colorize "$msg" 37 44
@@ -156,7 +156,7 @@ for content_dir in `ls`; do
                   name_extension=`echo "${souce_image##*.}" | tr "[[:upper:]]" "[[:lower:]]"`
                   
                   # copy it to the target directory
-                  colorize "      copying image ${source_image} from ${content_dir}/${dir}"
+                  colorize "      copying image ${source_image} from ${content_dir}/${dir}" 34
                   if [ "$name_extension" != "$extension" ] && [ "$extension" == "jpg" ]; then
                     cp -nv "${source_image}" "${target_dir}/${source_image%.*}.JPG"
                   elif [ "$extension" != "jpg" ]; then
@@ -209,7 +209,7 @@ for content_dir in `ls`; do
               
               files_in_target_dir=`ls "${target_dir}/" 2>&1 | wc -w | sed 's/ //g'`
               if [ "${files_in_target_dir}" -eq 0 ]; then
-                colorize "    copying song files from ${dir}"
+                colorize "    copying song files from ${dir}" 34
                 cp -nv *.* "${target_dir}/"
                 cp -nv REAL/*.* "${target_dir}/"
               else
@@ -236,7 +236,7 @@ for content_dir in `ls`; do
                   cd "${songpack}"
                   files_in_target_dir=`ls "${target_dir}/" 2>&1 | wc -w | sed 's/ //g'`
                   if [ "${files_in_target_dir}" -eq 0 ]; then
-                    colorize "    copying song files from ${songpack}"
+                    colorize "    copying song files from ${songpack}" 34
                     cp -nv *.* "${target_dir}/"
                     cp -nv REAL/*.* "${target_dir}/"
                   else
@@ -280,19 +280,6 @@ for content_dir in `ls`; do
             fi
             provider_name=`echo "${provider}" | tr "[[:upper:]]" "[[:lower:]]"`
             
-            video_pack="${dir%%VIDEO*}"
-            video_pack="${video_pack%%2010*}"
-            video_pack="${video_pack%%2009*}"
-            video_pack="${video_pack/_$provider/}"
-            video_pack="${video_pack/$provider/}"
-            video_pack=`echo "${video_pack}" | tr "[[:upper:]]" "[[:lower:]]"`
-            
-            colorize "    video pack name: ${video_pack}" 32
-            
-            target_dir="${CONTENT_TARGET_DIRECTORY}/videos/${provider_name}/${video_pack}"
-            [ ! -d "${target_dir}" ] && mkdir -p "${target_dir}"
-            colorize "    target directory is ${target_dir}"
-            
             cd "${dir}"
             # find the name patterns inside this directory
             video_names=(`ls | grep -Ei '(mp4|3gp)$' | sed -E 's/^[0-9]+X[0-9]+_([^\.]+)\.(MP4|3GP)$/\1/g' | grep -Eiv '(mp4|3gp)$' | sort -u`)
@@ -304,11 +291,9 @@ for content_dir in `ls`; do
                 ref_width=128
                 ref_height=96
                 source_video=''
-                videoname="${videoname//[/\[/}"
-                videoname="${videoname//]/\]/}"
-                videoname="${videoname/(/\(/}"
-                videoname="${videoname/)/\)/}"
-                for videofile in `ls *_${videoname}.* 2> /dev/null | grep -Ei "(mp4|3gp)$"`; do
+                videoname="${videoname//[/}"
+                videoname="${videoname//]/}"
+                for videofile in `ls *${videoname}* | grep -Ei '(mp4|3gp)$' 2> /dev/null`; do
                   res=`ffmpeg -i $videofile 2>&1 | grep -oEi ' [0-9]{3}x[0-9]{2,3}' | sed 's/ //g'`
                   # res="${videofile%%_*}"
                   if [ -n "${res}" ]; then
@@ -323,19 +308,39 @@ for content_dir in `ls`; do
                   fi
                 done
                 
+                video_pack="${dir%%VIDEO*}"
+                video_pack="${video_pack%%2010*}"
+                video_pack="${video_pack%%2009*}"
+                video_pack="${video_pack/_$provider/}"
+                video_pack="${video_pack/$provider/}"
+                video_pack="${video_pack//[/}"
+                video_pack="${video_pack//]/}"
+                video_pack=`echo "${video_pack}" | tr "[[:upper:]]" "[[:lower:]]"`
+                
+                if [ -n "${video_pack}" ]; then
+                  colorize "    video pack name: ${video_pack}" 32
+                  target_dir="${CONTENT_TARGET_DIRECTORY}/videos/${provider_name}/${video_pack}"
+                else
+                  video_pack_tmp="${source_video#*_}"
+                  video_pack_tmp="${video_pack_tmp%.*}"
+                  video_pack_tmp="${video_pack_tmp//[/}"
+                  video_pack_tmp="${video_pack_tmp//]/}"
+                  video_pack_tmp=`echo "${video_pack_tmp}" | tr "[[:upper:]]" "[[:lower:]]"`
+                  colorize "    video pack name: ${video_pack_tmp}" 32
+                  target_dir="${CONTENT_TARGET_DIRECTORY}/videos/${provider_name}/${video_pack_tmp}"
+                fi
+                [ ! -d "${target_dir}" ] && mkdir -p "${target_dir}"
+                colorize "    target directory is ${target_dir}"
+                
                 if [ -n "${source_video}" ] && [ -f "${source_video}" ] && [ ! -f "${target_dir}/${source_video}" ]; then
-                  colorize "    copying ${source_video} from ${dir} to ${target_dir}"
+                  colorize "    copying ${source_video} from ${dir} to ${target_dir}" 34
                   # copy it to the target directory
-                  cp -nv ${source_video%.*}.* "${target_dir}/"
-                  
-                  # if [ "${source_video%%_*}" != "176X44" ]; then
-                  #   rm "${target_dir}/176X44_${source_video#*_}" 2> /dev/null
-                  # fi
+                  cp -nv "${source_video%.*}".* "${target_dir}/"
                   
                   # copy the images relate to this video
-                  cp -nv ICO_*${videoname}* "${target_dir}/" 2> /dev/null
+                  cp -nv ICO_*"${videoname}"* "${target_dir}/" 2> /dev/null
                 elif [ -f "${target_dir}/${source_video}" ]; then
-                  colorize "      '${target_dir}/${source_video}' already exists, skipping it." 34
+                  colorize "      '${target_dir}/${source_video}' already exists, skipping it." 35
                 else
                   colorize "      Something prevented '${source_video}' to be copied, please fix this and try again." 35
                 fi
