@@ -1,5 +1,65 @@
 #!/bin/bash
 
 # this script takes the raw structure and generates the AMS structure
-# followed by the necessary XML files, with the required information
+# followed by yet another script that will generate the necessary XML
+# files, with the required information
+# ruby script called: amsxmlgenerator
 
+CONTENT_SOURCE_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/raw_content"
+CONTENT_TARGET_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/ams"
+
+cd $CONTENT_SOURCE_DIRECTORY
+
+for mediatype in `ls`; do
+  if [ -d "${mediatype}" ]; then
+    cd "${mediatype}"
+    case $mediatype in
+      games)
+        for provider in `ls`; do
+          cd $provider
+            for game_pack in `ls`; do
+              cd $game_pack
+              
+              cd ..
+            done
+          cd ..
+        done
+      ;;
+      images)
+        for provider in `ls`; do
+          cd $provider
+          for image_pack in `ls`; do
+            cd $image_pack
+            
+            cd ..
+          done
+          cd ..
+        done
+      ;;
+      songs)
+        for provider in `ls`; do
+          cd $provider
+          for song_pack in `ls`; do
+            cd $song_pack
+            
+            cd ..
+          done
+          cd ..
+        done
+      ;;
+      videos)
+        for provider in `ls`; do
+          cd $provider
+          for video_pack in `ls`; do
+            cd $video_pack
+            
+            cd ..
+          done
+          cd ..
+        done
+      ;;
+    esac
+  fi
+done
+
+exit $?
