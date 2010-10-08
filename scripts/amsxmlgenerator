@@ -3,10 +3,11 @@
 # generates XML files to be uploaded along with the packs they are in
 # to import contents to the AMS platform
 
+require 'rubygems'
 require 'fastercsv'
 require 'nokogiri'
-require 'file_utils'
-require 'net'
+require 'fileutils'
+# require 'net'
 
 # read files in all directories and write a XML file for every single
 # content pack, after that upload the results to the AMS file server,
@@ -22,6 +23,8 @@ require 'net'
 # Videos
 # 243 - Video7 176x144 - Video7 mp4 in 3gp 176x144
 # 244 - Video7 128x96 - Video7 mp4 in 3gp 128x96
+# 1720 - FLMV_mpeg4_aac_176x144.3gp
+# 1721 - FLMV_mpeg4_aac_352x288.3gp
 # 
 # Images
 # 1147 - color image MASTER 1200x1200 jpg
@@ -31,3 +34,64 @@ require 'net'
 # Games
 # look in the handset-itemtypeid.csv
 # 
+
+supplier_id = 12345
+external_id = 'imagecontentnamerandomnumber'
+content_name = 'Content Name'
+content_md5sum = '4dd19692830616f2e3ffad0095d6e4e9'
+content_size = 391239
+
+image_names = [0,1,2]
+
+AMS_CONTENT_DIR = "/Volumes/PublicoSP/remoteITcontents"
+FileUtils.cd(AMS_CONTENT_DIR, :verbose => true) {|root|
+  root.
+}
+
+
+# IMAGE EXAMPLE
+ams_xml_content = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do
+  contentimport('xmlns' => "http://arvato-mobile.com/transfer", 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance", 'xmlns:xsd' => "http://www.w3.org/2001/XMLSchema", 'xsi:schemaLocation' => "http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd", 'supplierid' => supplier_id, 'date' => "2010-10-08") {
+    image_names.each do |image|
+      article('articletypeid' => "8") {
+        idbag {
+          externalid "#{external_id}#{image}"
+        }
+        artist('role' => "Main") {
+          name "No Artist"
+        }
+        title("#{content_name} #{image}", 'loc' => 'ww')
+        licensor "FILL IN YOUR LICENSOR NAME HERE"
+        keyword "My Keyword1"
+        keyword "My Keyword2"
+        contentgrading 0
+        genre "My genre1"
+        genre "My genre2"
+        category "import" # fixed value
+        attribute('key' => "VF_AssetID", 'value' => "Fill in Asset ID	X here")
+        attribute('key' => "General Reporting Code", 'value' => "EA_000001_ww")
+        territory {
+          c "BR"
+          dRelDate "2010-10-08+01:00"
+          priceinfo {
+            effectivedate "1970-01-01+01:00"
+            pricecode "DEFAULT"
+          }
+        }
+        item('itemtypeid' => "1147") {
+          binary('contentname_color_image_MASTER_1200x1200.jpg', 'kind'=>"Binary", 'md5sum' => content_md5sum, 'filesize' => content_size)
+        }
+        item('itemtypeid' => "1148") {
+          binary('contentname_color_image_MASTER_1200x900.jpg', 'kind' => "Binary", 'md5sum' => content_md5sum, 'filesize' => content_size)
+        }
+        item('itemtypeid' => "1149") {
+          binary('contentname_color_image_MASTER_900x1200.jpg', 'kind' => "Binary", 'md5sum' => content_md5sum, 'filesize' => content_size)
+        }
+        item('itemtypeid' => "1150") {
+          binary('contentname_color_image_MASTER_675x1200.jpg', 'kind' => "Binary", 'md5sum' => content_md5sum, 'filesize' => content_size)
+        }
+      }
+    end
+  }
+end
+puts ams_xml_content.to_xml
