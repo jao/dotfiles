@@ -8,8 +8,20 @@
 CONTENT_SOURCE_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/raw_content"
 CONTENT_TARGET_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/ams"
 
-cd $CONTENT_SOURCE_DIRECTORY
+date="201010080600"
 
+_rename_files_to_lowercase () {
+  cd $1
+  for file in `ls`; do
+    newfilename=`echo $file | tr "[[:upper:]]" "[[:lower:]]"`
+    if [ "$file" != "$newfilename" ]; then
+      mv -v $file $newfilename
+    fi
+  done
+  cd -
+}
+
+cd $CONTENT_SOURCE_DIRECTORY
 for mediatype in `ls`; do
   if [ -d "${mediatype}" ]; then
     cd "${mediatype}"
@@ -17,11 +29,17 @@ for mediatype in `ls`; do
       games)
         for provider in `ls`; do
           cd $provider
-            for game_pack in `ls`; do
-              cd $game_pack
-              
-              cd ..
-            done
+          for game_pack in `ls`; do
+            cd $game_pack
+            target_dir="${CONTENT_TARGET_DIRECTORY}/${date}_${mediatype}_${provider}_${game_pack}_new"
+            [ ! -d $target_dir ] && mkdir -p $target_dir
+            convert ICO_WAP.GIF -thumbnail $target_dir/_wap_preview.jpg
+            convert ICO_WEB.GIF -thumbnail $target_dir/_web_preview.jpg
+            cp -n *.JAD $target_dir/
+            
+            _rename_files_to_lowercase "${target_dir}"
+            cd ..
+          done
           cd ..
         done
       ;;
@@ -30,7 +48,11 @@ for mediatype in `ls`; do
           cd $provider
           for image_pack in `ls`; do
             cd $image_pack
+            target_dir="${CONTENT_TARGET_DIRECTORY}/${date}_${mediatype}_${provider}_${image_pack}_new"
+            [ ! -d $target_dir ] && mkdir -p $target_dir
+            cp -n *.JPG $target_dir/
             
+            _rename_files_to_lowercase "${target_dir}"
             cd ..
           done
           cd ..
@@ -41,7 +63,14 @@ for mediatype in `ls`; do
           cd $provider
           for song_pack in `ls`; do
             cd $song_pack
+            target_dir="${CONTENT_TARGET_DIRECTORY}/${date}_${mediatype}_${provider}_${song_pack}_new"
+            [ ! -d $target_dir ] && mkdir -p $target_dir
+            convert ICO_WAP.GIF -thumbnail $target_dir/_wap_preview.jpg
+            convert ICO_WEB.GIF -thumbnail $target_dir/_web_preview.jpg
+            cp -n *.MP3 $target_dir/
+            rm $target_dir/*_PREVIEW.MP3
             
+            _rename_files_to_lowercase "${target_dir}"
             cd ..
           done
           cd ..
@@ -52,7 +81,11 @@ for mediatype in `ls`; do
           cd $provider
           for video_pack in `ls`; do
             cd $video_pack
+            target_dir="${CONTENT_TARGET_DIRECTORY}/${date}_${mediatype}_${provider}_${video_pack}_new"
+            [ ! -d $target_dir ] && mkdir -p $target_dir
             
+            
+            _rename_files_to_lowercase "${target_dir}"
             cd ..
           done
           cd ..
