@@ -10,7 +10,7 @@ CONTENT_TARGET_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/ams"
 
 DATETIME="201010080600"
 
-_rename_files_to_proper_name () {
+_rename_files_properly () {
   cd $1
   for file in `ls`; do
     newfilename=`echo $file | tr "[[:upper:]]" "[[:lower:]]"`
@@ -44,7 +44,7 @@ for mediatype in `ls`; do
             [ -f ICO_WEB.GIF ] && convert ICO_WEB.GIF -thumbnail $target_dir/_web_preview.jpg
             cp -n *.JAD $target_dir/
             
-            _rename_files_to_proper_name "${target_dir}"
+            _rename_files_properly "${target_dir}"
             cd ..
           done
           cd ..
@@ -63,7 +63,7 @@ for mediatype in `ls`; do
             cp -n *.JPG $target_dir/
             cp -n *.jpg $target_dir/
             
-            _rename_files_to_proper_name "${target_dir}"
+            _rename_files_properly "${target_dir}"
             cd ..
           done
           cd ..
@@ -84,7 +84,7 @@ for mediatype in `ls`; do
             cp -n *.MP3 ${target_dir}/
             rm $target_dir/*_PREVIEW.MP3
             
-            _rename_files_to_proper_name "${target_dir}"
+            _rename_files_properly "${target_dir}"
             cd ..
           done
           cd ..
@@ -110,7 +110,7 @@ for mediatype in `ls`; do
             cp -n *.3GP $target_dir/
             cp -n *.MP4 $target_dir/
             
-            _rename_files_to_proper_name "${target_dir}"
+            _rename_files_properly "${target_dir}"
             cd ..
           done
           cd ..

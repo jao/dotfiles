@@ -8,3 +8,9 @@ require 'nokogiri'
 require 'file_utils'
 require 'net'
 
+# read files in all directories and write a XML file for every single
+# content pack, after that upload the results to the AMS file server,
+# probably using rsync, if possible.
+# after all files are uploaded create the file xmlname.go for every pack
+# and sync the file structure again, this should start the import
+# proccess.
