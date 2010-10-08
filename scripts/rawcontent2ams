@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/bin/bash
 
 # this script takes the raw structure and generates the AMS structure
 # followed by the necessary XML files, with the required information
