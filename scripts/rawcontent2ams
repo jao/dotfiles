@@ -3,7 +3,12 @@
 # this script takes the raw structure and generates the AMS structure
 # followed by yet another script that will generate the necessary XML
 # files, with the required information
-# ruby script called: amsxmlgenerator
+# ruby script is called: amsxmlgenerator
+
+# Basic variables
+SCRIPT_NAME=`basename $0`
+SCRIPT_DIR=`dirname $0`
+source "${SCRIPT_DIR}/_function_colorize"
 
 CONTENT_SOURCE_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/raw_content"
 CONTENT_TARGET_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/ams"
@@ -15,10 +20,12 @@ _rename_files_properly () {
   for file in `ls`; do
     newfilename=`echo $file | tr "[[:upper:]]" "[[:lower:]]"`
     newfilename="${newfilename//[/}"
-    newfilename="${newfilename//]/}"
+    newfilename="${newfilename//]/_}"
     newfilename="${newfilename//(/}"
-    newfilename="${newfilename//)/}"
+    newfilename="${newfilename//)/_}"
+    newfilename="${newfilename//__/_}"
     if [ "$file" != "$newfilename" ]; then
+      colorize "  $file => $newfilename" 36
       mv -v $file $newfilename
     fi
   done
@@ -46,19 +53,19 @@ for mediatype in `ls`; do
       esac
       case $mediatype in
         games)
-          pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_new"
+          pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_insert"
           target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
           [ ! -d $target_dir ] && mkdir -p $target_dir
           touch $target_dir/$pack_name.xml
           
           [ -f ICO_WAP.GIF ] && convert ICO_WAP.GIF -thumbnail $target_dir/_wap_preview.jpg
           [ -f ICO_WEB.GIF ] && convert ICO_WEB.GIF -thumbnail $target_dir/_web_preview.jpg
-          cp -n *.JAD $target_dir/
+          cp -nv *.JA* $target_dir/
           
           _rename_files_properly "${target_dir}"
         ;;
         images)
-          pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_new"
+          pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_insert"
           target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
           [ ! -d $target_dir ] && mkdir -p $target_dir
           touch $target_dir/$pack_name.xml
@@ -69,7 +76,7 @@ for mediatype in `ls`; do
           _rename_files_properly "${target_dir}"
         ;;
         songs)
-          pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_new"
+          pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_insert"
           target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
           [ ! -d $target_dir ] && mkdir -p $target_dir
           touch $target_dir/$pack_name.xml
@@ -82,7 +89,7 @@ for mediatype in `ls`; do
           _rename_files_properly "${target_dir}"
         ;;
         videos)
-          pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_new"
+          pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_insert"
           target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
           [ ! -d $target_dir ] && mkdir -p $target_dir
           touch $target_dir/$pack_name.xml
@@ -95,7 +102,8 @@ for mediatype in `ls`; do
           done
           
           cp -n *.3GP $target_dir/
-          cp -n *.MP4 $target_dir/
+          
+          # create videos with 176x144 and 128x96 - 3gp mp4 format using ffmpeg
           
           _rename_files_properly "${target_dir}"
         ;;

@@ -11,6 +11,23 @@ require 'net'
 # read files in all directories and write a XML file for every single
 # content pack, after that upload the results to the AMS file server,
 # probably using rsync, if possible.
-# after all files are uploaded create the file xmlname.go for every pack
+# 
+# After all files are uploaded create the file xmlname.go for every pack
 # and sync the file structure again, this should start the import
 # proccess.
+
+# Real Sound
+# 82 - Real Sound MP3
+# 
+# Videos
+# 243 - Video7 176x144 - Video7 mp4 in 3gp 176x144
+# 244 - Video7 128x96 - Video7 mp4 in 3gp 128x96
+# 
+# Images
+# 1147 - color image MASTER 1200x1200 jpg
+# 1148 - color image MASTER 1200x900 jpg
+# 1149 - color image MASTER 900x1200 jpg
+# 
+# Games
+# look in the handset-itemtypeid.csv
+# 

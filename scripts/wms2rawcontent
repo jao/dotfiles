@@ -89,7 +89,7 @@ for content_dir in `ls`; do
             cd "${dir}"
             files_in_target_dir=`ls "${target_dir}/" 2>&1 | wc -w | sed 's/ //g'`
             if [ "$files_in_target_dir" -eq 0 ]; then
-              colorize "    copying game files from ${dir}" 34
+              colorize "    copying game files from ${content_dir}/${dir}" 34
               cp -nv IMG/*.GIF "${target_dir}/"
               cp -nv TXT/*.TXT "${target_dir}/"
               cp -nv FILES/*/*.JA* "${target_dir}/"
@@ -204,7 +204,7 @@ for content_dir in `ls`; do
               
               files_in_target_dir=`ls "${target_dir}/" 2>&1 | wc -w | sed 's/ //g'`
               if [ "${files_in_target_dir}" -eq 0 ]; then
-                colorize "    copying song files from ${dir}" 34
+                colorize "    copying song files from ${content_dir}/${dir}" 34
                 cp -nv *.* "${target_dir}/"
                 cp -nv REAL/*.* "${target_dir}/"
               else
@@ -231,7 +231,7 @@ for content_dir in `ls`; do
                   cd "${songpack}"
                   files_in_target_dir=`ls "${target_dir}/" 2>&1 | wc -w | sed 's/ //g'`
                   if [ "${files_in_target_dir}" -eq 0 ]; then
-                    colorize "    copying song files from ${songpack}" 34
+                    colorize "    copying song files from ${content_dir}/${dir}/${songpack}" 34
                     cp -nv *.* "${target_dir}/"
                     cp -nv REAL/*.* "${target_dir}/"
                   else
@@ -328,7 +328,7 @@ for content_dir in `ls`; do
                 colorize "    target directory is ${target_dir}"
                 
                 if [ -n "${source_video}" ] && [ -f "${source_video}" ] && [ ! -f "${target_dir}/${source_video}" ]; then
-                  colorize "    copying ${source_video} from ${dir} to ${target_dir}" 34
+                  colorize "    copying ${source_video} from ${content_dir}/${dir}" 34
                   # copy it to the target directory
                   cp -nv "${source_video%.*}".* "${target_dir}/"
                   
