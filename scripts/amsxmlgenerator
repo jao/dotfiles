@@ -1,3 +1,10 @@
 #!/usr/bin/ruby
 
-# 
+# generates XML files to be uploaded along with the packs they are in
+# to import contents to the AMS platform
+
+require 'fastercsv'
+require 'nokogiri'
+require 'file_utils'
+require 'net'
+
