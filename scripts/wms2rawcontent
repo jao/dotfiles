@@ -14,14 +14,8 @@ SCRIPT_NAME=`basename $0`
 SCRIPT_DIR=`dirname $0`
 source "${SCRIPT_DIR}/_function_colorize"
 
-SERVER_NAME=`uname -n`
-if [ "$SERVER_NAME" == 'fail.local' ]; then
-  CONTENT_SOURCE_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/remote"
-  CONTENT_TARGET_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/raw_content"
-else
-  CONTENT_SOURCE_DIRECTORY="/usr/local/multimedia/BRAZIL"
-  CONTENT_TARGET_DIRECTORY="/usr/local/multimedia/raw_content"
-fi
+CONTENT_SOURCE_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/remote"
+CONTENT_TARGET_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/raw_content"
 
 # content measuring functions
 _get_image_size () {
@@ -125,7 +119,8 @@ for content_dir in `ls`; do
               exit 1
             fi
             provider_name=`echo "${provider}" | tr "[[:upper:]]" "[[:lower:]]"`
-            image_pack="${image_pack%%WALLPAPER*}"
+            image_pack="${dir%%WALLPAPER*}"
+            image_pack="${image_pack%%IMAGE*}"
             image_pack="${image_pack%%2010*}"
             image_pack="${image_pack%%2009*}"
             image_pack="${image_pack/_$provider/}"

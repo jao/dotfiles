@@ -33,8 +33,16 @@ for mediatype in `ls`; do
     for content_pack in `ls`; do
       cd $content_pack
       case $provider in
+        avioesdoforro|forrodomuido) provider_name="ezapsom"
         bella) provider_name="belladasemana";;
-        *) provider_name="$provider"
+        cesarpolvilho) provider_name="eblasperez";;
+        concursosereias) provider_name="sereias";;
+        hsm) provider_name="disney";;
+        fugu) provider_name="fugumobile";;
+        smartcontents) provider_name="sensualclub"
+        taito) provider_name="fatorx";;
+        wtn) provider_name="mobbr";;
+        *) provider_name="$provider";;
       esac
       case $mediatype in
         games)
