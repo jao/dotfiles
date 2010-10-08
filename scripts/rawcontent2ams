@@ -27,97 +27,76 @@ _rename_files_properly () {
 
 cd $CONTENT_SOURCE_DIRECTORY
 for mediatype in `ls`; do
-  if [ -d "${mediatype}" ]; then
-    cd "${mediatype}"
-    case $mediatype in
-      games)
-        for provider in `ls`; do
-          cd $provider
-          for game_pack in `ls`; do
-            cd $game_pack
-            pack_name="${DATETIME}_${mediatype}_${provider}_${game_pack}_new"
-            target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
-            [ ! -d $target_dir ] && mkdir -p $target_dir
-            touch $target_dir/$pack_name.xml
-            
-            [ -f ICO_WAP.GIF ] && convert ICO_WAP.GIF -thumbnail $target_dir/_wap_preview.jpg
-            [ -f ICO_WEB.GIF ] && convert ICO_WEB.GIF -thumbnail $target_dir/_web_preview.jpg
-            cp -n *.JAD $target_dir/
-            
-            _rename_files_properly "${target_dir}"
-            cd ..
+  cd $mediatype
+  for provider in `ls`; do
+    cd $provider
+    for content_pack in `ls`; do
+      cd $content_pack
+      case $provider in
+        bella) provider_name="belladasemana";;
+        *) provider_name="$provider"
+      esac
+      case $mediatype in
+        games)
+          pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_new"
+          target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
+          [ ! -d $target_dir ] && mkdir -p $target_dir
+          touch $target_dir/$pack_name.xml
+          
+          [ -f ICO_WAP.GIF ] && convert ICO_WAP.GIF -thumbnail $target_dir/_wap_preview.jpg
+          [ -f ICO_WEB.GIF ] && convert ICO_WEB.GIF -thumbnail $target_dir/_web_preview.jpg
+          cp -n *.JAD $target_dir/
+          
+          _rename_files_properly "${target_dir}"
+        ;;
+        images)
+          pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_new"
+          target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
+          [ ! -d $target_dir ] && mkdir -p $target_dir
+          touch $target_dir/$pack_name.xml
+          
+          cp -n *.JPG $target_dir/
+          cp -n *.jpg $target_dir/
+          
+          _rename_files_properly "${target_dir}"
+        ;;
+        songs)
+          pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_new"
+          target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
+          [ ! -d $target_dir ] && mkdir -p $target_dir
+          touch $target_dir/$pack_name.xml
+          
+          [ -f ICO_WAP.GIF ] && convert ICO_WAP.GIF -thumbnail $target_dir/_wap_preview.jpg
+          [ -f ICO_WEB.GIF ] && convert ICO_WEB.GIF -thumbnail $target_dir/_web_preview.jpg
+          cp -n *.MP3 ${target_dir}/
+          rm $target_dir/*_PREVIEW.MP3
+          
+          _rename_files_properly "${target_dir}"
+        ;;
+        videos)
+          pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_new"
+          target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
+          [ ! -d $target_dir ] && mkdir -p $target_dir
+          touch $target_dir/$pack_name.xml
+          
+          for preview in `ls *.GIF`; do
+            if [ -f $preview ]; then
+              target_preview=`echo $file | sed -E 's/ICO_WAP_/_wap_preview_/g' | sed -E 's/ICO_WEB_/_web_preview_/g' | tr "[[:upper:]]" "[[:lower:]]"`
+              convert $preview -thumbnail $target_dir/$target_preview
+            fi
           done
-          cd ..
-        done
-      ;;
-      images)
-        for provider in `ls`; do
-          cd $provider
-          for image_pack in `ls`; do
-            cd $image_pack
-            pack_name="${DATETIME}_${mediatype}_${provider}_${image_pack}_new"
-            target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
-            [ ! -d $target_dir ] && mkdir -p $target_dir
-            touch $target_dir/$pack_name.xml
-            
-            cp -n *.JPG $target_dir/
-            cp -n *.jpg $target_dir/
-            
-            _rename_files_properly "${target_dir}"
-            cd ..
-          done
-          cd ..
-        done
-      ;;
-      songs)
-        for provider in `ls`; do
-          cd $provider
-          for song_pack in `ls`; do
-            cd $song_pack
-            pack_name="${DATETIME}_${mediatype}_${provider}_${song_pack}_new"
-            target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
-            [ ! -d $target_dir ] && mkdir -p $target_dir
-            touch $target_dir/$pack_name.xml
-            
-            [ -f ICO_WAP.GIF ] && convert ICO_WAP.GIF -thumbnail $target_dir/_wap_preview.jpg
-            [ -f ICO_WEB.GIF ] && convert ICO_WEB.GIF -thumbnail $target_dir/_web_preview.jpg
-            cp -n *.MP3 ${target_dir}/
-            rm $target_dir/*_PREVIEW.MP3
-            
-            _rename_files_properly "${target_dir}"
-            cd ..
-          done
-          cd ..
-        done
-      ;;
-      videos)
-        for provider in `ls`; do
-          cd $provider
-          for video_pack in `ls`; do
-            cd $video_pack
-            pack_name="${DATETIME}_${mediatype}_${provider}_${video_pack}_new"
-            target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
-            [ ! -d $target_dir ] && mkdir -p $target_dir
-            touch $target_dir/$pack_name.xml
-            
-            for preview in `ls *.GIF`; do
-              if [ -f $preview ]; then
-                target_preview=`echo $file | sed -E 's/ICO_WAP_/_wap_preview_/g' | sed -E 's/ICO_WEB_/_web_preview_/g' | tr "[[:upper:]]" "[[:lower:]]"`
-                convert $preview -thumbnail $target_dir/$target_preview
-              fi
-            done
-            
-            cp -n *.3GP $target_dir/
-            cp -n *.MP4 $target_dir/
-            
-            _rename_files_properly "${target_dir}"
-            cd ..
-          done
-          cd ..
-        done
-      ;;
-    esac
-  fi
+          
+          cp -n *.3GP $target_dir/
+          cp -n *.MP4 $target_dir/
+          
+          _rename_files_properly "${target_dir}"
+        ;;
+      esac
+      cd ..
+    done
+    cd ..
+  done
+  cd ..
 done
 
 exit $?
