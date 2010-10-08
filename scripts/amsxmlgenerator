@@ -43,7 +43,7 @@ content_size = 391239
 
 image_names = [0,1,2]
 
-AMS_CONTENT_DIR = "/Volumes/PublicoSP/remoteITcontents"
+AMS_CONTENT_DIR = "/Volumes/PublicoSP/remoteITcontents"r
 FileUtils.cd(AMS_CONTENT_DIR, :verbose => true) {|root|
   root.
 }
@@ -95,3 +95,478 @@ ams_xml_content = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do
   }
 end
 puts ams_xml_content.to_xml
+
+# VIDEO EXAMPLE
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<contentimport xmlns="http://arvato-mobile.com/transfer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd" supplierid="123456789" date="2009-08-17T16:23:16.0Z">
+	<article articletypeid="28">
+		<!--Article Type ID 28 is for Video in the arvato-mobile AMS-->
+		<idbag>
+			<externalid>MisterMusicVideo_123456789</externalid>
+			<!--Use a continuous identifier as an external ID, for example a production ID. Must be unique! Every article has it's own external ID  -->
+		</idbag>
+		<artist role="Main">
+			<name>MY ARTISTNAME</name>
+			<!--If no artist is available, please fill in "No Artist"-->
+		</artist>
+		<title loc="ww">International Title</title>
+		<title loc="de">Deutscher Titel</title>
+		<!--Use localization "ww" (means worldwide) for the international title. Use localization like "en", "es", "de", "fr" (ISO 639-1 alpha 2) for localized titles-->
+		<licensor>FILL IN YOUR LICENSOR NAME HERE</licensor>
+		<!--Licensorname. Out of arvato-mobile's perspective, this is the company which is licensing and providing the content to arvato-mobile.-->
+		<keyword>MY KEYWORD</keyword>
+		<keyword>ANOTHER KEYWORD</keyword>
+		<!--Keywords are useful for generating search indexes. Please ask your Retailing- &  Contentmanager at arvato-mobile if keywords are necessary in your XML delivery -->
+		<contentgrading>0</contentgrading>
+		<!--Rating for the arvato mobile age verification system. Possible values are 0, 5, 10, 20, 30, 40, 50 and 60. The default value is "0" (free for all ages). Please see CONTENT_GRADING_SPECIFICATION -->
+		<genre>pop</genre>
+		<!--Genre. Metadata which describes the content of  the video by using genres.  Please always provide a genre.-->
+		<category>import</category>
+		<!--Mandatory. Please always use "import" as the category value!-->
+		<duration>271</duration>
+		<!--Measure unit: Seconds. For an article: Not the duration of any preview, but of the video content itself. Will be displayed in the shop.-->
+		<articlebinary type="FLMV_cover600x600" md5sum="81e65b7c8c22d8527e2d0264cbdc1db7" filesize="315847">video_coversource_600x600.jpg</articlebinary>
+		<articlebinary type="FLMV_screen capture source_640x480" md5sum="1130f7978e445f8b1990dfb7864ffaed" filesize="391580">video_screencapture_640x480.jpg</articlebinary>
+		<!--Articlebinary. Article Binaries will be used as preview or cover in the frontend (shop, etc.). They are mandatory-->
+		<territory>
+			<!--Region specific royalty information. Please ask your Retailing- &  Contentmanager at arvato-mobile if territory- & price information is necessary in your XML delivery. -->
+			<c>GB</c>
+			<!--Country code (ISO 3166-1-alpha-2)-->
+			<dRelDate>2009-10-22</dRelDate>
+			<dCancDate>2011-12-24</dCancDate>
+			<priceinfo>
+				<effectivedate>1970-01-01+01:00</effectivedate>
+				<pricecode>DEFAULT</pricecode>
+				<!--String is representing an encoded price. Please ask your Retailing- &  Contentmanager at arvato-mobile if territory- & price information is necessary in your XML delivery. -->
+			</priceinfo>
+		</territory>
+		<item itemtypeid="1718">
+			<binary kind="BINARY" md5sum="5241c0cb9a2c11868769a2083d109426" filesize="648723">MisterMusicVideo_1234567891941_FLMV_h263_aac_176x144.3gp</binary>
+		</item>
+		<item itemtypeid="1719">
+			<binary kind="BINARY" md5sum="8d52d40d06133ede33283cee4d11df97" filesize="977854">MisterMusicVideo_1234567891942_FLMV_h263_aac_352x288.3gp</binary>
+		</item>
+		<item itemtypeid="1720">
+			<binary kind="BINARY" md5sum="715fe9120545251ae991e900d24a6e67" filesize="688324">MisterMusicVideo_1234567891943_FLMV_mpeg4_aac_176x144.3gp</binary>
+		</item>
+		<item itemtypeid="1721">
+			<binary kind="BINARY" md5sum="c741d7142c6e571fed778825c073dc6d" filesize="978921">MisterMusicVideo_1234567891944_FLMV mpeg4 aac 352x288.3gp</binary>
+		</item>
+		<item itemtypeid="789">
+			<binary kind="BINARY" md5sum="555ba8990ff5d78ba1edc88f71107121" filesize="279921029">MisterMusicVideo_1234567891944_FLMV_MPEG_SOURCE.mpg</binary>
+		</item>
+		<item itemtypeid="501">
+			<binary kind="BINARY" md5sum="5241c0cb9a2c11868769a2083d109426" filesize="86121773">MisterMusicVideo_1234567891944_FLMV_WMV_SOURCE.wmv</binary>
+		</item>
+	</article>
+</contentimport>
+
+
+
+
+# REAL SOUND EXAMPLE
+
+<?xml version="1.0" encoding="UTF-8"?>
+<contentimport supplier="indiemobile-pias" supplierid="88" date="2009-10-07 02:22:30" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_0.xsd" xmlns="http://arvato-mobile.com/transfer">
+	<!--Please ask for your supplier ID-->
+	<article articletypeid="13" xmlns="http://arvato-mobile.com/transfer">
+		<!--Article Type ID 13 for Realmusic-->
+		<idbag>
+			<externalid>EUEDD03120226</externalid>
+			<!--Use a continuous identifier as an external ID, for example a production ID. Must be unique! Every article has it's own external ID.-->
+			<isrc>EUEDD03120226</isrc>
+			<!--It is not allowed to use any other code or identifier in the ISRC column than the ISRC (International Standard Recording Code). If you do not have an ISRC, please delete the tag completely.-->
+		</idbag>
+		<artist role="MainArtist">
+			<name>David Bowie</name>
+		</artist>
+		<title loc="ww">Heroes</title>
+		<!--Use localization "ww" (means worldwide) for the international title. Use localization like "en", "es", "de", "fr" (ISO 639-1 alpha 2) for localized titles-->
+		<title loc="de">Heroes</title>
+		<title loc="en">Heroes</title>
+		<licensor>Abcdefg</licensor>
+		<!--Case sensitive licensor name, if you don't know yours please ask your contact at arvato-mobile for details-->
+		<contentgrading>0</contentgrading>
+		<!--Rating for the arvato mobile age verification system. Possible values are 0, 5, 10, 20, 30, 40, 50 and 60. The default value is "0" (free for all ages)-->
+		<category>BACK CATALOG</category>
+		<!--Please always add this category tag.-->
+		<attribute value="EUEDD03120226" key="ISRC"/>
+		<!--Please fill in ISRC here as well. It is not allowed to use any other code or identifier in the ISRC column than the ISRC (International Standard Recording Code). If you do not have an ISRC, please delete the tag completely.-->
+		<attribute value="EMIDD0361918" key="General Reporting Code"/>
+		<!--General reporting code is the code arvato-mobile uses for the reporting. We suggest to use the ISRC if applicable. -->
+		<articlebinary type="Real_music_coversource800x800" md5sum="f2f64f5c8edc6af1435ba0eeffe048ee" filesize="463138">cover\ww\EUEDD03120226_coversource800x800.jpg</articlebinary>
+		<!--"articlebinary": The sourcefile for the cover artwork. -->
+		<territory>
+			<!--Region specific royalty and territory information. Each <c> tag represents a territory -->
+			<c>AD</c>
+			<c>AE</c>
+			<c>AF</c>
+			<c>AG</c>
+			<c>AI</c>
+			<c>AL</c>
+			<c>AM</c>
+			<c>AN</c>
+			<c>AO</c>
+			<c>AQ</c>
+			<c>AR</c>
+			<c>AS</c>
+			<c>AU</c>
+			<c>AW</c>
+			<c>AZ</c>
+			<c>BA</c>
+			<c>BB</c>
+			<c>BD</c>
+			<c>BE</c>
+			<c>BF</c>
+			<c>BG</c>
+			<c>BH</c>
+			<c>BI</c>
+			<c>BJ</c>
+			<c>BM</c>
+			<c>BN</c>
+			<c>BO</c>
+			<c>BR</c>
+			<c>BS</c>
+			<c>BT</c>
+			<c>BV</c>
+			<c>BW</c>
+			<c>BY</c>
+			<c>BZ</c>
+			<c>CA</c>
+			<c>CC</c>
+			<c>CD</c>
+			<c>CF</c>
+			<c>CG</c>
+			<c>CI</c>
+			<c>CK</c>
+			<c>CL</c>
+			<c>CM</c>
+			<c>CN</c>
+			<c>CO</c>
+			<c>CR</c>
+			<c>CS</c>
+			<c>CU</c>
+			<c>CV</c>
+			<c>CX</c>
+			<c>CY</c>
+			<c>CZ</c>
+			<c>DJ</c>
+			<c>DK</c>
+			<c>DM</c>
+			<c>DO</c>
+			<c>DZ</c>
+			<c>EC</c>
+			<c>EE</c>
+			<c>EG</c>
+			<c>EH</c>
+			<c>ER</c>
+			<c>ES</c>
+			<c>ET</c>
+			<c>FI</c>
+			<c>FJ</c>
+			<c>FK</c>
+			<c>FM</c>
+			<c>FO</c>
+			<c>FR</c>
+			<c>GA</c>
+			<c>GB</c>
+			<c>GD</c>
+			<c>GE</c>
+			<c>GF</c>
+			<c>GH</c>
+			<c>GI</c>
+			<c>GL</c>
+			<c>GM</c>
+			<c>GN</c>
+			<c>GP</c>
+			<c>GQ</c>
+			<c>GR</c>
+			<c>GS</c>
+			<c>GT</c>
+			<c>GU</c>
+			<c>GW</c>
+			<c>GY</c>
+			<c>HK</c>
+			<c>HM</c>
+			<c>HN</c>
+			<c>HR</c>
+			<c>HT</c>
+			<c>HU</c>
+			<c>ID</c>
+			<c>IL</c>
+			<c>IN</c>
+			<c>IO</c>
+			<c>IQ</c>
+			<c>IR</c>
+			<c>IS</c>
+			<c>IT</c>
+			<c>JM</c>
+			<c>JO</c>
+			<c>JP</c>
+			<c>KE</c>
+			<c>KG</c>
+			<c>KH</c>
+			<c>KI</c>
+			<c>KM</c>
+			<c>KN</c>
+			<c>KP</c>
+			<c>KR</c>
+			<c>KW</c>
+			<c>KY</c>
+			<c>KZ</c>
+			<c>LA</c>
+			<c>LB</c>
+			<c>LC</c>
+			<c>LI</c>
+			<c>LK</c>
+			<c>LR</c>
+			<c>LS</c>
+			<c>LT</c>
+			<c>LU</c>
+			<c>LV</c>
+			<c>LY</c>
+			<c>MA</c>
+			<c>MC</c>
+			<c>MD</c>
+			<c>MG</c>
+			<c>MH</c>
+			<c>MK</c>
+			<c>ML</c>
+			<c>MM</c>
+			<c>MN</c>
+			<c>MO</c>
+			<c>MP</c>
+			<c>MQ</c>
+			<c>MR</c>
+			<c>MS</c>
+			<c>MT</c>
+			<c>MU</c>
+			<c>MV</c>
+			<c>MW</c>
+			<c>MX</c>
+			<c>MY</c>
+			<c>MZ</c>
+			<c>NA</c>
+			<c>NC</c>
+			<c>NE</c>
+			<c>NF</c>
+			<c>NG</c>
+			<c>NI</c>
+			<c>NL</c>
+			<c>NO</c>
+			<c>NP</c>
+			<c>NR</c>
+			<c>NU</c>
+			<c>NZ</c>
+			<c>OM</c>
+			<c>PA</c>
+			<c>PE</c>
+			<c>PF</c>
+			<c>PG</c>
+			<c>PH</c>
+			<c>PK</c>
+			<c>PL</c>
+			<c>PM</c>
+			<c>PN</c>
+			<c>PR</c>
+			<c>PS</c>
+			<c>PT</c>
+			<c>PW</c>
+			<c>PY</c>
+			<c>QA</c>
+			<c>RE</c>
+			<c>RO</c>
+			<c>RS</c>
+			<c>RU</c>
+			<c>RW</c>
+			<c>SA</c>
+			<c>SB</c>
+			<c>SC</c>
+			<c>SD</c>
+			<c>SE</c>
+			<c>SG</c>
+			<c>SH</c>
+			<c>SI</c>
+			<c>SJ</c>
+			<c>SK</c>
+			<c>SL</c>
+			<c>SM</c>
+			<c>SN</c>
+			<c>SO</c>
+			<c>SR</c>
+			<c>ST</c>
+			<c>SV</c>
+			<c>SY</c>
+			<c>SZ</c>
+			<c>TC</c>
+			<c>TD</c>
+			<c>TF</c>
+			<c>TG</c>
+			<c>TH</c>
+			<c>TJ</c>
+			<c>TK</c>
+			<c>TL</c>
+			<c>TM</c>
+			<c>TN</c>
+			<c>TO</c>
+			<c>TR</c>
+			<c>TT</c>
+			<c>TV</c>
+			<c>TW</c>
+			<c>TZ</c>
+			<c>UA</c>
+			<c>UG</c>
+			<c>UM</c>
+			<c>US</c>
+			<c>UY</c>
+			<c>UZ</c>
+			<c>VA</c>
+			<c>VC</c>
+			<c>VE</c>
+			<c>VG</c>
+			<c>VI</c>
+			<c>VN</c>
+			<c>VU</c>
+			<c>WF</c>
+			<c>WS</c>
+			<c>YE</c>
+			<c>YT</c>
+			<c>ZA</c>
+			<c>ZM</c>
+			<c>ZW</c>
+			<!--Please add all territories for which the content shall be released. Use Country code (ISO 3166-1-alpha-2). http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2-->
+			<dRelDate>2010-05-31</dRelDate>
+			<!--Start date to sell the digital product. Important!-->
+			<priceinfo>
+				<!--Informations about the prices. Optional-->
+				<effectivedate>1970-01-01</effectivedate>
+				<!--Date when the price will be effective.Optional-->
+				<pricecode>DEFAULT</pricecode>
+				<!--String representing an encoded price. Optional-->
+			</priceinfo>
+		</territory>
+		<item itemtypeid="519">
+			<!--Real Music Source WAV Master Cut 7-->
+			<binary kind="BINARY" md5sum="1affe7108db9edbd7e7fb15729f777c5" filesize="1234944">mastercuts\EUEDD03120226_7.wav</binary>
+		</item>
+		<item itemtypeid="518">
+			<!--Real Music Source WAV Master Cut 12-->
+			<binary kind="BINARY" md5sum="df5f4d001dde9bf21f7958bcbdc11509" filesize="1510400">mastercuts\EUEDD03120226_12.wav</binary>
+		</item>
+		<item itemtypeid="516">
+			<!--Real Music Source WAV Master Cut 20-->
+			<binary kind="BINARY" md5sum="fbbb9666d6e21832ee911dbbec285089" filesize="3401728">mastercuts\EUEDD03120226_20.wav</binary>
+		</item>
+		<item itemtypeid="515">
+			<!--Real Music Source WAV Master Cut 36-->
+			<binary kind="BINARY" md5sum="75adff3626c7e7a8faa26b4fd30b4a48" filesize="6320128">mastercuts\EUEDD03120226_36.wav</binary>
+		</item>
+	</article>
+</contentimport>
+
+
+
+
+
+
+
+
+# GAME EXAMPLE
+
+<?xml version="1.0" encoding="UTF-8"?>
+<contentimport xmlns="http://arvato-mobile.com/transfer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd" supplierid="5007" date="2010-03-11">
+	<!--Use compilation date here-->
+	<!--MANDATORY! Every Supplier has it's own supplier ID at arvato. Please ask your contact at arvato mobile for your supplier ID-->
+	<article articletypeid="4">
+		<!--MANDATORY! Article Type ID 4 is arvato-mobile's internal article type ID for mobile games-->
+		<idbag>
+			<externalid>AnyID_007007</externalid>
+			<!--MANDATORY! Use a continuous identidsdsfier as an external ID, for example a production ID. Must be unique! Every article has it's own external ID  -->
+		</idbag>
+		<!--Please do not use Artist tag anymore. It is deprecated!-->
+		<title loc="ww">Nice Wet Babes</title>
+		<!--MANDATORY! An international / worldwide title is mandatory! Use localization "ww" (means worldwide) for the international title.-->
+		<title loc="de">Heisse feuchte Miezen</title>
+		<!--MANDATORY! Use localization like en, es, de, fr (ISO 639-1 alpha 2) for localized titles-->
+		<licensor>YourLicensorNameHere</licensor>
+		<!--MANDATORY! Case sensitive licensor name, please always use the same name for licensor, producer and supplier-->
+		<contentgrading>30</contentgrading>
+		<!--MANDATORY! Rating for the arvato mobile age verification system. Possible values are 0, 10, 20, 30, 40, 50 and 60. The default value is "0" (free for all ages)-->
+		<genre>Erotic_Slideshow</genre>
+		<!--MANDATORY! Please DO NOT use your own genre here. Use one of the pre-defined genres which can be found in the "arvato-mobile_transfer-xml_1-6-0_GAMES_IMPORT_GUIDELINES".-->
+		<attribute key="General Reporting Code" value="Fill_In_The_External_ID_Here_As_Well"/>
+		<!--MANDATORY! Please fill in your external ID in the General Reporting Code value.-->
+		<attribute key="Type" value="game"/>
+		<!--MANDATORY! Please determine wether your submission is a "game" or an "application".-->
+		<attribute key="CopyrightInfo" value="(C) 2010, ABC-Games ltd."/>
+		<!--MANDATORY! It is mandatory to make use of the copyright info attribute. key is always “CopyrightInfo”-->
+		<!--MANDATORY! International (worldwide = ww) game descriptions-->
+		<localizedattribute key="JavaGameDescription" loc="ww" value="Please fill in your long game description here. You must not use more than 1000 chars.The warm season is hardly on the way and the Nice Wet Babes are outright going the full monty! They like it most being outside totally topless! Enjoy the view on a hot blonde, a sexy brunette and a sensual red-haired exposing their awesome tits to the sun! Get this erotic summer slideshow on your mobile and observe these lustful Nice Wet Babes when they loll around their hot body in the sunshine!"/>
+		<localizedattribute key="JavaGameDescriptionShort" loc="ww" value="Please fill in your short game description here. You must not use more than 255 chars.It's gonna be a hot summer! In this sexy slideshow the Nice Wet Babes enjoy the first sunbeams!"/>
+		<localizedattribute key="JavaGameDescriptionTagline" loc="ww" value="Please fill in your Tagline here. You must not use more than 80 chars. Hot boobs under the open sky! "/>
+		<!--Localized (Germany = de) game descriptions for local content -->
+		<localizedattribute key="JavaGameDescription" loc="de" value="Please fill in your long game description here. You must not use more than 1000 chars. Please fill in your long game description here. You must not use more than 1000 chars. Please fill in your long game description here. You must not use more than 1000 chars. Please fill in your long game description here. You must not use more than 1000 chars. Please fill in your long game description here. You must not use more than 1000 chars. Please fill in your long game description here. You must not use more than 1000 chars.Please fill in your long game description here. You must not use more than 1000 chars.Please fill in your long game description here. You must not use more than 1000 chars.Please fill in your long game description here. You must not use more than 1000 chars."/>
+		<localizedattribute key="JavaGameDescriptionShort" loc="de" value="Please fill in your short game description here. You must not use more than 255 chars. It should really describe the game, unlike the Tagline. "/>
+		<localizedattribute key="JavaGameDescriptionTagline" loc="de" value="Please fill in your Tagline here. You must not use more than 80 chars. It should be a catchy phrase. "/>
+		<!--Examples for marketing material. For detailed info please review "marketing_descriptions_xxxxxxxx.xls"-->
+		<articlebinary type="Game_Ingame-Trailer_101x120" md5sum="A29A8A845332445EC078074C3E2DBE4A" filesize="241817">images\EN\AB_NiceWetBabes_animated_101x120.gif</articlebinary>
+		<articlebinary type="Game_Ingame-Trailer_240x320" md5sum="D2D370587808F023DE2549CCC746B7F0" filesize="1319320">images\EN\AB_NiceWetBabes_animated_240x320.gif</articlebinary>
+		<articlebinary type="Game_Ingame1_240x320" md5sum="7515F0D3116B1CDDFC8C665B9665FB88" filesize="33795">images\EN\AB_NiceWetBabes_01_240x320.gif</articlebinary>
+		<articlebinary type="Game_Ingame2_240x320" md5sum="14457CD68C80FFA89B259166C7C3CAE8" filesize="37663">images\EN\AB_NiceWetBabes_02_240x320.gif</articlebinary>
+		<articlebinary type="Game_Icon_85x85" md5sum="db495acb0d670e46dd000a7169a3280a" filesize="18265" sha1sum="c9bedbc1b1552868f373c299cf8b828a50a68f66">http:/mwp.vfnet.de/marketingmaterial/Game_Icon_85x85.png</articlebinary>
+		<!--MANDATORY! Region specific royalty information. To understand which territories you have to submit for please check "arvato-mobile_transfer-xml_1-6-0_GAMES_IMPORT_GUIDELINES" -->
+		<territory>
+			<c>gb</c>
+			<c>ie</c>
+			<c>nz</c>
+			<c>nl</c>
+			<c>hr</c>
+			<!--Country code (ISO 3166-1-alpha-2)-->
+			<dRelDate>2010-03-11+01:00</dRelDate>
+			<!--MANDATORY! For the digital release date please fill in the current date-->
+		</territory>
+		<!--Jad modification contains information about javagame jad files and how to modify them. If you can't provide an own redirection link, please contact duc.nguyen@arvato-mobile.de to get one. -->
+		<jadmodification key="XY-MoreGames-URL" affiliate="T-Mob DE" value="http://redirector.arvato-mobile.com/get.redirect?groupId=24&amp;linkId=116"/>
+		<jadmodification key="XY-MoreGames-URL" affiliate="T-Mob NL" value="http://redirector.arvato-mobile.com/get.redirect?groupId=26&amp;linkId=105"/>
+		<jadmodification key="XY-MoreGames-URL" affiliate="T-Mob UK" value="http://redirector.arvato-mobile.com/get.redirect?groupId=25&amp;linkId=104"/>
+		<jadmodification key="XY-MoreGames-URL" affiliate="T-Mob AT" value="http://redirector.arvato-mobile.com/get.redirect?groupId=24&amp;linkId=117"/>
+		<!--Please see attachement "Handset-To-ItemTypeID" to get the complete and current list of supported handsets and the according ItemTypeIDs. Only reference JAD, not JAR binaries. For details on Blackberry binary handling inside the XML, please check the Guidelines, as you either can deliver JAD and JAR combination or zipfiles (zip is for JAD and COD combination).-->
+		<item itemtypeid="259">
+			<binary kind="BINARY" md5sum="15AAB4717634B9435C33B4305B28774D" filesize="1">files/NiceWetBabes_LG_C3300_ww.jad</binary>
+		</item>
+		<item itemtypeid="364">
+			<binary kind="BINARY" md5sum="15AAB4717634B9435C33B4305B28774D" filesize="1">files/NiceWetBabes_LG_C3300_ww.jad</binary>
+		</item>
+		<item itemtypeid="646">
+			<binary kind="BINARY" md5sum="15AAB4717634B9435C33B4305B28774D" filesize="1">files/NiceWetBabes_LG_C3300_ww.jad</binary>
+		</item>
+		<item itemtypeid="774">
+			<binary kind="BINARY" md5sum="e5158d3e6eb62ee3fda6edbd9ab78c64" filesize="177250">files/NiceWetBabes_BlackBerry_8100_ww_mul_cod.zip</binary>
+		</item>
+		<item itemtypeid="776">
+			<binary kind="BINARY" md5sum="e5158d3e6eb62ee3fda6edbd9ab78c64" filesize="165221">files/NiceWetBabes_BlackBerry_8800_ww_mul_cod.zip</binary>
+		</item>
+		<item itemtypeid="1105">
+			<binary kind="BINARY" md5sum="941F3037459D206AA1E2BA5A3049B2c2" filesize="1">files/NiceWetBabes_BlackBerry_9000_ww.jad</binary>
+		</item>
+		<item itemtypeid="1123">
+			<binary kind="BINARY" md5sum="e5158d3e6eb62ee3fda6edbd9ab78c64" filesize="163221">files/NiceWetBabes_SymbianGame_Nokia_N96_ww.sis</binary>
+		</item>
+		<item itemtypeid="1495">
+			<binary kind="BINARY" md5sum="c89bccfc801ad556df39552a12d872cf" filesize="154324">files/NiceWetBabes_WinMobileGame_HTC_P3300.cab</binary>
+		</item>
+		<item itemtypeid="1612">
+			<binary kind="BINARY" md5sum="7d854b64731db446edd47ad6a0a08069" filesize="183781">files/NiceWetBabes_AndroidGame_SonyEricsson_X10i.apk</binary>
+		</item>
+		<item itemtypeid="1627">
+			<binary kind="BINARY" md5sum="C97EEC15423CC8CFC83E591DB939A79C" filesize="157884">files/NiceWetBabes_Android_HTC_Click.apk</binary>
+		</item>
+		<item itemtypeid="1633">
+			<binary kind="BINARY" md5sum="CA04F99DFE7BB939014EBD603B36CE9A" filesize="156231">files/NiceWetBabes_Android_Motorola_Milestone.apk</binary>
+		</item>
+		<item itemtypeid="1774">
+			<binary kind="BINARY" md5sum="ae2f9330b582f396be54793600c775fe" filesize="134525">files/NiceWetBabes_SymbianGameX_Nokia_N97.sisx</binary>
+		</item>
+		<!--please see attachements to get the complete and current list of supported handsets and the according ItemTypeIDs-->
+	</article>
+</contentimport>
