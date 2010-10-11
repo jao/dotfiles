@@ -9,6 +9,7 @@ require 'fastercsv'
 require 'nokogiri'
 require 'fileutils'
 require 'ftools'
+require 'digest/md5'
 
 $LOAD_PATH << File.dirname(__FILE__)
 require 'util.rb'
@@ -26,9 +27,8 @@ require 'time_class.rb'
 # proccess.
 
 supplier_id = 12345
-external_id = 'contentnamerandomnumber'
-content_name = 'Content Name'
-content_md5sum = '4dd19692830616f2e3ffad0095d6e4e9'
+external_id = 'examplecontentnamerandomnumber'
+content_name = 'Example Content Name'
 content_size = 391239
 
 images = videos = sounds = jgames = [1,2,3]
@@ -39,13 +39,18 @@ AMS_CONTENT_DIR = "/Volumes/PublicoSP/remoteITcontents/ams"
 # 1147 - color image MASTER 1200x1200 jpg
 # 1148 - color image MASTER 1200x900 jpg
 # 1149 - color image MASTER 900x1200 jpg
-def images_xml image_names, supplier_id, external_id, content_name, content_md5sum, content_size
+def images_xml image_names, supplier_id, content_name, content_size
+  # get images informations
+  # md5hash = MD5.new(File.read('path_to_file', 'b')).hexdigest
+  external_id = "image#{supplier_id}#{content_name.downcase.gsub(/ /,'')}#{content_size}"
+  content_md5sum = Digest::MD5.hexdigest(external_id)
+  
   xml_result = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do
     contentimport(:xmlns => "http://arvato-mobile.com/transfer", :supplierid => supplier_id, :date => "2010-10-08", 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance", 'xmlns:xsd' => "http://www.w3.org/2001/XMLSchema", 'xsi:schemaLocation' => "http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd") {
       image_names.each do |image|
         article(:articletypeid => 8) {
           idbag {
-            externalid "#{external_id}image#{image}"
+            externalid "#{external_id}-#{image}"
           }
           artist(:role => "Main") {
             name "No Artist"
@@ -276,4 +281,4 @@ content_root.each do |content_package|
   puts content_package.entries.join("\n").pink
 end
 
-puts images_xml(images, supplier_id, external_id, content_name, content_md5sum, content_size)
+puts images_xml(images, supplier_id, content_name, content_size)
