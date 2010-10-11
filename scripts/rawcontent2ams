@@ -40,7 +40,7 @@ for mediatype in `ls`; do
     for content_pack in `ls`; do
       cd $content_pack
       case $provider in
-        avioesdoforro|forrodomuido) provider_name="ezapsom"
+        avioesdoforro|forrodomuido) provider_name="ezapsom";;
         bella) provider_name="belladasemana";;
         cesarpolvilho) provider_name="eblasperez";;
         concursosereias) provider_name="sereias";;
@@ -51,6 +51,7 @@ for mediatype in `ls`; do
         wtn) provider_name="mobbr";;
         *) provider_name="$provider";;
       esac
+      
       case $mediatype in
         games)
           pack_name="${DATETIME}_${mediatype}_${provider_name}_${content_pack}_insert"
@@ -103,7 +104,7 @@ for mediatype in `ls`; do
           
           cp -n *.3GP $target_dir/
           
-          # create videos with 176x144 and 128x96 - 3gp mp4 aac format using ffmpeg
+          # create videos with 352x288, 176x144 and 128x96 - 3gp mp4 aac format using ffmpeg
           
           _rename_files_properly "${target_dir}"
         ;;
