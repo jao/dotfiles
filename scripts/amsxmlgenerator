@@ -97,71 +97,59 @@ end
 puts ams_xml_content.to_xml
 
 # VIDEO EXAMPLE
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<contentimport xmlns="http://arvato-mobile.com/transfer" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xsi:schemaLocation="http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd" supplierid="123456789" date="2009-08-17T16:23:16.0Z">
-	<article articletypeid="28">
-		<!--Article Type ID 28 is for Video in the arvato-mobile AMS-->
-		<idbag>
-			<externalid>MisterMusicVideo_123456789</externalid>
-			<!--Use a continuous identifier as an external ID, for example a production ID. Must be unique! Every article has it's own external ID  -->
-		</idbag>
-		<artist role="Main">
-			<name>MY ARTISTNAME</name>
-			<!--If no artist is available, please fill in "No Artist"-->
-		</artist>
-		<title loc="ww">International Title</title>
-		<title loc="de">Deutscher Titel</title>
-		<!--Use localization "ww" (means worldwide) for the international title. Use localization like "en", "es", "de", "fr" (ISO 639-1 alpha 2) for localized titles-->
-		<licensor>FILL IN YOUR LICENSOR NAME HERE</licensor>
-		<!--Licensorname. Out of arvato-mobile's perspective, this is the company which is licensing and providing the content to arvato-mobile.-->
-		<keyword>MY KEYWORD</keyword>
-		<keyword>ANOTHER KEYWORD</keyword>
-		<!--Keywords are useful for generating search indexes. Please ask your Retailing- &  Contentmanager at arvato-mobile if keywords are necessary in your XML delivery -->
-		<contentgrading>0</contentgrading>
-		<!--Rating for the arvato mobile age verification system. Possible values are 0, 5, 10, 20, 30, 40, 50 and 60. The default value is "0" (free for all ages). Please see CONTENT_GRADING_SPECIFICATION -->
-		<genre>pop</genre>
-		<!--Genre. Metadata which describes the content of  the video by using genres.  Please always provide a genre.-->
-		<category>import</category>
-		<!--Mandatory. Please always use "import" as the category value!-->
-		<duration>271</duration>
-		<!--Measure unit: Seconds. For an article: Not the duration of any preview, but of the video content itself. Will be displayed in the shop.-->
-		<articlebinary type="FLMV_cover600x600" md5sum="81e65b7c8c22d8527e2d0264cbdc1db7" filesize="315847">video_coversource_600x600.jpg</articlebinary>
-		<articlebinary type="FLMV_screen capture source_640x480" md5sum="1130f7978e445f8b1990dfb7864ffaed" filesize="391580">video_screencapture_640x480.jpg</articlebinary>
-		<!--Articlebinary. Article Binaries will be used as preview or cover in the frontend (shop, etc.). They are mandatory-->
-		<territory>
-			<!--Region specific royalty information. Please ask your Retailing- &  Contentmanager at arvato-mobile if territory- & price information is necessary in your XML delivery. -->
-			<c>GB</c>
-			<!--Country code (ISO 3166-1-alpha-2)-->
-			<dRelDate>2009-10-22</dRelDate>
-			<dCancDate>2011-12-24</dCancDate>
-			<priceinfo>
-				<effectivedate>1970-01-01+01:00</effectivedate>
-				<pricecode>DEFAULT</pricecode>
-				<!--String is representing an encoded price. Please ask your Retailing- &  Contentmanager at arvato-mobile if territory- & price information is necessary in your XML delivery. -->
-			</priceinfo>
-		</territory>
-		<item itemtypeid="1718">
-			<binary kind="BINARY" md5sum="5241c0cb9a2c11868769a2083d109426" filesize="648723">MisterMusicVideo_1234567891941_FLMV_h263_aac_176x144.3gp</binary>
-		</item>
-		<item itemtypeid="1719">
-			<binary kind="BINARY" md5sum="8d52d40d06133ede33283cee4d11df97" filesize="977854">MisterMusicVideo_1234567891942_FLMV_h263_aac_352x288.3gp</binary>
-		</item>
-		<item itemtypeid="1720">
-			<binary kind="BINARY" md5sum="715fe9120545251ae991e900d24a6e67" filesize="688324">MisterMusicVideo_1234567891943_FLMV_mpeg4_aac_176x144.3gp</binary>
-		</item>
-		<item itemtypeid="1721">
-			<binary kind="BINARY" md5sum="c741d7142c6e571fed778825c073dc6d" filesize="978921">MisterMusicVideo_1234567891944_FLMV mpeg4 aac 352x288.3gp</binary>
-		</item>
-		<item itemtypeid="789">
-			<binary kind="BINARY" md5sum="555ba8990ff5d78ba1edc88f71107121" filesize="279921029">MisterMusicVideo_1234567891944_FLMV_MPEG_SOURCE.mpg</binary>
-		</item>
-		<item itemtypeid="501">
-			<binary kind="BINARY" md5sum="5241c0cb9a2c11868769a2083d109426" filesize="86121773">MisterMusicVideo_1234567891944_FLMV_WMV_SOURCE.wmv</binary>
-		</item>
-	</article>
-</contentimport>
-
-
+ams_xml_content = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do
+  contentimport('xmlns' => "http://arvato-mobile.com/transfer", 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance", 'xmlns:xsd' => "http://www.w3.org/2001/XMLSchema", 'xsi:schemaLocation' => "http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd", 'supplierid' => supplier_id, 'date' => "2010-10-08") {
+    image_names.each do |image|
+      article('articletypeid' => "28") {
+        idbag {
+          externalid "#{external_id}#{image}"
+        }
+        artist('role' => "Main") {
+          name "No Artist"
+        }
+        title("#{content_name} #{image}", 'loc' => 'ww')
+        licensor "FILL IN YOUR LICENSOR NAME HERE"
+        keyword "My Keyword1"
+        keyword "My Keyword2"
+        contentgrading 0
+        genre "My genre1"
+        genre "My genre2"
+        category "import" # fixed value
+        attribute('key' => "VF_AssetID", 'value' => "Fill in Asset ID	X here")
+        attribute('key' => "General Reporting Code", 'value' => "EA_000001_ww")
+        territory {
+          c "BR"
+          dRelDate "2010-10-08+01:00"
+          priceinfo {
+            effectivedate "1970-01-01+01:00"
+            pricecode "DEFAULT"
+          }
+        }
+        duration "271" # seconds
+        articlebinary('video_coversource_600x600.jpg', 'type' => 'FLMV_cover600x600', 'md5sum' => '', 'filesize' => '')
+        articlebinary('video_screencapture_640x480.jpg', 'type' => 'FLMV_screen capture source_640x480', 'md5sum' => '', 'filesize' => '')
+        item('itemtypeid' => "1718") {
+          binary('MisterMusicVideo_1234567891941_FLMV_h263_aac_176x144.3gp', 'kind'=>"Binary", 'md5sum' => content_md5sum, 'filesize' => content_size)
+        }
+        item('itemtypeid' => "1719") {
+          binary('MisterMusicVideo_1234567891942_FLMV_h263_aac_352x288.3gp', 'kind'=>"Binary", 'md5sum' => content_md5sum, 'filesize' => content_size)
+        }
+        item('itemtypeid' => "1720") {
+          binary('MisterMusicVideo_1234567891943_FLMV_mpeg4_aac_176x144.3gp', 'kind' => "Binary", 'md5sum' => content_md5sum, 'filesize' => content_size)
+        }
+        item('itemtypeid' => "1721") {
+          binary('MisterMusicVideo_1234567891944_FLMV mpeg4 aac 352x288.3gp', 'kind' => "Binary", 'md5sum' => content_md5sum, 'filesize' => content_size)
+        }
+        item('itemtypeid' => "789") {
+          binary('MisterMusicVideo_1234567891944_FLMV_MPEG_SOURCE.mpg', 'kind' => "Binary", 'md5sum' => content_md5sum, 'filesize' => content_size)
+        }
+        item('itemtypeid' => "501") {
+          binary('MisterMusicVideo_1234567891944_FLMV_WMV_SOURCE.wmv', 'kind' => "Binary", 'md5sum' => content_md5sum, 'filesize' => content_size)
+        }
+      }
+    end
+  }
+end
 
 
 # REAL SOUND EXAMPLE

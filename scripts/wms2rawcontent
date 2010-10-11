@@ -54,8 +54,12 @@ _find_source_image () {
 
 # script starts here
 
-# go to the content's source directory
+# go to content source directory
 cd "${CONTENT_SOURCE_DIRECTORY}"
+
+# Download files from the server
+# rsync -Prtlhvmn --exclude "[tb]*/" --exclude "**/*.dm" root@salt1:/usr/local/multimedia/BRAZIL/ .
+
 for content_dir in `ls`; do
   if [ -d "${content_dir}" ]; then
     cd "${content_dir}"

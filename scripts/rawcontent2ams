@@ -2,8 +2,8 @@
 
 # this script takes the raw structure and generates the AMS structure
 # followed by yet another script that will generate the necessary XML
-# files, with the required information
-# ruby script is called: amsxmlgenerator
+# files, with the required information.
+# The ruby script is called: amsxmlgenerator
 
 # Basic variables
 SCRIPT_NAME=`basename $0`
@@ -13,7 +13,7 @@ source "${SCRIPT_DIR}/_function_colorize"
 CONTENT_SOURCE_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/raw_content"
 CONTENT_TARGET_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/ams"
 
-DATETIME="201010080600"
+DATETIME="201010110600"
 
 _rename_files_properly () {
   cd $1
@@ -96,14 +96,14 @@ for mediatype in `ls`; do
           
           for preview in `ls *.GIF`; do
             if [ -f $preview ]; then
-              target_preview=`echo $file | sed -E 's/ICO_WAP_/_wap_preview_/g' | sed -E 's/ICO_WEB_/_web_preview_/g' | tr "[[:upper:]]" "[[:lower:]]"`
-              convert $preview -thumbnail $target_dir/$target_preview
+              preview_image_name=`echo $file | sed -E 's/ICO_WAP_/_wap_preview_/g' | sed -E 's/ICO_WEB_/_web_preview_/g' | tr "[[:upper:]]" "[[:lower:]]"`
+              convert $preview -thumbnail $target_dir/$preview_image_name
             fi
           done
           
           cp -n *.3GP $target_dir/
           
-          # create videos with 176x144 and 128x96 - 3gp mp4 format using ffmpeg
+          # create videos with 176x144 and 128x96 - 3gp mp4 aac format using ffmpeg
           
           _rename_files_properly "${target_dir}"
         ;;
