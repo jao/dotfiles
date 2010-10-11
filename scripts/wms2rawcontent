@@ -58,7 +58,7 @@ _find_source_image () {
 cd "${CONTENT_SOURCE_DIRECTORY}"
 
 # Download files from the server
-# rsync -Prtlhvmn --exclude "[tb]*/" --exclude "**/*.dm" root@salt1:/usr/local/multimedia/BRAZIL/ .
+# rsync -Prtlhvm --exclude "[tb]*/" --exclude "**/*.dm" root@salt1:/usr/local/multimedia/BRAZIL/ .
 
 for content_dir in `ls`; do
   if [ -d "${content_dir}" ]; then
