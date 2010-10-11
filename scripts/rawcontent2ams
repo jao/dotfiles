@@ -61,8 +61,13 @@ for mediatype in `ls`; do
           [ ! -d $target_dir ] && mkdir -p $target_dir
           touch $target_dir/$pack_name.xml
           
-          [ -f ICO_WAP.GIF ] && convert ICO_WAP.GIF -thumbnail 30x30 $target_dir/_wap_preview.jpg
-          [ -f ICO_WEB.GIF ] && convert ICO_WEB.GIF -thumbnail 200x200 $target_dir/_web_preview.jpg
+          [ -f ICO_WEB.GIF ] && convert -size 100x100 ICO_WEB.GIF -thumbnail 100x100 $target_dir/_wap_preview.jpg
+          [ -f ICO_WEB.GIF ] && convert -size 200x200 ICO_WEB.GIF -thumbnail 200x200 $target_dir/_web_preview.jpg
+          
+          [ -f INFO.TXT ] && cp INFO.TXT $target_dir/info.txt
+          [ -f SHORT.TXT ] && cp INFO.TXT $target_dir/short.txt
+          [ -f LONG.TXT ] && cp INFO.TXT $target_dir/long.txt
+          
           cp -nv *.JA* $target_dir/
           
           _rename_files_properly "${target_dir}"
@@ -112,7 +117,7 @@ for mediatype in `ls`; do
           # parameters
           video_options="-b 100k -r 13"
           audio_options="-ab 30k -ar 22050"
-          qcomp=" -qcomp 0.5" # compression
+          qcomp="-qcomp 0.5" # compression
           
           for video in `ls | grep -Ei '3gp$'`; do
             ref_size=${video##_*}
@@ -143,27 +148,22 @@ for mediatype in `ls`; do
               
               if [ "$new_width" -le "$ref_width" ] && [ "$new_height" -le "$ref_height" ]; then
                 if [ $(($new_width / 4)) -eq $(($new_height / 3)) ]; then
-                  aspect="4:3"
-                  aspect_param=" -aspect 4:3"
+                  aspect_param="-aspect 4:3"
                 elif [ $(($new_width / 3)) -eq $(($new_height / 2)) ]; then
-                  aspect="3:2"
-                  aspect_param=" -aspect 3:2"
+                  aspect_param="-aspect 3:2"
                 elif [ $(($new_width / 16)) -eq $(($new_height / 9)) ]; then
-                  aspect="16:9"
-                  aspect_param=" -aspect 16:9"
+                  aspect_param="-aspect 16:9"
                 elif [ $(($new_width / 11)) -eq $(($new_height / 9)) ]; then
-                  aspect="11:9"
-                  aspect_param=" -aspect 11:9"
+                  aspect_param="-aspect 11:9"
                 else
-                  aspect="unknown"
                   aspect_param=""
                 fi
                 # 3gp
                 new_video="${target_dir}/${videoname_lowercase}_video_mpeg4_aac_${size}.3gp"
                 if [ ! -f "$new_video" ]; then
-                  colorize "    ${video} => ${new_video}" 36
-                  colorize "      ffmpeg -i ${video} -vcodec mpeg4 ${video_options} -acodec aac ${audio_options} -s ${size}${aspect_param}${qcomp} -y -f 3gp ${new_video}"
-                  ffmpeg -i $video -vcodec mpeg4 $video_options -acodec aac $audio_options -s ${size}${aspect_param}${qcomp} -y -f 3gp $new_video 2>&1 | grep -Ei '(damaged|error|problem|failed)'
+                  colorize "    $video => $new_video" 36
+                  colorize "      ffmpeg -i $video -vcodec mpeg4 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y -f 3gp $new_video"
+                  ffmpeg -i $video -vcodec mpeg4 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y -f 3gp $new_video 2>&1 | grep -Ei '(damaged|error|problem|failed)'
                 fi
               fi
             done
