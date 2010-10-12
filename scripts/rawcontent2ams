@@ -13,7 +13,7 @@ source "${SCRIPT_DIR}/_function_colorize"
 CONTENT_SOURCE_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/raw_content"
 CONTENT_TARGET_DIRECTORY="/Volumes/PublicoSP/remoteITcontents/ams"
 
-DATETIME="201010110600"
+DATETIME="201010101010"
 
 _rename_files_properly () {
   cd $1
@@ -83,11 +83,12 @@ for mediatype in `ls`; do
           _rename_files_no_spaces
           
           regexp="(ALCATEL|AMOI|BENQ|BLACKBERRY|HTC|HUAWEI|KYOCERA|LG|MOTOROLA|NEC|NOKIA|PANASONIC|PANTECH|SAGEM|SAMSUNG|SANYO|SHARP|SIEMENS|SONY.?ERICSSON|TOSHIBA|ZTE)"
-          for file in `ls *.JA* | grep -Ei "$regexp"`; do
-            new_filename=`echo $file | sed -E "s/${regexp}/\1_/g" | sed -E 's/SONY.ERICSSON/SONYERICSSON/' | sed 's/__/_/g' | tr "[[:upper:]]" "[[:lower:]]" | sed 's/(_en|_it)//g'`
-            cp -nv "$file" $target_dir/files/$new_filename
+          for file in `ls *.JAD | grep -Ei "$regexp"`; do
+            new_filename=`echo $file | sed -E "s/${regexp}/\1-/g" | sed -E 's/SONY.ERICSSON/SONYERICSSON/' | sed -E 's/_+/_/g' | sed -E 's/(-+|-_)/-/g' | tr "[[:upper:]]" "[[:lower:]]" | sed -E 's/(_en|_it|jogos?2010[0-9]+|2010[0-9]+)//g'`
+            cp -nv "$file" $target_dir/files/${new_filename}
+            cp -nv "${file/.JAD/.JAR}" $target_dir/files/${new_filename/.jad/.jar}
           done
-          rm $target_dir/files/*.dm
+          rm $target_dir/files/*.dm 2> /dev/null
           
           # _rename_files_properly "${target_dir}"
         ;;
