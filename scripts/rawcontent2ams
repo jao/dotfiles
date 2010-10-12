@@ -32,6 +32,14 @@ _rename_files_properly () {
   cd -
 }
 
+_rename_files_no_spaces () {
+  ls | while read filename; do
+    if [ -e "$filename" ] && [ "$filename" != "${filename// /}" ]; then
+      mv "$filename" "${filename// /}";
+    fi
+  done
+}
+
 cd $CONTENT_SOURCE_DIRECTORY
 for mediatype in `ls`; do
   cd $mediatype
@@ -72,11 +80,14 @@ for mediatype in `ls`; do
           # java files directory
           [ ! -d $target_dir/files ] && mkdir -p $target_dir/files
           
+          _rename_files_no_spaces
+          
           regexp="(ALCATEL|AMOI|BENQ|BLACKBERRY|HTC|HUAWEI|KYOCERA|LG|MOTOROLA|NEC|NOKIA|PANASONIC|PANTECH|SAGEM|SAMSUNG|SANYO|SHARP|SIEMENS|SONY.?ERICSSON|TOSHIBA|ZTE)"
           for file in `ls *.JA* | grep -Ei "$regexp"`; do
-            new_filename=`echo $file | sed -E "s/${regexp}/\1_/g" | sed -E 's/SONY.ERICSSON/SONYERICSSON/' | tr "[[:upper:]]" "[[:lower:]]"`
-            cp -nv $file $target_dir/files/$new_filename
+            new_filename=`echo $file | sed -E "s/${regexp}/\1_/g" | sed -E 's/SONY.ERICSSON/SONYERICSSON/' | sed 's/__/_/g' | tr "[[:upper:]]" "[[:lower:]]" | sed 's/(_en|_it)//g'`
+            cp -nv "$file" $target_dir/files/$new_filename
           done
+          rm $target_dir/files/*.dm
           
           # _rename_files_properly "${target_dir}"
         ;;
