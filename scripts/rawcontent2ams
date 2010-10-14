@@ -128,9 +128,9 @@ for mediatype in `ls`; do
               ratio_portrait="-crop $(( $width / 4 * 3 ))x${width}"
             fi
             
-            [ ! -f $target_dir/${image_name}_image_1200x1200.jpg ] && convert -size 1200x1200 $image $ratio_square -resize 1200x1200! $target_dir/${image_name}_image_1200x1200.jpg
-            [ ! -f $target_dir/${image_name}_image_1200x900.jpg ] && convert -size 1200x900 $image $ratio_landscape -resize 1200x900! $target_dir/${image_name}_image_1200x900.jpg
-            [ ! -f $target_dir/${image_name}_image_900x1200.jpg ] && convert -size 900x1200 $image $ratio_portrait -resize 900x1200! $target_dir/${image_name}_image_900x1200.jpg
+            [ ! -f $target_dir/${image_name}_image_1200x1200.jpg ] && convert -size 1200x1200 $image -resize 1200x1200! $target_dir/${image_name}_image_1200x1200.jpg
+            [ ! -f $target_dir/${image_name}_image_1200x900.jpg ] && convert -size 1200x900 $image -resize 1200x900! $target_dir/${image_name}_image_1200x900.jpg
+            [ ! -f $target_dir/${image_name}_image_900x1200.jpg ] && convert -size 900x1200 $image -resize 900x1200! $target_dir/${image_name}_image_900x1200.jpg
             [ ! -f $target_dir/${image_name}_image_675x1200.jpg ] && convert -size 675x1200 $image -resize 675x1200! $target_dir/${image_name}_image_675x1200.jpg
           done
           
