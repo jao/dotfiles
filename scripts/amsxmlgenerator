@@ -19,13 +19,12 @@ require 'integer_class.rb'
 require 'time_class.rb'
 
 # Location of the content related csv files
-GAMES_CSV = FasterCSV.read('/Volumes/PublicoSP/remoteITcontents/info-games.csv', :col_sep => ';')
-IMAGES_CSV = FasterCSV.read('/Volumes/PublicoSP/remoteITcontents/info-images.csv', :col_sep => ';')
-SONGS_CSV = FasterCSV.read('/Volumes/PublicoSP/remoteITcontents/info-songs.csv', :col_sep => ';')
-VIDEOS_CSV = FasterCSV.read('/Volumes/PublicoSP/remoteITcontents/info-videos.csv', :col_sep => ';')
-HANDSET_CSV = FasterCSV.read('/Volumes/PublicoSP/remoteITcontents/handset-itemtypeid.csv')
-
-puts GAMES_CSV.first.inspect
+CONTENT_ROOT = '/Volumes/PublicoSP/remoteITcontents'
+GAMES_CSV = FasterCSV.table(CONTENT_ROOT + '/info-games.csv', :col_sep => ';')
+IMAGES_CSV = FasterCSV.table(CONTENT_ROOT + '/info-images.csv', :col_sep => ';')
+SONGS_CSV = FasterCSV.table(CONTENT_ROOT + '/info-songs.csv', :col_sep => ';')
+VIDEOS_CSV = FasterCSV.table(CONTENT_ROOT + '/info-videos.csv', :col_sep => ';')
+HANDSETS_CSV = FasterCSV.table(CONTENT_ROOT + '/handset-itemtypeid.csv')
 
 # read files in all directories and write a XML file for every single
 # content pack, after that upload the results to the AMS file server,
@@ -42,7 +41,33 @@ content_size = 391239
 
 images = videos = sounds = jgames = [1,2,3]
 
-AMS_CONTENT_DIR = "/Volumes/PublicoSP/remoteITcontents/ams"
+AMS_CONTENT_DIR = CONTENT_ROOT + "/ams"
+
+
+@itemtype_name_patterns = {
+  :images => {
+    1147 => '_1200x1200.jpg',
+    1148 => '_1200x900.jpg',
+    1149 => '_900x1200.jpg',
+    1150 => '_675x1200.jpg'
+  },
+  :videos => {
+    1718 => '_h263_aac_176x144.3gp',
+    1719 => '_h263_aac_352x288.3gp',
+    1720 => '_mpeg4_aac_176x144.3gp',
+    1721 => '_mpeg4_aac_352x288.3gp',
+    789 => '_MPEG_SOURCE.mpg',
+    501 => '_WMV_SOURCE.wmv'
+  },
+  :sounds => {
+    82 => '.mp3'
+  }
+}
+
+def file_md5sum path
+  # return the md5sum of a given file
+  content_md5sum = Digest::MD5.hexdigest(external_id)
+end
 
 # IMAGE EXAMPLE
 # 1147 - color image MASTER 1200x1200 jpg
@@ -55,7 +80,7 @@ def images_xml image_names, supplier_id, content_name, content_size
   content_md5sum = Digest::MD5.hexdigest(external_id)
   
   xml_result = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do
-    contentimport(:xmlns => "http://arvato-mobile.com/transfer", :supplierid => supplier_id, :date => "2010-10-08", 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance", 'xmlns:xsd' => "http://www.w3.org/2001/XMLSchema", 'xsi:schemaLocation' => "http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd") {
+    contentimport(:xmlns => "http://arvato-mobile.com/transfer", :supplierid => supplier_id, :date => "2010-10-10", 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance", 'xmlns:xsd' => "http://www.w3.org/2001/XMLSchema", 'xsi:schemaLocation' => "http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd") {
       image_names.each do |image|
         article(:articletypeid => 8) {
           idbag {
@@ -76,7 +101,7 @@ def images_xml image_names, supplier_id, content_name, content_size
           attribute(:key => "General Reporting Code", :value => "EA_000001_ww")
           territory {
             c "BR"
-            dRelDate "2010-10-08+01:00"
+            dRelDate "2010-10-10+01:00"
             priceinfo {
               effectivedate "1970-01-01+01:00"
               pricecode "DEFAULT"
@@ -108,7 +133,7 @@ end
 # 1721 - FLMV_mpeg4_aac_352x288.3gp
 def videos_xml video_names
   xml_result = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do
-    contentimport(:xmlns => "http://arvato-mobile.com/transfer", :supplierid => supplier_id, :date => "2010-10-08", 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance", 'xmlns:xsd' => "http://www.w3.org/2001/XMLSchema", 'xsi:schemaLocation' => "http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd") {
+    contentimport(:xmlns => "http://arvato-mobile.com/transfer", :supplierid => supplier_id, :date => "2010-10-10", 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance", 'xmlns:xsd' => "http://www.w3.org/2001/XMLSchema", 'xsi:schemaLocation' => "http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd") {
       video_names.each do |video|
         article(:articletypeid => 28) {
           idbag {
@@ -129,14 +154,14 @@ def videos_xml video_names
           attribute(:key => "General Reporting Code", :value => "EA_000001_ww")
           territory {
             c "BR"
-            dRelDate "2010-10-08+01:00"
+            dRelDate "2010-10-10+01:00"
             priceinfo {
               effectivedate "1970-01-01+01:00"
               pricecode "DEFAULT"
             }
           }
           duration "271" # seconds
-          articlebinary('video_coversource_600x600.jpg', :type => 'FLMV_cover600x600', :md5sum => content_md5sum, :filesize => content_size)
+          articlebinary('video_cover_600x600.jpg', :type => 'FLMV_cover600x600', :md5sum => content_md5sum, :filesize => content_size)
           articlebinary('video_screencapture_640x480.jpg', :type => 'FLMV_screen capture source_640x480', :md5sum => content_md5sum, :filesize => content_size)
           item(:itemtypeid => 1718) {
             binary('MisterMusicVideo_1234567891941_FLMV_h263_aac_176x144.3gp', :kind => "Binary", :md5sum => content_md5sum, :filesize => content_size)
@@ -172,7 +197,7 @@ end
 # 519 - Real Music Source WAV Master Cut 7
 def sounds_xml sound_names
   xml_result = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do
-    contentimport(:xmlns => "http://arvato-mobile.com/transfer", :supplierid => supplier_id, :date => "2010-10-08", 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance", 'xmlns:xsd' => "http://www.w3.org/2001/XMLSchema", 'xsi:schemaLocation' => "http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd") {
+    contentimport(:xmlns => "http://arvato-mobile.com/transfer", :supplierid => supplier_id, :date => "2010-10-10", 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance", 'xmlns:xsd' => "http://www.w3.org/2001/XMLSchema", 'xsi:schemaLocation' => "http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd") {
       sound_names.each do |sound|
         article(:articletypeid => 13) {
           idbag {
@@ -193,7 +218,7 @@ def sounds_xml sound_names
           attribute(:key => "General Reporting Code", :value => "EA_000001_ww")
           territory {
             c "BR"
-            dRelDate "2010-10-08+01:00"
+            dRelDate "2010-10-10+01:00"
             priceinfo {
               effectivedate "1970-01-01+01:00"
               pricecode "DEFAULT"
@@ -228,7 +253,7 @@ end
 # look in the handset-itemtypeid.csv
 def games_xml jgame_names
   xml_result = Nokogiri::XML::Builder.new(:encoding => "UTF-8") do
-    contentimport(:xmlns => "http://arvato-mobile.com/transfer", :supplierid => supplier_id, :date => "2010-10-08", 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance", 'xmlns:xsd' => "http://www.w3.org/2001/XMLSchema", 'xsi:schemaLocation' => "http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd") {
+    contentimport(:xmlns => "http://arvato-mobile.com/transfer", :supplierid => supplier_id, :date => "2010-10-10", 'xmlns:xsi' => "http://www.w3.org/2001/XMLSchema-instance", 'xmlns:xsd' => "http://www.w3.org/2001/XMLSchema", 'xsi:schemaLocation' => "http://arvato-mobile.com/transfer http://images.handy.de/fundb/xsd/arvato_transfer_1_6_2.xsd") {
       jgame_names.each do |jgame|
         article(:articletypeid => 4) {
           idbag {
@@ -256,7 +281,7 @@ def games_xml jgame_names
         
           territory {
             c "BR"
-            dRelDate "2010-10-08+01:00"
+            dRelDate "2010-10-10+01:00"
             priceinfo {
               effectivedate "1970-01-01+01:00"
               pricecode "DEFAULT"
@@ -266,8 +291,8 @@ def games_xml jgame_names
           # Examples for marketing material. For detailed info please review "marketing_descriptions_xxxxxxxx.xls"
           articlebinary('NiceWetBabes_animated_101x120.gif', :type => 'Game_Ingame-Trailer_101x120', :md5sum => content_md5sum, :filesize => content_size)
           articlebinary('NiceWetBabes_animated_240x320.gif', :type => 'Game_Ingame-Trailer_240x320', :md5sum => content_md5sum, :filesize => content_size)
-          articlebinary('NiceWetBabes_01_240x320.gif', :type => 'Game_Ingame1_240x320', :md5sum => content_md5sum, :filesize => content_size)
-          articlebinary('NiceWetBabes_02_240x320.gif', :type => 'Game_Ingame2_240x320', :md5sum => content_md5sum, :filesize => content_size)
+          # articlebinary('NiceWetBabes_01_240x320.gif', :type => 'Game_Ingame1_240x320', :md5sum => content_md5sum, :filesize => content_size)
+          # articlebinary('NiceWetBabes_02_240x320.gif', :type => 'Game_Ingame2_240x320', :md5sum => content_md5sum, :filesize => content_size)
           articlebinary('Game_Icon_85x85.png', :type => 'Game_Icon_85x85', :md5sum => content_md5sum, :filesize => content_size)
         
           # Java game Item type
@@ -283,11 +308,13 @@ def games_xml jgame_names
   return xml_result.to_xml
 end
 
-FileUtils.mkdir_p AMS_CONTENT_DIR if !File.exist?(AMS_CONTENT_DIR)
+puts GAMES_CSV.first.inspect
+
+# FileUtils.mkdir_p AMS_CONTENT_DIR if !File.exist?(AMS_CONTENT_DIR)
 content_root = Dir.new(AMS_CONTENT_DIR)
 
-content_root.each do |content_package|
-  puts content_package.entries.join("\n").pink
-end
+# content_root.each do |content_package|
+#   puts content_package.entries.join("\n").pink
+# end
 
-puts images_xml(images, supplier_id, content_name, content_size)
+# puts images_xml(images, supplier_id, content_name, content_size)
