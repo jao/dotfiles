@@ -69,12 +69,15 @@ for mediatype in `ls`; do
           colorize "content pack: $pack_name ($target_dir)" 32
           touch $target_dir/$pack_name.xml
           
-          [ -f ICO_WEB.GIF ] && [ ! -f $target_dir/_wap_preview.jpg ] && convert -size 100x100 ICO_WEB.GIF -thumbnail 100x100! $target_dir/_wap_preview.jpg
-          [ -f ICO_WEB.GIF ] && [ ! -f $target_dir/_web_preview.jpg ] && convert -size 200x200 ICO_WEB.GIF -thumbnail 200x200! $target_dir/_web_preview.jpg
+          # previews
+          if [ -f ICO_WEB.GIF ]; then
+            [ ! -f $target_dir/_wap_preview.jpg ] && convert -size '100x100' -thumbnail '100x100!' ICO_WEB.GIF $target_dir/_wap_preview.jpg
+            [ ! -f $target_dir/_web_preview.jpg ] && convert -size '200x200' -thumbnail '200x200!' ICO_WEB.GIF $target_dir/_web_preview.jpg
+          fi
           
           [ -f INFO.TXT ] && cp -n INFO.TXT $target_dir/info.txt
-          [ -f SHORT.TXT ] && cp -n INFO.TXT $target_dir/short.txt
-          [ -f LONG.TXT ] && cp -n INFO.TXT $target_dir/long.txt
+          [ -f LONG.TXT ] && cp -n LONG.TXT $target_dir/long.txt
+          [ -f SHORT.TXT ] && cp -n SHORT.TXT $target_dir/short.txt
           
           # java files directory
           [ ! -d $target_dir/files ] && mkdir -p $target_dir/files
@@ -91,86 +94,75 @@ for mediatype in `ls`; do
           # _rename_files_properly "${target_dir}"
           
           # fixing file permissions
-          chmod 644 *.*
+          chmod 664 $target_dir/*.*
+          chmod 664 $target_dir/files/*.*
         ;;
-        images)
-          pack_name="${DATETIME}_image_${provider_name}_${content_pack}_insert"
+        images-temp)
+          pack_name="${DATETIME}_image_${provider_name}_${content_pack//_/}_insert"
           target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
           [ ! -d $target_dir ] && mkdir -p $target_dir
           colorize "content pack: $pack_name ($target_dir)" 32
           touch $target_dir/$pack_name.xml
           
+          # information csv file creation
+          [ ! -f $target_dir/$pack_name.csv ] && echo "provider, content pack, resolution, original filename, new filename" > $target_dir/$pack_name.csv
+          
           for image in `ls | grep -Ei 'jpg$'`; do
             colorize "  exporting $image"
-            imagename=${image#*_}
-            imagename=${imagename%_SQR*}
-            imagename=${imagename%_RET*}
-            imagename=${imagename%-SQR*}
-            imagename=${imagename%-RET*}
-            imagename=${imagename%.*}
-            # imagename=${imagename//(/-}
-            # imagename=${imagename//)/}
-            imagename_lowercase=`echo $imagename | tr "[[:upper:]]" "[[:lower:]]"`
             
             # image resolution
             resolution=`identify $image | awk '{ print $3 }'`
             width=`echo $resolution | awk -Fx '{ print $1 }'`
             height=`echo $resolution | awk -Fx '{ print $2 }'`
             
-            # information csv file
-            [ ! -f $target_dir/$pack_name.csv ] && echo "provider, content pack, resolution, original filename, new filename" > $target_dir/$pack_name.csv
-            echo "${provider_name}, ${content_pack}, ${resolution}, ${image}, ${imagename_lowercase}_image" >> $target_dir/$pack_name.csv
-            colorize "    ${provider_name}, ${content_pack}, ${resolution}, ${image}, ${imagename_lowercase}_image"
+            # new name
+            imagename=${image#*_}
+            imagename=${imagename%_SQR*}
+            imagename=${imagename%_RET*}
+            imagename=${imagename%-SQR*}
+            imagename=${imagename%-RET*}
+            imagename=${imagename%.*}
+            imagename=${imagename//(/_}
+            imagename=${imagename//)/_}
+            imagename=${imagename//__/_}
+            imagename=${imagename#_}
+            imagename=${imagename%_}
+            imagename=`echo $imagename | tr "[[:upper:]]" "[[:lower:]]"`
             
-            # ratio information
-            # if [ $(($width / 4)) -eq $(($height / 3)) ]; then
-            #   ratio_square="-crop ${height}x${height}"
-            #   ratio_landscape=""
-            #   ratio_portrait="-crop $(( $height / 4 * 3 ))x${height}"
-            #   ratio_sky="-crop $(( $height / 16 * 9))x${height}"
-            # elif [ $(($width / 3)) -eq $(($height / 4)) ]; then
-            #   ratio_square="-crop ${width}x${width}"
-            #   ratio_landscape="-crop $(( $width / 4 * 3 ))x${width}"
-            #   ratio_portrait=""
-            #   ratio_sky="-crop $(( $height / 16 * 9))x${height}"
-            # else
-            #   ratio_square=""
-            #   ratio_landscape="-crop ${width}x$(( $width / 4 * 3 ))"
-            #   ratio_portrait="-crop $(( $width / 4 * 3 ))x${width}"
-            #   ratio_sky="-crop $(( $width / 16 * 9))x${width}"
-            # fi
-            
-            # [ ! -f $target_dir/${imagename_lowercase}_image_1200x1200.jpg ] && 
-            convert -gravity center -background white -resize 1200x1200 -extent 1200x1200 $image "$target_dir/${imagename_lowercase}_image_1200x1200.jpg"
-            # [ ! -f $target_dir/${imagename_lowercase}_image_1200x900.jpg ] && 
-            convert -gravity center -background white -resize 1200x900 -extent 1200x900 $image "$target_dir/${imagename_lowercase}_image_1200x900.jpg"
-            # [ ! -f $target_dir/${imagename_lowercase}_image_900x1200.jpg ] && 
-            convert -gravity center -background white -resize 900x1200 -extent 900x1200 $image "$target_dir/${imagename_lowercase}_image_900x1200.jpg"
-            # [ ! -f $target_dir/${imagename_lowercase}_image_675x1200.jpg ] && 
-            convert -gravity center -background white -resize 675x1200 -extent 675x1200 $image "$target_dir/${imagename_lowercase}_image_675x1200.jpg"
+            if [ ! -f $target_dir/${imagename}_image_1200x1200.jpg ] && [ ! -f $target_dir/${imagename}_image_1200x900.jpg ] && [ ! -f $target_dir/${imagename}_image_900x1200.jpg ] && [ ! -f $target_dir/${imagename}_image_675x1200.jpg ]; then
+              echo "${provider_name}, ${content_pack//_/}, ${resolution}, ${image}, ${imagename}_image" >> $target_dir/$pack_name.csv
+              
+              convert -gravity center -background white -resize '1200x1200' -extent '1200x1200' $image "$target_dir/${imagename}_image_1200x1200.jpg"
+              convert -gravity center -background white -resize '1200x900' -extent '1200x900' $image "$target_dir/${imagename}_image_1200x900.jpg"
+              convert -gravity center -background white -resize '900x1200' -extent '900x1200' $image "$target_dir/${imagename}_image_900x1200.jpg"
+              convert -gravity center -background white -resize '675x1200' -extent '675x1200' $image "$target_dir/${imagename}_image_675x1200.jpg"
+            fi
           done
           
           _rename_files_properly "${target_dir}"
           
           # fixing file permissions
-          chmod 644 *.*
+          chmod 664 $target_dir/*.*
         ;;
-        songs-temp)
+        songs)
           pack_name="${DATETIME}_realsound_${provider_name}_${content_pack}_insert"
           target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
           [ ! -d $target_dir ] && mkdir -p $target_dir
           colorize "content pack: $pack_name ($target_dir)" 32
           touch $target_dir/$pack_name.xml
           
-          [ -f ICO_WEB.GIF ] && [ ! -f $target_dir/_wap_preview.jpg ] && convert -size 100x100 ICO_WEB.GIF -thumbnail 100x100! $target_dir/_wap_preview.jpg
-          [ -f ICO_WEB.GIF ] && [ ! -f $target_dir/_web_preview.jpg ] && convert -size 200x200 ICO_WEB.GIF -thumbnail 200x200! $target_dir/_web_preview.jpg
+          if [ -f ICO_WEB.GIF ]; then
+            [ ! -f $target_dir/_wap_preview.jpg ] && convert -size '100x100' ICO_WEB.GIF -thumbnail '100x100!' $target_dir/_wap_preview.jpg
+            [ ! -f $target_dir/_web_preview.jpg ] && convert -size '200x200' ICO_WEB.GIF -thumbnail '200x200!' $target_dir/_web_preview.jpg
+          fi
+          
           cp -n *.MP3 ${target_dir}/
           rm $target_dir/*_PREVIEW.MP3 2> /dev/null # make sure no errors regarding this are shown
           
           _rename_files_properly "${target_dir}"
           
           # fixing file permissions
-          chmod 644 *.*
+          chmod 664 $target_dir/*.*
         ;;
         videos-temp)
           pack_name="${DATETIME}_video_${provider_name}_${content_pack}_insert"
@@ -178,6 +170,9 @@ for mediatype in `ls`; do
           [ ! -d $target_dir ] && mkdir -p $target_dir
           colorize "content pack: $pack_name ($target_dir)" 32
           touch $target_dir/$pack_name.xml
+          
+          # information csv file
+          [ ! -f $target_dir/$pack_name.csv ] && echo "provider, content pack, resolution, original filename, new filename" > $target_dir/$pack_name.csv
           
           # parameters
           video_options="-b 100k -r 13"
@@ -197,23 +192,27 @@ for mediatype in `ls`; do
             videoname="${videoname#*_}"
             videoname_lowercase=`echo "$videoname" | tr "[[:upper:]]" "[[:lower:]]"`
             
-            # information csv file
-            [ ! -f $target_dir/$pack_name.csv ] && echo "provider, content pack, resolution, original filename, new filename" > $target_dir/$pack_name.csv
             echo "${provider_name}, ${content_pack}, ${ref_size}, ${video}, ${videoname_lowercase}_video" >> $target_dir/$pack_name.csv
             colorize "    ${provider_name}, ${content_pack}, ${ref_size}, ${video}, ${videoname_lowercase}_video"
             
+            # previews
             preview="ICO_WEB_${videoname}.GIF"
             if [ -f $preview ]; then
-              [ ! -f $target_dir/${videoname_lowercase}_video_web_preview.jpg ] && convert -size 200x200 $preview -thumbnail 200x200! $target_dir/${videoname_lowercase}_video_web_preview.jpg
-              [ ! -f $target_dir/${videoname_lowercase}_video_wap_preview.jpg ] && convert -size 100x100 $preview -thumbnail 100x100! $target_dir/${videoname_lowercase}_video_wap_preview.jpg
-              [ ! -f $target_dir/${videoname_lowercase}_video_cover_600x600.jpg ] && convert -size 600x600 $preview -resize 600x600! $target_dir/${videoname_lowercase}_video_cover_600x600.jpg
+              [ ! -f $target_dir/${videoname_lowercase}_video_web_preview.jpg ] && convert -size '200x200' -thumbnail '200x200!' $preview $target_dir/${videoname_lowercase}_video_web_preview.jpg
+              [ ! -f $target_dir/${videoname_lowercase}_video_wap_preview.jpg ] && convert -size '100x100' -thumbnail '100x100!' $preview $target_dir/${videoname_lowercase}_video_wap_preview.jpg
+              [ ! -f $target_dir/${videoname_lowercase}_video_cover_600x600.jpg ] && convert -size '600x600' -resize '600x600!' $preview $target_dir/${videoname_lowercase}_video_cover_600x600.jpg
             else
               colorize "  missing file $preview" 33
             fi
+            
             # screen capture
-            ffmpeg -i $video -f image2 -ss 4 -t 2 -r 1:4 -s 640x480 _${videoname}_640x480_%02d.jpg &> /dev/null
-            [ -f _${videoname}_640x480_002.jpg ] && [ ! -f $target_dir/${videoname_lowercase}_video_screen_capture_640x480.jpg ] && convert -size 640x480 _${videoname}_640x480_002.jpg -resize 640x480! $target_dir/${videoname_lowercase}_video_screen_capture_640x480.jpg
-            rm _${videoname}_640x480_*.jpg 2> /dev/null # make sure no errors regarding this are shown
+            if [ ! -f $target_dir/${videoname_lowercase}_video_screencapture_640x480.jpg ]; then
+              ffmpeg -i $video -f image2 -ss 4 -t 3 -r 1:4 -s 640x480 _${videoname}_%02d.jpg &> /dev/null
+              if [ -f _${videoname}_02.jpg ]; then
+                convert -size '640x480' -resize '640x480!' _${videoname}_02.jpg $target_dir/${videoname_lowercase}_video_screencapture_640x480.jpg
+              fi
+              rm _${videoname}_*.jpg 2> /dev/null # make sure no errors regarding this are shown
+            fi
             
             for size in ${sizes[@]}; do
               new_width=`echo $size | awk -Fx '{ print $1 }'`
@@ -254,7 +253,7 @@ for mediatype in `ls`; do
           _rename_files_properly "${target_dir}"
           
           # fixing file permissions
-          chmod 644 *.*
+          chmod 664 $target_dir/*.*
         ;;
       esac
       cd ..
