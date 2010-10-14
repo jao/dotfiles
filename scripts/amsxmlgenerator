@@ -17,6 +17,8 @@ require 'string_class.rb'
 require 'integer_class.rb'
 require 'time_class.rb'
 
+# Location of the content related csv files
+$LOAD_PATH << '/Volumes/PublicoSP/remoteITcontents'
 
 # read files in all directories and write a XML file for every single
 # content pack, after that upload the results to the AMS file server,

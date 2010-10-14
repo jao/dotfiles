@@ -63,19 +63,19 @@ for mediatype in `ls`; do
       esac
       
       case $mediatype in
-        games)
+        games-temp)
           pack_name="${DATETIME}_game_${provider_name}_${content_pack}_insert"
           target_dir="${CONTENT_TARGET_DIRECTORY}/${pack_name}"
           [ ! -d $target_dir ] && mkdir -p $target_dir
           touch $target_dir/$pack_name.xml
           colorize "content pack: $pack_name ($target_dir)" 32
           
-          [ -f ICO_WEB.GIF ] && convert -size 100x100 ICO_WEB.GIF -thumbnail 100x100! $target_dir/_wap_preview.jpg
-          [ -f ICO_WEB.GIF ] && convert -size 200x200 ICO_WEB.GIF -thumbnail 200x200! $target_dir/_web_preview.jpg
+          [ -f ICO_WEB.GIF ] && [ ! -f $target_dir/_wap_preview.jpg ] && convert -size 100x100 ICO_WEB.GIF -thumbnail 100x100! $target_dir/_wap_preview.jpg
+          [ -f ICO_WEB.GIF ] && [ ! -f $target_dir/_web_preview.jpg ] && convert -size 200x200 ICO_WEB.GIF -thumbnail 200x200! $target_dir/_web_preview.jpg
           
-          [ -f INFO.TXT ] && cp -n INFO.TXT $target_dir/info.txt
-          [ -f SHORT.TXT ] && cp -n INFO.TXT $target_dir/short.txt
-          [ -f LONG.TXT ] && cp -n INFO.TXT $target_dir/long.txt
+          [ -f INFO.TXT ] && cp -nv INFO.TXT $target_dir/info.txt
+          [ -f SHORT.TXT ] && cp -nv INFO.TXT $target_dir/short.txt
+          [ -f LONG.TXT ] && cp -nv INFO.TXT $target_dir/long.txt
           
           # java files directory
           [ ! -d $target_dir/files ] && mkdir -p $target_dir/files
@@ -88,7 +88,6 @@ for mediatype in `ls`; do
             cp -nv "$file" $target_dir/files/${new_filename}
             cp -nv "${file/.JAD/.JAR}" $target_dir/files/${new_filename/.jad/.jar}
           done
-          rm $target_dir/files/*.dm 2> /dev/null
           
           # _rename_files_properly "${target_dir}"
         ;;
@@ -110,6 +109,10 @@ for mediatype in `ls`; do
             width=`echo $resolution | awk -Fx '{ print $1 }'`
             height=`echo $resolution | awk -Fx '{ print $2 }'`
             
+            # information csv file
+            [ ! -f $target_dir/$pack_name.csv ] && echo "provider, content pack, resolution, original filename, new filename" > $target_dir/$pack_name.csv
+            echo "${provider_name}, ${content_pack}, ${resolution}, ${image}, ${image_name}_image" >> $target_dir/$pack_name.csv
+            
             # ratio information
             if [ $(($width / 4)) -eq $(($height / 3)) ]; then
               ratio_square="-crop ${height}x${height}"
@@ -125,14 +128,10 @@ for mediatype in `ls`; do
               ratio_portrait="-crop $(( $width / 4 * 3 ))x${width}"
             fi
             
-            # information csv file
-            [ ! -f $target_dir/images.csv ] && echo "provider, content pack, resolution, original file name, new file name" > $target_dir/images.csv
-            echo "${provider_name}, ${content_pack}, ${resolution}, ${image}, ${image_name}_image" >> $target_dir/images.csv
-            
-            convert -size 1200x1200 $image -resize 1200x1200! $target_dir/${image_name}_image_1200x1200.jpg
-            convert -size 1200x900 $image -resize 1200x900! $target_dir/${image_name}_image_1200x900.jpg
-            convert -size 900x1200 $image -resize 900x1200! $target_dir/${image_name}_image_900x1200.jpg
-            convert -size 675x1200 $image -resize 675x1200! $target_dir/${image_name}_image_675x1200.jpg
+            [ ! -f $target_dir/${image_name}_image_1200x1200.jpg ] && convert -size 1200x1200 $image $ratio_square -resize 1200x1200! $target_dir/${image_name}_image_1200x1200.jpg
+            [ ! -f $target_dir/${image_name}_image_1200x900.jpg ] && convert -size 1200x900 $image $ratio_landscape -resize 1200x900! $target_dir/${image_name}_image_1200x900.jpg
+            [ ! -f $target_dir/${image_name}_image_900x1200.jpg ] && convert -size 900x1200 $image $ratio_portrait -resize 900x1200! $target_dir/${image_name}_image_900x1200.jpg
+            [ ! -f $target_dir/${image_name}_image_675x1200.jpg ] && convert -size 675x1200 $image -resize 675x1200! $target_dir/${image_name}_image_675x1200.jpg
           done
           
           _rename_files_properly "${target_dir}"
@@ -144,10 +143,10 @@ for mediatype in `ls`; do
           touch $target_dir/$pack_name.xml
           colorize "content pack: $pack_name ($target_dir)" 32
           
-          [ -f ICO_WEB.GIF ] && convert -size 100x100 ICO_WEB.GIF -thumbnail 100x100! $target_dir/_wap_preview.jpg
-          [ -f ICO_WEB.GIF ] && convert -size 200x200 ICO_WEB.GIF -thumbnail 200x200! $target_dir/_web_preview.jpg
+          [ -f ICO_WEB.GIF ] && [ ! -f $target_dir/_wap_preview.jpg ] && convert -size 100x100 ICO_WEB.GIF -thumbnail 100x100! $target_dir/_wap_preview.jpg
+          [ -f ICO_WEB.GIF ] && [ ! -f $target_dir/_web_preview.jpg ] && convert -size 200x200 ICO_WEB.GIF -thumbnail 200x200! $target_dir/_web_preview.jpg
           cp -n *.MP3 ${target_dir}/
-          rm $target_dir/*_PREVIEW.MP3
+          rm $target_dir/*_PREVIEW.MP3 2> /dev/null # make sure no errors regarding this are shown
           
           _rename_files_properly "${target_dir}"
         ;;
@@ -158,38 +157,39 @@ for mediatype in `ls`; do
           touch $target_dir/$pack_name.xml
           colorize "content pack: $pack_name ($target_dir)" 32
           
-          # sizes
-          sizes=('176x144' '352x288')
           # parameters
           video_options="-b 100k -r 13"
-          audio_options="-strict experimental -ab 60k -ar 22050"
+          audio_options="-strict experimental -ab 64k -ar 22050"
           qcomp="-qcomp 0.5" # compression
           
+          # sizes
+          sizes=('176x144' '352x288')
+          
           for video in `ls | grep -Ei '(3gp|mp4)$'`; do
-            ref_size=`echo ${video##_*} | tr "[[:upper:]]" "[[:lower:]]"`
+            ref_size=`echo ${video%%_*} | tr "[[:upper:]]" "[[:lower:]]"`
             ref_width=`echo $ref_size | awk -Fx '{ print $1 }'`
             ref_height=`echo $ref_size | awk -Fx '{ print $2 }'`
             
-            videoname=${video%*_}
-            videoname=${videoname#.*}
-            videoname_lowercase=`echo $videoname | tr "[[:upper:]]" "[[:lower:]]"`
+            videoname="${video%.*}"
+            videoname="${videoname#*_}"
+            videoname_lowercase=`echo "$videoname" | tr "[[:upper:]]" "[[:lower:]]"`
             
             # information csv file
-            [ ! -f $target_dir/videos.csv ] && echo "provider, content pack, resolution, original file name, new file name" > $target_dir/videos.csv
-            echo "${provider_name}, ${content_pack}, ${ref_size}, ${video}, ${videoname_lowercase}_video" >> $target_dir/videos.csv
+            [ ! -f $target_dir/$pack_name.csv ] && echo "provider, content pack, resolution, original filename, new filename" > $target_dir/$pack_name.csv
+            echo "${provider_name}, ${content_pack}, ${ref_size}, ${video}, ${videoname_lowercase}_video" >> $target_dir/$pack_name.csv
             
             preview="ICO_WEB_${videoname}.GIF"
             if [ -f $preview ]; then
-              convert -size 200x200 $preview -thumbnail 200x200! $target_dir/${videoname_lowercase}_video_web_preview.jpg
-              convert -size 100x100 $preview -thumbnail 100x100! $target_dir/${videoname_lowercase}_video_wap_preview.jpg
-              convert -size 600x600 $preview -resize 600x600! $target_dir/${videoname_lowercase}_video_cover_600x600.jpg
+              [ ! -f $target_dir/${videoname_lowercase}_video_web_preview.jpg ] && convert -size 200x200 $preview -thumbnail 200x200! $target_dir/${videoname_lowercase}_video_web_preview.jpg
+              [ ! -f $target_dir/${videoname_lowercase}_video_wap_preview.jpg ] && convert -size 100x100 $preview -thumbnail 100x100! $target_dir/${videoname_lowercase}_video_wap_preview.jpg
+              [ ! -f $target_dir/${videoname_lowercase}_video_cover_600x600.jpg ] && convert -size 600x600 $preview -resize 600x600! $target_dir/${videoname_lowercase}_video_cover_600x600.jpg
             else
               colorize "  missing file $preview" 33
             fi
             # screen capture
             ffmpeg -i $video -f image2 -ss 4 -t 2 -r 1:4 -s 640x480 _${videoname}_640x480_%02d.jpg &> /dev/null
-            convert -size 640x480 _${videoname}_640x480_002.jpg -resize 640x480! $target_dir/${videoname_lowercase}_video_screen_capture_640x480.jpg
-            rm _${videoname}_640x480_*.jpg
+            [ -f _${videoname}_640x480_002.jpg ] && [ ! -f $target_dir/${videoname_lowercase}_video_screen_capture_640x480.jpg ] && convert -size 640x480 _${videoname}_640x480_002.jpg -resize 640x480! $target_dir/${videoname_lowercase}_video_screen_capture_640x480.jpg
+            rm _${videoname}_640x480_*.jpg 2> /dev/null # make sure no errors regarding this are shown
             
             for size in ${sizes[@]}; do
               new_width=`echo $size | awk -Fx '{ print $1 }'`
@@ -208,14 +208,23 @@ for mediatype in `ls`; do
                 aspect_param=""
               fi
               
-              # 3gp
-              new_video="${target_dir}/${videoname_lowercase}_video_mpeg4_aac_${size}.3gp"
-              if [ ! -f "$new_video" ]; then
-                colorize "    $video => $new_video" 36
-                colorize "      ffmpeg -i $video -f 3gp -vcodec mpeg4 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y $new_video"
-                ffmpeg -i $video -f 3gp -vcodec mpeg4 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y $new_video 2>&1 | grep -Ei '(damaged|error|problem|failed)'
+              # mpeg4 aac 3gp
+              new_video_mpeg4_aac_3gp="${target_dir}/${videoname_lowercase}_video_mpeg4_aac_${size}.3gp"
+              if [ ! -f "$new_video_mpeg4_aac_3gp" ]; then
+                colorize "    mpeg4 aac 3gp :: $video => $new_video_mpeg4_aac_3gp" 36
+                colorize "      ffmpeg -i $video -f 3gp -vcodec mpeg4 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y $new_video_mpeg4_aac_3gp"
+                ffmpeg -i $video -f 3gp -vcodec mpeg4 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y $new_video_mpeg4_aac_3gp 2>&1 | grep -Ei '(damaged|error|problem|failed)'
+              fi
+              
+              # h263 aac 3gp
+              new_video_h263_aac_3gp="${target_dir}/${videoname_lowercase}_video_h263_aac_${size}.3gp"
+              if [ ! -f "$new_video_h263_aac_3gp" ]; then
+                colorize "    h263 aac 3gp :: $video => $new_video_h263_aac_3gp" 36
+                colorize "      ffmpeg -i $video -f 3gp -vcodec h263 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y $new_video_h263_aac_3gp"
+                ffmpeg -i $video -f 3gp -vcodec h263 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y $new_video_h263_aac_3gp 2>&1 | grep -Ei '(damaged|error|problem|failed)'
               fi
             done
+            
           done
           
           _rename_files_properly "${target_dir}"
