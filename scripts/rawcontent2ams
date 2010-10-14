@@ -140,10 +140,14 @@ for mediatype in `ls`; do
             #   ratio_sky="-crop $(( $width / 16 * 9))x${width}"
             # fi
             
-            [ ! -f $target_dir/${imagename_lowercase}_image_1200x1200.jpg ] && convert -gravity center -background white -extent 1200x1200 $image -resize 1200x1200 "$target_dir/${imagename_lowercase}_image_1200x1200.jpg"
-            [ ! -f $target_dir/${imagename_lowercase}_image_1200x900.jpg ] && convert -gravity center -background white -extent 1200x900 $image -resize 1200x900 "$target_dir/${imagename_lowercase}_image_1200x900.jpg"
-            [ ! -f $target_dir/${imagename_lowercase}_image_900x1200.jpg ] && convert -gravity center -background white -extent 900x1200 $image -resize 900x1200 "$target_dir/${imagename_lowercase}_image_900x1200.jpg"
-            [ ! -f $target_dir/${imagename_lowercase}_image_675x1200.jpg ] && convert -gravity center -background white -extent 675x1200 $image -resize 675x1200 "$target_dir/${imagename_lowercase}_image_675x1200.jpg"
+            # [ ! -f $target_dir/${imagename_lowercase}_image_1200x1200.jpg ] && 
+            convert -gravity center -background white -resize 1200x1200 -extent 1200x1200 $image "$target_dir/${imagename_lowercase}_image_1200x1200.jpg"
+            # [ ! -f $target_dir/${imagename_lowercase}_image_1200x900.jpg ] && 
+            convert -gravity center -background white -resize 1200x900 -extent 1200x900 $image "$target_dir/${imagename_lowercase}_image_1200x900.jpg"
+            # [ ! -f $target_dir/${imagename_lowercase}_image_900x1200.jpg ] && 
+            convert -gravity center -background white -resize 900x1200 -extent 900x1200 $image "$target_dir/${imagename_lowercase}_image_900x1200.jpg"
+            # [ ! -f $target_dir/${imagename_lowercase}_image_675x1200.jpg ] && 
+            convert -gravity center -background white -resize 675x1200 -extent 675x1200 $image "$target_dir/${imagename_lowercase}_image_675x1200.jpg"
           done
           
           _rename_files_properly "${target_dir}"
