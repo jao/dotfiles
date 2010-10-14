@@ -48,7 +48,7 @@ _init_target_dir_content_pack () {
 }
 
 _export_games () {
-  pack_name="${DATETIME}_game_${provider_name}_${content_pack}_insert"
+  pack_name="${DATETIME}_game_${provider_name}_${content_pack//_/}_insert"
   _init_target_dir_content_pack
   
   # previews
@@ -127,7 +127,7 @@ _export_images () {
 }
 
 _export_songs () {
-  pack_name="${DATETIME}_realsound_${provider_name}_${content_pack}_insert"
+  pack_name="${DATETIME}_realsound_${provider_name}_${content_pack//_/}_insert"
   _init_target_dir_content_pack
   
   if [ -f ICO_WEB.GIF ]; then
@@ -145,7 +145,7 @@ _export_songs () {
 }
 
 _export_videos () {
-  pack_name="${DATETIME}_video_${provider_name}_${content_pack}_insert"
+  pack_name="${DATETIME}_video_${provider_name}_${content_pack//_/}_insert"
   _init_target_dir_content_pack
   
   # information csv file
@@ -159,8 +159,8 @@ _export_videos () {
   # sizes
   sizes=('176x144' '352x288')
   
-  for video in `ls | grep -Ei '(3gp|mp4)$'`; do
-    colorize "      exporting $video"
+  for video in `ls -S | grep -Ei '(3gp|mp4)$'`; do
+    colorize "      exporting $video" 36
     ref_size=`echo ${video%%_*} | tr "[[:upper:]]" "[[:lower:]]"`
     ref_width=`echo $ref_size | awk -Fx '{ print $1 }'`
     ref_height=`echo $ref_size | awk -Fx '{ print $2 }'`
@@ -171,7 +171,7 @@ _export_videos () {
     videoname_lowercase=${videoname_lowercase//[/}
     videoname_lowercase=${videoname_lowercase//]/}
     
-    colorize "    ${provider_name}, ${content_pack}, ${ref_size}, ${video}, ${videoname_lowercase}_video"
+    colorize "      ${provider_name}, ${content_pack}, ${ref_size}, ${video}, ${videoname_lowercase}_video"
     
     # previews
     preview="ICO_WEB_${videoname}.GIF"
@@ -212,16 +212,16 @@ _export_videos () {
       # mpeg4 aac 3gp
       new_video_mpeg4_aac_3gp="${target_dir}/${videoname_lowercase}_video_mpeg4_aac_${size}.3gp"
       if [ ! -f "$new_video_mpeg4_aac_3gp" ]; then
-        colorize "    mpeg4 aac 3gp :: $video => $new_video_mpeg4_aac_3gp" 36
-        colorize "      ffmpeg -i $video -f 3gp -vcodec mpeg4 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y $new_video_mpeg4_aac_3gp"
+        colorize "      mpeg4 aac 3gp | $video => $new_video_mpeg4_aac_3gp"
+        # colorize "        ffmpeg -i $video -f 3gp -vcodec mpeg4 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y $new_video_mpeg4_aac_3gp" 35
         ffmpeg -i $video -f 3gp -vcodec mpeg4 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y $new_video_mpeg4_aac_3gp 2>&1 | grep -Ei '(damaged|error|problem|failed)'
       fi
       
       # h263 aac 3gp
       new_video_h263_aac_3gp="${target_dir}/${videoname_lowercase}_video_h263_aac_${size}.3gp"
       if [ ! -f "$new_video_h263_aac_3gp" ]; then
-        colorize "    h263 aac 3gp :: $video => $new_video_h263_aac_3gp" 36
-        colorize "      ffmpeg -i $video -f 3gp -vcodec h263 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y $new_video_h263_aac_3gp"
+        colorize "      h263 aac 3gp | $video => $new_video_h263_aac_3gp"
+        # colorize "        ffmpeg -i $video -f 3gp -vcodec h263 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y $new_video_h263_aac_3gp" 35
         ffmpeg -i $video -f 3gp -vcodec h263 $video_options -acodec aac $audio_options -s $size $aspect_param $qcomp -y $new_video_h263_aac_3gp 2>&1 | grep -Ei '(damaged|error|problem|failed)'
       fi
     done
@@ -238,8 +238,7 @@ _export_videos () {
 _export_content_packs () {
   for provider in `ls`; do
     if [ -d $provider ] && [ ! -f ".ams_${provider}" ]; then
-      colorize "Exporting $mediatype from $provider" 33
-      # set the renamed providers to their new names (hardcoded)
+      # set the renamed providers to their right names (hardcoded)
       case $provider in
         avioesdoforro|forrodomuido) provider_name="ezapsom";;
         bella) provider_name="belladasemana";;
@@ -254,6 +253,7 @@ _export_content_packs () {
       esac
       
       cd $provider
+      colorize "Exporting $mediatype from $provider / $provider_name" 32
       for content_pack in `ls`; do
         if [ -d $content_pack ] && [ ! -f ".ams_${content_pack}" ]; then
           cd $content_pack
@@ -281,26 +281,33 @@ _export_content_packs () {
   done
 }
 
+cd $CONTENT_SOURCE_DIRECTORY
 if [ -n $1 ]; then
   mediatype="$1"
-fi
-
-cd $CONTENT_SOURCE_DIRECTORY
-if [ -z $mediatype ]; then
-  for mediatype in `ls`; do
+  if [ -d $mediatype ] && [ ! -f ".ams_${mediatype}" ]; then
     cd $mediatype
     _export_content_packs
     cd ..
-  done
-else
-  if [ -d $mediatype ]; then
-    cd $mediatype
-    _export_content_packs
-    cd ..
+    touch ".ams_$mediatype"
+    colorize "$mediatype exported." 36
+  elif [ -d $mediatype ] && [ -f ".ams_${mediatype}" ]; then
+    colorize "$mediatype previously exported." 33
   else
     colorize "Bad parameter value, should be games, images, songs or videos." 31
     exit 5
   fi
+else
+  for mediatype in `ls`; do
+    if [ -d $mediatype ] && [ ! -f ".ams_${mediatype}" ]; then
+      cd $mediatype
+      _export_content_packs
+      cd ..
+      touch ".ams_$mediatype"
+      colorize "$mediatype exported." 36
+    else
+      colorize "$mediatype previously exported." 33
+    fi
+  done
 fi
 
 exit $?
