@@ -44,6 +44,9 @@ tinyurl () { curl -G "http://tinyurl.com/api-create.php" --data-urlencode "url=$
 # get the moourl awesomeness
 moourl () { curl -G "http://moourl.com/create/" --data-urlencode "source=${1}" --trace-ascii - 2> /dev/null | grep Location: | echo "http://moourl.com/$(egrep -o '\w+$')" | pbcopy; }
 
+# clear ASL logs
+clean_asl_logs () { sudo rm -f /private/var/log/asl/*.asl }
+
 # Colors
 BLUE="\e[0;34m"
 CYAN="\e[0;36m"
