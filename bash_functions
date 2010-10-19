@@ -17,7 +17,6 @@ alias psgrep="ps aux | egrep -v egrep | egrep -i "
 alias lock="/System/Library/CoreServices/Menu\ Extras/user.menu/Contents/Resources/CGSession -suspend"
 alias screensaver="/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine &>/dev/null"
 alias mysql="mysql --auto-rehash=TRUE"
-# alias tjtest="ssh -t imp ssh tj@test"
 
 # changing directory to project
 pcd () { cd ~/projects/$1; }
@@ -89,7 +88,7 @@ my-prompt () {
     fi
     
     if [[ "$STATUS" =~ "$TO_BE_COMMITED" ]] || [[ "$STATUS" =~ "$CHANGED" ]]; then
-      BC=$RED; STATE=" ${YELLOW}✘${NC}"
+      BC=$RED; STATE="${YELLOW}✘${NC}"
     fi
     
     [ -z "$STATE" ] && BC=$GREEN
