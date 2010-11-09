@@ -17,6 +17,7 @@ alias psgrep="ps aux | egrep -v egrep | egrep -i "
 alias lock="/System/Library/CoreServices/Menu\ Extras/user.menu/Contents/Resources/CGSession -suspend"
 alias screensaver="/System/Library/Frameworks/ScreenSaver.framework/Resources/ScreenSaverEngine.app/Contents/MacOS/ScreenSaverEngine &>/dev/null"
 alias mysql="mysql --auto-rehash=TRUE"
+alias r="rails"
 
 # changing directory to project
 pcd () { cd ~/projects/$1; }
