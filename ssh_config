@@ -1,2 +1,2 @@
-Host web* salt* amdal* amhst*
+Host web* salt* amdal* amhst* tiamat fwsp
   User root
