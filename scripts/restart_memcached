@@ -1,0 +1,19 @@
+#/usr/bin/sh
+
+echo -e "\e[30;42;1m Checking for memcached instances...                      \e[0m"
+
+memcached_is_running=`ps aux | grep memcached | grep -v grep | wc -l`
+
+if [ -n "$memcached_is_running" ]; then
+  echo -e "\e[33mMemcached is already running, stopping all instances...\e[0m"
+  killall memcached
+  echo ""
+fi
+
+echo -e "\e[32mStarting both instances...\e[0m"
+memcached -d -p 11211 -u memcached -m 64 -c 1024 -P /var/run/memcached/memcached.pid
+memcached -d -p 11212 -u memcached -m 64 -c 1024 -P /var/run/memcached/memcached2.pid
+
+# set and print the new grep result
+memcached_is_running=`ps aux | grep memcached | grep -v grep | wc -l`
+echo -e "\e[36mFound $memcached_is_running\e[0m"
