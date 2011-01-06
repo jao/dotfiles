@@ -25,8 +25,11 @@ pcd () { cd ~/projects/$1; }
 # reload source
 reload () { source ~/.bash_profile; }
 
-# list directory after cd
-cd () { builtin cd "${@:-$HOME}" && ls; }
+# list directory after cd | -p parameter will run git pull after ls when it is a git repo
+cd () { if [ "$1" == "-p" ]; then builtin cd "${2:-$HOME}" && ls; [ -d ".git" ] && git pull; else builtin cd "${@:-$HOME}" && ls; fi; }
+
+# cd && pull
+cdp () { builtin cd "${@:-$HOME}" && ls; if [ -d ".git" ]; then git pull; fi }
 
 # mkdir, cd into it
 mkcd () { mkdir -p "$*"; cd "$*"; }
