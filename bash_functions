@@ -47,6 +47,18 @@ tinyurl () { curl -G "http://tinyurl.com/api-create.php" --data-urlencode "url=$
 # get the moourl awesomeness
 moourl () { curl -G "http://moourl.com/create/" --data-urlencode "source=${1}" --trace-ascii - 2> /dev/null | grep Location: | echo "http://moourl.com/$(egrep -o '\w+$')" | pbcopy; }
 
+# get the goo.gl
+googl () {
+  if [ -f ~/.google_api_key ]; then
+    echo "shortening url..."
+    google_api_key=`cat ~/.google_api_key`
+    key_param=", 'key': '$google_api_key'"
+  else
+    key_param=""
+  fi
+  curl "https://www.googleapis.com/urlshortener/v1/url" -H 'Content-Type: application/json' -d "{'longUrl': '${1}'${key_param}}" 2> /dev/null | grep '"id":' | awk '{ print $2}' | sed -E 's/("|,)//g' | pbcopy;
+}
+
 # clear ASL logs
 clean_asl_logs () { sudo rm -f /private/var/log/asl/*.asl; }
 
