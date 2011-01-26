@@ -34,7 +34,7 @@ cdp () { builtin cd "${@:-$HOME}" && ls; if [ -d ".git" ]; then git pull; fi }
 # mkdir, cd into it
 mkcd () { mkdir -p "$*"; cd "$*"; }
 
-man2pdf () { man -t $* | ps2pdf - - | open -f -a Preview; }
+man2pdf () { man -t $* | open -f -a Preview; }
 
 # taken from http://github.com/bryanl/zshkit/
 github-url () { git config remote.origin.url | sed -En 's/git(@|:\/\/)github.com(:|\/)(.+)\/(.+).git/https:\/\/github.com\/\3\/\4/p'; }
