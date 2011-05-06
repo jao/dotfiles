@@ -93,6 +93,7 @@ my-prompt () {
     local DIVERGED="have diverged"
     local CHANGED="# Changed but not updated"
     local TO_BE_COMMITED="# Changes to be committed"
+    local CHANGES_NOT_STAGED="# Changes not staged for commit"
     STATUS=`git status 2>/dev/null`
     
     if [[ "$STATUS" =~ "$DIVERGED" ]]; then
@@ -103,8 +104,8 @@ my-prompt () {
       BC=$RED; STATE="${RED}↑${NC}"
     fi
     
-    if [[ "$STATUS" =~ "$TO_BE_COMMITED" ]] || [[ "$STATUS" =~ "$CHANGED" ]]; then
-      BC=$RED; STATE="${YELLOW}✘${NC}"
+    if [[ "$STATUS" =~ "$TO_BE_COMMITED" ]] || [[ "$STATUS" =~ "$CHANGED" ]] || [[ "$STATUS" =~ "$CHANGES_NOT_STAGED" ]]; then
+      BC=$YELLOW; STATE="${YELLOW}${NC}"
     fi
     
     [ -z "$STATE" ] && BC=$GREEN
