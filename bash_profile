@@ -10,13 +10,13 @@ export ANDROID_SDK_ROOT="/usr/local/Cellar/android-sdk/r7"
 export LC_ALL="en_US.UTF-8"
 
 # Oracle stuff
-export ORACLE_HOME="${HOME}/Library/Oracle/instantclient"
+# export ORACLE_HOME="${HOME}/Library/Oracle/instantclient"
 # export DYLD_LIBRARY_PATH="${ORACLE_HOME}"
 # export SQLPATH="${ORACLE_HOME}"
 # export NLS_LANG="AMERICAN_AMERICA.UTF8"
 
 # Postgresql
-export PGDATA='/usr/local/var/postgres'
+# export PGDATA='/usr/local/var/postgres'
 
 # PATH
 export PATH="${HOME}/scripts:${HOME}/projects/termite:${HOME}/projects/prime/content-prep:/usr/local/bin:${PATH}"
