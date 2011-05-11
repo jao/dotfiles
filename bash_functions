@@ -59,6 +59,9 @@ googl () {
   curl "https://www.googleapis.com/urlshortener/v1/url" -H 'Content-Type: application/json' -d "{'longUrl': '${1}'${key_param}}" 2> /dev/null | grep '"id":' | awk '{ print $2}' | sed -E 's/("|,)//g' | pbcopy;
 }
 
+# ascii character table
+ascii () { for i in {32..255}; do printf "\e[0;33m$i\e[0m "\\$(($i/64*100+$i%64/8*10+$i%8))"\n"; done | column; }
+
 # clear ASL logs
 clean_asl_logs () { sudo rm -f /private/var/log/asl/*.asl; }
 
@@ -72,9 +75,6 @@ RED="\e[0;31m"
 WHITE="\e[1;37m"
 YELLOW="\e[0;33m"
 NC="\e[0m" # no color
-
-# ascii character table
-ascii () { for i in {32..255}; do printf "\e[0;33m$i\e[0m "\\$(($i/64*100+$i%64/8*10+$i%8))"\n"; done | column; }
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 my-prompt () {
