@@ -73,6 +73,9 @@ WHITE="\e[1;37m"
 YELLOW="\e[0;33m"
 NC="\e[0m" # no color
 
+# ascii character table
+ascii () { for i in {32..255}; do printf "\e[0;33m$i\e[0m "\\$(($i/64*100+$i%64/8*10+$i%8))"\n"; done | column; }
+
 export GIT_PS1_SHOWDIRTYSTATE=1
 my-prompt () {
   # basic variables
