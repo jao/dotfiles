@@ -108,11 +108,14 @@ my-prompt () {
     fi
     
     if [[ "$STATUS" =~ "$TO_BE_COMMITED" ]] || [[ "$STATUS" =~ "$CHANGED" ]] || [[ "$STATUS" =~ "$CHANGES_NOT_STAGED" ]]; then
-      BC=$YELLOW; STATE="${YELLOW}+${NC}"
+      BC=$YELLOW; STATE="${STATE}${YELLOW}+${NC}"
+    fi
+    
+    if [[ "$STATUS" =~ "$UNTRACKED" ]]; then
+      STATE="${STATE}${CYAN}?${NC}"
     fi
     
     [ -z "$STATE" ] && BC=$GREEN
-    [[ "$STATUS" =~ "$UNTRACKED" ]] && STATE="${STATE}${CYAN}?${NC}"
     
     PS1="${PS1} ${ini}${BC}${GITBRANCH}${NC}${STATE}${end}"
   fi
