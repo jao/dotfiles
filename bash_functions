@@ -81,11 +81,11 @@ my-prompt () {
   # basic variables
   local STATE=''; local RVM=''; local STATUS=''; local ini=''; local end='';
   local BC=$GREEN # base color
-  [ -f ~/.rvm/bin/rvm-prompt ] && RVM=" \e[1;30;43m $(~/.rvm/bin/rvm-prompt i v) \e[0m" # rvm rubies
+  [ -f ~/.rvm/bin/rvm-prompt ] && RVM=" \e[0;30;43m $(~/.rvm/bin/rvm-prompt v g) \e[0m" # rvm rubies
   PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m${RVM}" # basic ps1
   
   # GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
-  local GITBRANCH=`__git_ps1 "%s"`
+  local GITBRANCH=`__git_ps1 "%s" | awk '{print $1;}'`
   if [ "$GITBRANCH" != "" ]; then
     # delimiters
     ini="("; end=")"
@@ -108,11 +108,11 @@ my-prompt () {
     fi
     
     if [[ "$STATUS" =~ "$TO_BE_COMMITED" ]] || [[ "$STATUS" =~ "$CHANGED" ]] || [[ "$STATUS" =~ "$CHANGES_NOT_STAGED" ]]; then
-      BC=$YELLOW; STATE="${YELLOW}${NC}"
+      BC=$YELLOW; STATE="${YELLOW}+${NC}"
     fi
     
     [ -z "$STATE" ] && BC=$GREEN
-    [[ "$STATUS" =~ "$UNTRACKED" ]] && STATE="${STATE}${YELLOW}*${NC}"
+    [[ "$STATUS" =~ "$UNTRACKED" ]] && STATE="${STATE}${CYAN}?${NC}"
     
     PS1="${PS1} ${ini}${BC}${GITBRANCH}${NC}${STATE}${end}"
   fi

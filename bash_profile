@@ -29,6 +29,7 @@ source ~/.git_completion
 # load rvm stuff
 source ~/.rvm/scripts/rvm
 source ~/.rvm/scripts/completion
+# source "$rvm_path/contrib/ps1_functions"
 
 # load my functions
 source ~/.bash_functions
