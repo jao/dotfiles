@@ -22,23 +22,36 @@
 [core]
   whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
 	excludesfile = /Users/jao/.gitignore_global
+[merge]
+	# Include summaries of merged commits in newly created merge commit messages
+	log = true
 [alias]
+  s = status -s
   st = status
   ci = commit
   ca = commit -a
   cam = commit -a -m
   br = branch
   co = checkout
+  d = diff --patch-with-stat
   df = diff
+  l = log --pretty=oneline -n 20 --graph
   lg = log -p
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
   lola = log --graph --decorate --pretty=oneline --abbrev-commit --all
   ls = ls-files
+	# Switch to a branch, creating it if necessary
+	go = checkout -B
+	# Undo a `git push`
+	undopush = push -f origin HEAD^:master
 [branch]
   autosetupmerge = true
 [branch "master"]
   remote = origin
   merge = refs/heads/master
+[apply]
+	# Detect whitespace errors when applying a patch
+	whitespace = fix
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
