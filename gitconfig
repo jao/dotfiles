@@ -35,6 +35,7 @@
   co = checkout
   d = diff --patch-with-stat
   df = diff
+  dc = diff --cached
   l = log --pretty=oneline -n 20 --graph
   lg = log -p
   lol = log --graph --decorate --pretty=oneline --abbrev-commit
