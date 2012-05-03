@@ -1,3 +1,7 @@
+# Larger bash history (default is 500)
+export HISTFILESIZE=10000
+export HISTSIZE=10000
+
 # Easier navigation: .., ..., ~ and -
 alias ..="cd .."
 alias ...="cd ../.."
@@ -8,10 +12,73 @@ alias -- -="cd -"
 alias d="cd ~/Documents/Dropbox"
 alias p="cd ~/projects"
 alias r="rails"
-alias g="git"
 alias v="vim"
 alias m="mate ."
 alias s="subl ."
+
+alias g="git"
+alias ga='git add -A'
+alias gap='ga -p'
+alias gau='git add -u'
+alias gbr='git branch -v'
+gc() {
+  git diff --cached | grep '\btap[ph]\b' >/dev/null &&
+    echo "\e[0;31;29mOops, there's a #tapp or similar in that diff.\e[0m" ||
+    git commit -v "$@"
+}
+alias gc!='git commit -v'
+alias gca='git commit -v -a'
+alias gcam='gca --amend'
+alias gch='git cherry-pick'
+alias gcm='git commit -v --amend'
+alias gco='git checkout'
+alias gcop='gco -p'
+alias gd='git diff -M'
+alias gd.='git diff -M --color-words="."'
+alias gdc='git diff --cached -M'
+alias gdc.='git diff --cached -M --color-words="."'
+alias gm='git merge --no-ff'
+alias gmf='git merge --ff-only'
+alias gf="git fetch"
+alias gp="git push"
+git-new() {
+  [ -d "$1" ] || mkdir "$1" &&
+  cd "$1" &&
+  git init &&
+  touch .gitignore &&
+  git add .gitignore &&
+  git commit -m "Added .gitignore."
+}
+git_current_branch() {
+  cat "$(git rev-parse --git-dir 2>/dev/null)/HEAD" | sed -e 's/^.*refs\/heads\///'
+}
+alias glog='git log --date-order --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset"'
+alias gl='glog --graph'
+alias gla='gl --all'
+gls() {
+  query="$1"
+  shift
+  glog --pickaxe-regex "-S$query" "$@"
+}
+alias gm='git merge --no-ff'
+alias gmf='git merge --ff-only'
+alias gmfthis='gmf origin/$(git_current_branch)'
+alias gp='git push'
+alias gpthis='gp origin $(git_current_branch)'
+alias gr='git reset'
+alias grb='git rebase -p'
+alias grbthis='grb origin/$(git_current_branch)'
+alias grbc='git rebase --continue'
+alias grbi='git rebase -i'
+alias grh='git reset --hard'
+alias grp='gr --patch'
+alias grsh='git reset --soft HEAD~'
+alias grv='git remote -v'
+alias gs='git show'
+alias gs.='git show --color-words="."'
+alias gst='git stash'
+alias gstp='git stash pop'
+
 
 # ls aliases
 alias ls="ls -G"
@@ -189,6 +256,14 @@ my-prompt () {
   PS1="${PS1} \n\$ "
 }
 PROMPT_COMMAND=my-prompt
+
+# tilde_or_pwd() {
+#   echo $PWD | sed -e "s/\/Users\/$USER/~/"
+# }
+
+# export PROMPT=$'%{\e[0;90m%}%n@\e[0;30;47m%M%{\e[0m%}
+# %{\e[0;%(?.32.31)m%}>%{\e[0m%} '
+# export RPROMPT=$'%{\e[0;90m%}$(tilde_or_pwd)$(git_cwd_info)%{\e[0m%}'
 
 
 # @gf3’s Sexy Bash Prompt, inspired by “Extravagant Zsh Prompt”
