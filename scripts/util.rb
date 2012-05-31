@@ -2,7 +2,7 @@
 STDOUT.sync = true
 
 # get terminal window resolution
-WINDOW = HighLine::SystemExtensions.terminal_size
+# WINDOW = HighLine::SystemExtensions.terminal_size
 
 # print in the same line
 def psl s=''

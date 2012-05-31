@@ -69,15 +69,15 @@ class Time
   
   def ftime f
     case f
-      when 'date': self.strftime("%d/%m/%Y")
-      when 'datetime': self.strftime("%d/%m/%Y %H:%M")
-      when 'datetimesec': self.strftime("%d/%m/%Y %H:%M %S'")
-      when 'iso': self.strftime("%Y-%m-%d %H:%M")
-      when 'time': self.strftime("%H:%M")
-      when 'wday': self.strftime("%a")
-      when 'wdaydate': self.strftime("%a %d/%m")
-      when 'daymonth': self.strftime("%d/%m")
-      when 'monthyear': self.strftime("%B %Y")
+      when 'date' then self.strftime("%d/%m/%Y")
+      when 'datetime' then self.strftime("%d/%m/%Y %H:%M")
+      when 'datetimesec' then self.strftime("%d/%m/%Y %H:%M %S'")
+      when 'iso' then self.strftime("%Y-%m-%d %H:%M")
+      when 'time' then self.strftime("%H:%M")
+      when 'wday' then self.strftime("%a")
+      when 'wdaydate' then self.strftime("%a %d/%m")
+      when 'daymonth' then self.strftime("%d/%m")
+      when 'monthyear' then self.strftime("%B %Y")
       else self.strftime(f)
     end  
   end

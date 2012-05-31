@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+require "rubygems"
+require "rspec"
+
+match_urls = [
+  "http://youtube.com/watch?v=1234567890",
+  "https://youtube.com/watch?v=1234567890",
+  "http://www.youtube.com/watch?v=1234567890",
+  "https://www.youtube.com/watch?v=1234567890",
+  "http://youtu.be/1234567890",
+  "https://youtu.be/1234567890",
+  "http://www.youtu.be/1234567890",
+  "https://www.youtu.be/1234567890",
+  "youtube.com/watch?v=1234567890",
+  "youtu.be/1234567890"
+]
+
+dont_match_urls = [
+  "youtube.com",
+  "youtube.com/",
+  "youtube.com/watch",
+  "youtube.com/watch/",
+  "youtu.be",
+  "youtu.be/"
+]
+
+describe "given a regexp" do
+  let(:regex) { /(?:https?:\/\/)?(?:www\.)?youtu(?:\.be|be\.com)\/(?:watch\?v=)?(\w{10,})/ }
+
+  context "it should match" do
+    match_urls.each do |url|
+      it "#{url}" do
+        url.should match(regex)
+      end
+    end
+  end
+
+  context "it should not match" do
+    dont_match_urls.each do |url|
+      it "#{url}" do
+        url.should_not match(regex)
+      end
+    end
+  end
+end
