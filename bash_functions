@@ -41,6 +41,8 @@ alias gm='git merge --no-ff'
 alias gmf='git merge --ff-only'
 alias gf="git fetch"
 alias gp="git push"
+alias gwc="git whatchanged -p --abbrev-commit --pretty=medium"
+
 git-new() {
   [ -d "$1" ] || mkdir "$1" &&
   cd "$1" &&
