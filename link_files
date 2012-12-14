@@ -16,7 +16,7 @@ DOTFILES_DIR=`echo $DOTFILES | sed "s|$HOME/||"`
 
 cd $HOME
 
-for FILE in "bash_profile" "bash_functions" "bash_completion" "gemrc" "git_completion" "gitconfig" "gitignore" "aprc" "rvmrc"
+for FILE in "bash_profile" "bash_functions" "bash_completion" "gemrc" "git_completion" "git_prompt" "gitconfig" "gitignore" "aprc" "rvmrc"
 do
   # removing existing file, if exists
   if [ -f .$FILE ]; then

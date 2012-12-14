@@ -1,14 +1,14 @@
+---
+:backtrace: false
 :benchmark: false
-:verbose: true
-:update_sources: true
-gem: --no-ri --no-rdoc
-install: --env-shebang
-gemcutter_key: 66...cf
-:sources: 
+:bulk_threshold: 1000
+:sources:
 - http://gemcutter.org
 - http://gems.rubyforge.org/
 - http://gems.github.com/
-- http://gems.datamapper.org
-:backtrace: false
-:bulk_threshold: 1000
+:update_sources: true
+:verbose: true
+gem: --no-ri --no-rdoc
+install: --env-shebang
+gemcutter_key: 66...cf
 update: --env-shebang

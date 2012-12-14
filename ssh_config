@@ -1,4 +1,19 @@
-Host development.olook.com.br homolog.olook.com.br
+Host dev
+  HostName development.olook.com.br
   User root
   Port 13630
 
+Host hmg
+  HostName homolog.olook.com.br
+  User root
+  Port 13630
+
+Host showroom
+  HostName showroom.olook.com.br
+  User root
+  Port 13630
+
+Host db2
+  HostName ec2-50-16-84-115.compute-1.amazonaws.com
+  User root
+  Port 22
