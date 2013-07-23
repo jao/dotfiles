@@ -87,9 +87,14 @@ set convert-meta off
 # Use Alt/Meta + Delete to delete the preceding word
 # "\e[3;3~": kill-word
 
-# load git awesomeness
-source ~/.git_completion
-source ~/.git_prompt
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+  . $(brew --prefix)/etc/bash_completion
+fi
+if [ -d $(brew --prefix)/etc/bash_completion.d ]; then
+  # load git awesomeness
+  . $(brew --prefix)/etc/bash_completion.d/git-completion.bash
+  . $(brew --prefix)/etc/bash_completion.d/git-prompt.sh
+fi
 
 # load rvm stuff
 source ~/.rvm/scripts/rvm
@@ -102,8 +107,14 @@ source ~/.bash_functions
 # Homebrew
 source `brew --prefix`/Library/Contributions/brew_bash_completion.sh
 
+# load ack completion
+source ~/.ack_completion
+
 # rake completion
 complete -C ~/projects/dotfiles/rake_completion -o default rake
 
 # projects completion
 complete -C ~/projects/dotfiles/project_completion -o default pcd
+
+# pow completion
+complete -C ~/projects/dotfiles/pow_completion -o default pow

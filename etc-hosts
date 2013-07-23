@@ -8,40 +8,5 @@
 255.255.255.255	 broadcasthost
 ::1              localhost
 
-# local
-# 127.0.0.1      database tjdev memcache
-127.0.0.1        localhost
-127.0.0.1        tj.localhost    sbt.localhost
-127.0.0.1        soft.localhost  hard.localhost  g.localhost
-127.0.0.1        blah.localhost
-127.0.0.1        sbt.localhost
-127.0.0.1        wap.rails.local
-
-# local network
-172.16.36.17     tjdev       # database  memcache
-172.16.36.2      stewie      oracle_database
-172.16.36.3      cartman     database  memcache
-
-# outside servers
-200.186.155.33 imp
-
-# production (Houston)
-174.120.227.14   amhstar1    ar1
-174.120.227.4    amhston1    on1
-174.120.227.16   amhston2    on2
-174.120.227.6    amhstsalt1  salt1
-174.120.227.8    amhstapp1   app1
-174.120.227.10   amhstweb1   web1
-174.120.227.12   amhstweb2   web2
-
-# dallas
-174.133.167.132  amdalar1    dar1
-174.133.167.134  amdalon1    don1
-174.133.167.136  amdalon2    don2
-174.133.167.138  amdalsalt1  dsalt1
-174.133.167.140  amdalapp1   dapp1
-174.133.167.142  amdalweb1   dweb1
-174.133.167.144  amdalweb2   dweb2
-
 # personal stuff
 209.20.74.243   solita

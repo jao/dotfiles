@@ -43,6 +43,9 @@ alias gmf='git merge --ff-only'
 alias gf="git fetch"
 alias gp="git push"
 alias gwc="git whatchanged -p --abbrev-commit --pretty=medium"
+alias glog='git log --date-order --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset"'
+alias gl='glog --graph'
+alias gla='gl --all'
 
 git-new() {
   [ -d "$1" ] || mkdir "$1" &&
@@ -55,9 +58,6 @@ git-new() {
 git_current_branch() {
   cat "$(git rev-parse --git-dir 2>/dev/null)/HEAD" | sed -e 's/^.*refs\/heads\///'
 }
-alias glog='git log --date-order --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset"'
-alias gl='glog --graph'
-alias gla='gl --all'
 gls() {
   query="$1"
   shift
@@ -81,7 +81,6 @@ alias gs='git show'
 alias gs.='git show --color-words="."'
 alias gst='git stash'
 alias gstp='git stash pop'
-
 
 # ls aliases
 alias ls="ls -G"
@@ -176,12 +175,6 @@ man2pdf () { man -t $* | open -f -a Preview; }
 github-url () { git config remote.origin.url | sed -En 's/git(@|:\/\/)github.com(:|\/)(.+)\/(.+).git/https:\/\/github.com\/\3\/\4/p'; }
 github () { open $(github-url); }
 git-scoreboard () { git log | grep '^Author' | sort | uniq -ci | sort -r; }
- 
-# get the tinyurl
-tinyurl () { curl -G "http://tinyurl.com/api-create.php" --data-urlencode "url=${1}" 2> /dev/null | pbcopy; }
-
-# get the moourl awesomeness
-moourl () { curl -G "http://moourl.com/create/" --data-urlencode "source=${1}" --trace-ascii - 2> /dev/null | grep Location: | echo "http://moourl.com/$(egrep -o '\w+$')" | pbcopy; }
 
 # get the goo.gl
 googl () {
@@ -197,9 +190,63 @@ googl () {
 
 # ascii character table
 ascii () { for i in {32..255}; do printf "\e[0;33m$i\e[0m "\\$(($i/64*100+$i%64/8*10+$i%8))"\n"; done | column; }
+colors () { ruby ~/projects/dotfiles/scripts/colors; }
 
 # clear ASL logs
 clean_asl_logs () { sudo rm -f /private/var/log/asl/*.asl; }
+
+# pow
+pow () {
+  case $1 in
+    about)
+      open "http://http://pow.cx";;
+    app)
+      local pow_app=`pwd`;
+      case $2 in
+        delete)
+          rm -i ~/.pow/$3;;
+        new)
+          $(cd ~/.pow && ln -s $pow_app);;
+        remove)
+          $(cd ~/.pow && rm -i $pow_app);;
+        *)
+          echo "App info"
+          echo $pow_app;;
+      esac;;
+    endpoint)
+      curl -H host:pow localhost/status.json
+      echo;;
+    help)
+      echo "Pow Rack Server:
+      about
+      endpoint
+      help
+      manual
+      portproxy
+        pow portproxy port# appname
+      restart
+        pow restart [project]
+      upgrade
+      uninstall";;
+    manual)
+      open "http://pow.cx/manual.html";;
+    portproxy)
+      echo $2 > ~/.pow/$3;;
+    restart)
+      case $2 in
+        project)
+          echo "restarting app..."
+          touch tmp/restart.txt;;
+        *)
+          echo "restarting Pow..."
+          touch ~/.pow/restart.txt;;
+      esac;;
+    uninstall)
+      curl get.pow.cx/uninstall.sh | sh;;
+    upgrade)
+      curl get.pow.cx | sh;;
+  esac
+}
 
 # Colors
 BLUE="\e[0;34m"
@@ -259,67 +306,3 @@ my-prompt () {
   PS1="${PS1} \n\$ "
 }
 PROMPT_COMMAND=my-prompt
-
-# tilde_or_pwd() {
-#   echo $PWD | sed -e "s/\/Users\/$USER/~/"
-# }
-
-# export PROMPT=$'%{\e[0;90m%}%n@\e[0;30;47m%M%{\e[0m%}
-# %{\e[0;%(?.32.31)m%}>%{\e[0m%} '
-# export RPROMPT=$'%{\e[0;90m%}$(tilde_or_pwd)$(git_cwd_info)%{\e[0m%}'
-
-
-# @gf3’s Sexy Bash Prompt, inspired by “Extravagant Zsh Prompt”
-# Shamelessly copied from https://github.com/gf3/dotfiles
-# Screenshot: http://i.imgur.com/s0Blh.png
-
-# if [[ $COLORTERM = gnome-* && $TERM = xterm ]] && infocmp gnome-256color >/dev/null 2>&1; then
-#   export TERM=gnome-256color
-# elif infocmp xterm-256color >/dev/null 2>&1; then
-#   export TERM=xterm-256color
-# fi
-# 
-# if tput setaf 1 &> /dev/null; then
-#   tput sgr0
-#   if [[ $(tput colors) -ge 256 ]] 2>/dev/null; then
-#     MAGENTA=$(tput setaf 9)
-#     ORANGE=$(tput setaf 172)
-#     GREEN=$(tput setaf 190)
-#     PURPLE=$(tput setaf 141)
-#     WHITE=$(tput setaf 256)
-#   else
-#     MAGENTA=$(tput setaf 5)
-#     ORANGE=$(tput setaf 4)
-#     GREEN=$(tput setaf 2)
-#     PURPLE=$(tput setaf 1)
-#     WHITE=$(tput setaf 7)
-#   fi
-#   BOLD=$(tput bold)
-#   RESET=$(tput sgr0)
-# else
-#   MAGENTA="\033[1;31m"
-#   ORANGE="\033[1;33m"
-#   GREEN="\033[1;32m"
-#   PURPLE="\033[1;35m"
-#   WHITE="\033[1;37m"
-#   BOLD=""
-#   RESET="\033[m"
-# fi
-# 
-# export MAGENTA
-# export ORANGE
-# export GREEN
-# export PURPLE
-# export WHITE
-# export BOLD
-# export RESET
-# 
-# function parse_git_dirty() {
-#   [[ $(git status 2> /dev/null | tail -n1) != "nothing to commit (working directory clean)" ]] && echo "*"
-# }
-# 
-# function parse_git_branch() {
-#   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/\1$(parse_git_dirty)/"
-# }
-# 
-# PS1="\[${BOLD}${MAGENTA}\]\u \[$WHITE\]at \[$ORANGE\]\h \[$WHITE\]in \[$GREEN\]\w\[$WHITE\]\$([[ -n \$(git branch 2> /dev/null) ]] && echo \" on \")\[$PURPLE\]\$(parse_git_branch)\[$WHITE\]\n\$ \[$RESET\]"

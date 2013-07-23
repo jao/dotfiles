@@ -4,19 +4,18 @@ DOTFILES=`pwd`
 DOTFILES_DIR=`echo $DOTFILES | sed "s|$HOME/||"`
 
 # Files to link
-# .bash_completion.sh
 # .bash_profile
 # .bash_functions
 # .gemrc
-# .git_completion.sh
 # .gitconfig
-# .gitignore
+# .gitignore_global
 # .aprc
 # .rvmrc
+# .ackrc
 
 cd $HOME
 
-for FILE in "bash_profile" "bash_functions" "bash_completion" "gemrc" "git_completion" "git_prompt" "gitconfig" "gitignore" "aprc" "rvmrc"
+for FILE in "bash_profile" "bash_functions" "gemrc" "gitconfig" "gitignore_global" "aprc" "rvmrc" "ackrc"
 do
   # removing existing file, if exists
   if [ -f .$FILE ]; then

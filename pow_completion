@@ -1,0 +1,48 @@
+#!/usr/bin/env ruby
+
+class PowCompletion
+  def initialize(command)
+    @command = command
+  end
+  
+  def matches
+    matching_tasks.map do |task|
+      task.sub(typed_before_space, '')
+    end
+  end
+  
+  def typed
+    @command[/\s(.+?)$/, 1] || ''
+  end
+
+  def typed_before_space
+    typed[/.+\ /] || ''
+  end
+  
+  def matching_tasks
+    pow_commands.select do |task|
+      task[0, typed.length] == typed
+    end
+  end
+
+  def pow_commands
+    [
+      'about',
+      'app',
+      'app delete',
+      'app new',
+      'app remove',
+      'endpoint',
+      'help',
+      'manual',
+      'portproxy',
+      'restart',
+      'restart project',
+      'uninstall',
+      'upgrade'
+    ]
+  end
+end
+
+puts PowCompletion.new(ENV["COMP_LINE"]).matches
+exit 0
