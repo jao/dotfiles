@@ -6,8 +6,7 @@ export SVN_EDITOR="subl -w"
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="1;33;40"
 
-export ANDROID_SDK_ROOT=/usr/local/Cellar/android-sdk/r20.0.3
-export LC_ALL="en_US.UTF-8"
+export ANDROID_HOME=/usr/local/opt/android-sdk
 
 # Postgresql
 # export PGDATA='/usr/local/var/postgres'
@@ -94,6 +93,8 @@ if [ -d $(brew --prefix)/etc/bash_completion.d ]; then
   # load git awesomeness
   . $(brew --prefix)/etc/bash_completion.d/git-completion.bash
   . $(brew --prefix)/etc/bash_completion.d/git-prompt.sh
+  # load android adb
+  . $(brew --prefix)/etc/bash_completion.d/adb-completion.bash
 fi
 
 # load rvm stuff
