@@ -4,6 +4,7 @@ export EDITOR=GIT_EDITOR=SVN_EDITOR="subl -w"
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="1;33;40"
 
+# android sdk
 export ANDROID_HOME=/usr/local/opt/android-sdk
 
 # Prefer US English and use UTF-8
@@ -114,11 +115,13 @@ fi
 # load ack completion
 . ~/.ack_completion
 
+# load ruby completions from dotfiles
+DOTFILES_PATH=~/projects/dotfiles
 # rake completion
-complete -C ~/projects/dotfiles/rake_completion -o default rake
+complete -C $DOTFILES_PATH/rake_completion -o default rake
 
 # projects completion
-complete -C ~/projects/dotfiles/project_completion -o default pcd
+complete -C $DOTFILES_PATH/project_completion -o default pcd
 
 # pow completion
-complete -C ~/projects/dotfiles/pow_completion -o default pow
+complete -C $DOTFILES_PATH/pow_completion -o default pow
