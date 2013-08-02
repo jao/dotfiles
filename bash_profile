@@ -100,7 +100,7 @@ if [ -d $BREW_PREFIX/etc/bash_completion.d ]; then
 fi
 
 # Homebrew
-. $brew_prefix/Library/Contributions/brew_bash_completion.sh
+. $BREW_PREFIX/Library/Contributions/brew_bash_completion.sh
 
 # load rvm stuff
 if [ -d ~/.rvm ]; then
