@@ -1,12 +1,14 @@
 # configurations
-export EDITOR="subl -w"
-export GIT_EDITOR="subl -w"
-export SVN_EDITOR="subl -w"
+export EDITOR=GIT_EDITOR=SVN_EDITOR="subl -w"
 
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="1;33;40"
 
 export ANDROID_HOME=/usr/local/opt/android-sdk
+
+# Prefer US English and use UTF-8
+export LC_ALL="en_US.UTF-8"
+export LANG="en_US"
 
 # Postgresql
 # export PGDATA='/usr/local/var/postgres'
@@ -18,6 +20,7 @@ export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
+
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
 
@@ -27,17 +30,12 @@ shopt -s histappend
 # Autocorrect typos in path names when using `cd`
 shopt -s cdspell
 
-# Prefer US English and use UTF-8
-export LC_ALL="en_US.UTF-8"
-export LANG="en_US"
-
 # Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
 [ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2)" scp sftp ssh
 
 # Add tab completion for `defaults read|write NSGlobalDomain`
 # You could just use `-g` instead, but I like being explicit
 complete -W "NSGlobalDomain" defaults
-
 
 # Make Tab autocomplete regardless of filename case
 set completion-ignore-case on
@@ -55,6 +53,9 @@ set mark-symlinked-directories on
 # commands (i.e. more intelligent Up/Down behavior)
 # "\e[B": history-search-forward
 # "\e[A": history-search-backward
+
+# Use Alt/Meta + Delete to delete the preceding word
+# "\e[3;3~": kill-word
 
 # Do not autocomplete hidden files unless the pattern explicitly begins with a dot
 set match-hidden-files off
@@ -83,33 +84,35 @@ set input-meta on
 set output-meta on
 set convert-meta off
 
-# Use Alt/Meta + Delete to delete the preceding word
-# "\e[3;3~": kill-word
+BREW_PREFIX=$(brew --prefix)
 
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-  . $(brew --prefix)/etc/bash_completion
+if [ -f $BREW_PREFIX/etc/bash_completion ]; then
+  . $BREW_PREFIX/etc/bash_completion
 fi
-if [ -d $(brew --prefix)/etc/bash_completion.d ]; then
+if [ -d $BREW_PREFIX/etc/bash_completion.d ]; then
   # load git awesomeness
-  . $(brew --prefix)/etc/bash_completion.d/git-completion.bash
-  . $(brew --prefix)/etc/bash_completion.d/git-prompt.sh
+  [ -f $BREW_PREFIX/etc/bash_completion.d/git-completion.bash ] && . $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
+  [ -f $BREW_PREFIX/etc/bash_completion.d/git-prompt.sh ] && . $BREW_PREFIX/etc/bash_completion.d/git-prompt.sh
   # load android adb
-  . $(brew --prefix)/etc/bash_completion.d/adb-completion.bash
+  [ -f $BREW_PREFIX/etc/bash_completion.d/adb-completion.bash ] && . $BREW_PREFIX/etc/bash_completion.d/adb-completion.bash
+  # go lang completion
+  [ -f $BREW_PREFIX/etc/bash_completion.d/go-completion.bash ] && . $BREW_PREFIX/etc/bash_completion.d/go-completion.bash
 fi
-
-# load rvm stuff
-source ~/.rvm/scripts/rvm
-source ~/.rvm/scripts/completion
-# source "$rvm_path/contrib/ps1_functions"
-
-# load my functions
-source ~/.bash_functions
 
 # Homebrew
-source `brew --prefix`/Library/Contributions/brew_bash_completion.sh
+. $brew_prefix/Library/Contributions/brew_bash_completion.sh
+
+# load rvm stuff
+if [ -d ~/.rvm ]; then
+  . ~/.rvm/scripts/rvm
+  . ~/.rvm/scripts/completion
+fi
+
+# load my functions
+. ~/.bash_functions
 
 # load ack completion
-source ~/.ack_completion
+. ~/.ack_completion
 
 # rake completion
 complete -C ~/projects/dotfiles/rake_completion -o default rake
