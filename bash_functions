@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Larger bash history (default is 500)
 export HISTFILESIZE=10000
 export HISTSIZE=10000
@@ -14,8 +16,9 @@ alias p="cd ~/projects"
 alias r="rails"
 alias be="bundle exec"
 alias v="vim"
-alias m="mate ."
 alias s="subl ."
+
+alias vim="vim -u ~/.vim/vimrc"
 
 alias g="git"
 alias ga='git add -A'
@@ -46,23 +49,6 @@ alias gwc="git whatchanged -p --abbrev-commit --pretty=medium"
 alias glog='git log --date-order --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset"'
 alias gl='glog --graph'
 alias gla='gl --all'
-
-git-new() {
-  [ -d "$1" ] || mkdir "$1" &&
-  cd "$1" &&
-  git init &&
-  touch .gitignore &&
-  git add .gitignore &&
-  git commit -m "Added .gitignore."
-}
-git_current_branch() {
-  cat "$(git rev-parse --git-dir 2>/dev/null)/HEAD" | sed -e 's/^.*refs\/heads\///'
-}
-gls() {
-  query="$1"
-  shift
-  glog --pickaxe-regex "-S$query" "$@"
-}
 alias gm='git merge --no-ff'
 alias gmf='git merge --ff-only'
 alias gmfthis='gmf origin/$(git_current_branch)'
@@ -81,6 +67,23 @@ alias gs='git show'
 alias gs.='git show --color-words="."'
 alias gst='git stash'
 alias gstp='git stash pop'
+
+git-new() {
+  [ -d "$1" ] || mkdir "$1" &&
+  cd "$1" &&
+  git init &&
+  touch .gitignore &&
+  git add .gitignore &&
+  git commit -m "Added .gitignore."
+}
+git_current_branch() {
+  cat "$(git rev-parse --git-dir 2>/dev/null)/HEAD" | sed -e 's/^.*refs\/heads\///'
+}
+gls() {
+  query="$1"
+  shift
+  glog --pickaxe-regex "-S$query" "$@"
+}
 
 # ls aliases
 alias ls="ls -G"
@@ -153,6 +156,10 @@ alias rot13='tr a-zA-Z n-za-mN-ZA-M'
 alias stfu="osascript -e 'set volume output muted true'"
 alias pumpitup="osascript -e 'set volume 10'"
 alias hax="growlnotify -a 'Activity Monitor' 'System error' -m 'WTF R U DOIN'"
+
+# locaweb gateways
+alias gw1='ssh nibbler0001'
+alias gw2='ssh nibbler0002'
 
 # changing directory to project
 pcd () { cd ~/projects/$1; }

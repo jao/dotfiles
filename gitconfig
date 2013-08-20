@@ -29,8 +29,8 @@
   s = status -s
   st = status
   ci = commit
-  ca = commit -a
-  cam = commit -a -m
+  ca = commit -a -m
+  cam = commit --amend
   br = branch
   co = checkout
   d = diff --patch-with-stat

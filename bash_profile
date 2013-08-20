@@ -1,5 +1,9 @@
+#!/usr/bin/env bash
+
 # configurations
 export EDITOR=GIT_EDITOR=SVN_EDITOR="subl -w"
+
+export VEDITOR='mvim -f --nomru -c "au VimLeave * !open -a Terminal"'
 
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="1;33;40"

@@ -12,10 +12,12 @@ DOTFILES_DIR=`echo $DOTFILES | sed "s|$HOME/||"`
 # .aprc
 # .rvmrc
 # .ackrc
+# .gvimrc
+# .vim
 
 cd $HOME
 
-for FILE in "bash_profile" "bash_functions" "gemrc" "gitconfig" "gitignore_global" "aprc" "rvmrc" "ackrc"
+for FILE in "bash_profile" "bash_functions" "gemrc" "gitconfig" "gitignore_global" "aprc" "rvmrc" "ackrc" "gvimrc" "vim"
 do
   # removing existing file, if exists
   if [ -f .$FILE ]; then
@@ -24,10 +26,14 @@ do
   
   # linking project file, if exists
   if [ -f $DOTFILES_DIR/$FILE ]; then
-    ln -s $DOTFILES_DIR/$FILE .$FILE
+    ln -nfs $DOTFILES_DIR/$FILE .$FILE
   fi
   ls -laG .$FILE
 done
 
+# Vim
+git submodule update --init;
+
 # reading the profile
 source .bash_profile
+
