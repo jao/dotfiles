@@ -1,4 +1,5 @@
 .rake_tasks*
 *.swp
 tmp*
+vim/bundle/*
 
