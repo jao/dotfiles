@@ -17,6 +17,52 @@ Bundle 'kien/ctrlp.vim'
 " SuperTab continued
 Bundle 'ervandew/supertab'
 
+" Programming
+Bundle "jQuery"
+Bundle "rails.vim"
+Bundle 'https://github.com/vim-ruby/vim-ruby'
+Bundle 'https://github.com/tpope/vim-rails'
+Bundle 'https://github.com/nelstrom/vim-textobj-rubyblock'
+Bundle 'https://github.com/ecomba/vim-ruby-refactoring'
+Bundle 'https://github.com/tpope/vim-haml'
+Bundle 'https://github.com/tpope/vim-markdown'
+Bundle 'https://github.com/wavded/vim-stylus'
+
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'tpope/vim-rails'
+Bundle 'nelstrom/vim-textobj-rubyblock'
+Bundle 'ecomba/vim-ruby-refactoring'
+
+autocmd FileType ruby,eruby,yaml set tw=80 ai sw=2 sts=2 et
+autocmd FileType ruby,eruby,yaml setlocal foldmethod=manual
+autocmd User Rails set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
+
+Bundle 'klen/python-mode'
+Bundle 'python.vim'
+Bundle 'python_match.vim'
+Bundle 'pythoncomplete'
+
+Bundle 'tpope/vim-haml'
+Bundle 'juvenn/mustache.vim'
+Bundle 'tpope/vim-markdown'
+Bundle 'digitaltoad/vim-jade'
+Bundle 'slim-template/vim-slim'
+
+au BufNewFile,BufReadPost *.jade setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+au BufNewFile,BufReadPost *.html setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+au BufNewFile,BufReadPost *.slim setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
+Bundle 'wavded/vim-stylus'
+Bundle 'lunaru/vim-less'
+nnoremap ,m :w <BAR> !lessc % > %:t:r.css<CR><space>
+
+Bundle 'kchmck/vim-coffee-script'
+au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 tabstop=2 softtabstop=2 expandtab
+
+Bundle 'alfredodeza/jacinto.vim'
+au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
+au BufNewFile,BufReadPost *.coffee setl tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+
 " Gist.vim
 Bundle 'mattn/webapi-vim'
 Bundle 'mattn/gist-vim'
@@ -27,20 +73,102 @@ let g:gist_post_private = 1 " create private gist by default
 " fugitive.vim
 Bundle 'tpope/vim-fugitive'
 
+Bundle 'https://github.com/tpope/vim-endwise'
+
 " Powerline
-Bundle 'Lokaltog/vim-powerline'
-let g:Powerline_symbols = 'unicode'
-let g:Powerline_colorscheme = 'skwp'
+"  Bundle 'Lokaltog/vim-powerline'
+"  let g:Powerline_symbols = 'fancy'
+"  let g:Powerline_colorscheme = 'default'
+
+" Airline
+Bundle 'bling/vim-airline'
+let g:airline_powerline_fonts = 1
+
+Bundle 'airblade/vim-gitgutter'
 
 " Snipmate
 Bundle "MarcWeber/vim-addon-mw-utils"
 Bundle "tomtom/tlib_vim"
 Bundle "honza/vim-snippets"
-Bundle "garbas/vim-snipmate"
+
+" Snippets
+Bundle "http://github.com/gmarik/snipmate.vim.git"
+
+Bundle 'https://github.com/tpope/vim-surround'
+Bundle 'https://github.com/tpope/vim-unimpaired'
+
+Bundle 'https://github.com/scrooloose/nerdtree'
+
+Bundle 'https://github.com/troydm/easybuffer.vim'
+
+" Fancy
+Bundle 'bling/vim-airline'
+let g:airline_left_sep = ''
+let g:airline_right_sep = ''
+let g:airline_branch_prefix = ''
+
+Bundle 'https://github.com/Yggdroot/indentLine'
+Bundle 'Yggdroot/indentLine'
+set list lcs=tab:\|\
+let g:indentLine_color_term = 111
+let g:indentLine_color_gui = '#DADADA'
+let g:indentLine_char = 'c'
+"let g:indentLine_char = '∙▹¦'
+let g:indentLine_char = '∙'
+
+Bundle 'majutsushi/tagbar'
+nmap <leader>t :TagbarToggle<CR>
+
+Bundle 'gregsexton/gitv'
+
+Bundle 'scrooloose/nerdcommenter'
+nmap <leader># :call NERDComment(0, "invert")<cr>
+vmap <leader># :call NERDComment(0, "invert")<cr>
+
+" - Bundle 'msanders/snipmate.vim'
+Bundle 'sjl/splice.vim'
+
+Bundle 'tpope/vim-fugitive'
+nmap <leader>g :Ggrep
+" ,f for global git serach for word under the cursor (with highlight)
+nmap <leader>f :let @/="\\<<C-R><C-W>\\>"<CR>:set hls<CR>:silent Ggrep -w "<C-R><C-W>"<CR>:ccl<CR>:cw<CR><CR>
+" same in visual mode
+:vmap <leader>f y:let @/=escape(@", '\\[]$^*.')<CR>:set hls<CR>:silent Ggrep -F "<C-R>=escape(@", '\\"#')<CR>"<CR>:ccl<CR>:cw<CR><CR>
+
+Bundle 'scrooloose/syntastic'
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=1
+let g:syntastic_mode_map = { 'mode': 'active', 'active_filetypes': ['ruby'], 'passive_filetypes': ['html', 'css', 'slim'] }
+
+" --
+
+Bundle 'vim-scripts/Reindent'
+
+autocmd FileType gitcommit set tw=68 spell
+autocmd FileType gitcommit setlocal foldmethod=manual
+
+" Ack
+Bundle "mileszs/ack.vim"
+nnoremap <leader>a :Ack!<space>
+noremap <LocalLeader># "ayiw:Ack <C-r>a<CR>
+vnoremap <LocalLeader># "ay:Ack <C-r>a<CR>
 
 " Command-T
 Bundle "git://git.wincent.com/command-t.git"
 let g:CommandTMatchWindowAtTop=1 " show window at top
+
+" Navigation
+Bundle "http://github.com/gmarik/vim-visual-star-search.git"
+
+Bundle 'sjl/badwolf'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'tomasr/molokai'
+Bundle 'zaiste/Atom'
+Bundle 'w0ng/vim-hybrid'
+Bundle 'chriskempson/base16-vim'
+Bundle 'Elive/vim-colorscheme-elive'
+Bundle 'zeis/vim-kolor'
+
 
 " VIM setup
 " =========
@@ -48,9 +176,12 @@ let g:CommandTMatchWindowAtTop=1 " show window at top
 set mouse=a                 " Automatically enable mouse usage
 set mousehide               " Hide the mouse cursor while typing
 
+set splitbelow
+set splitright
+
 set laststatus=2 " always show the status line
 
-set guifont=Monaco:h12
+set guifont=Monaco:h12,Andale\ Mono\ Regular:h16,Menlo\ Regular:h15,Consolas\ Regular:h16,Courier\ New\ Regular:h18
 set wrap " quebra de linhas
 
 set lines=999
@@ -94,9 +225,6 @@ set incsearch " show matches while typing
 
 syntax on " turn on syntax highlighting
 colorscheme twilight " the color scheme (srsly)
-"set background=light
-"let g:solarized_termcolors=256
-"colorscheme solarized
 
 "Trailing Space Remove
 autocmd BufWritePre * :%s/\s\+$//e
