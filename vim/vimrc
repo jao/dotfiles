@@ -6,7 +6,7 @@ filetype off " required (to be honest, I don't know why :P)
 set rtp+=~/.vim/bundle/vundle/
 call vundle#rc()
 filetype plugin indent on
-Bundle 'gmarik/vundle'
+Bundle 'gmarik/vundle' " required!
 
 " CSApprox
 " Bundle 'CSApprox'
@@ -38,8 +38,15 @@ Bundle "tomtom/tlib_vim"
 Bundle "honza/vim-snippets"
 Bundle "garbas/vim-snipmate"
 
+" Command-T
+Bundle "git://git.wincent.com/command-t.git"
+let g:CommandTMatchWindowAtTop=1 " show window at top
+
 " VIM setup
 " =========
+
+set mouse=a                 " Automatically enable mouse usage
+set mousehide               " Hide the mouse cursor while typing
 
 set laststatus=2 " always show the status line
 
