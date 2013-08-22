@@ -207,16 +207,14 @@ Bundle "gmarik/vim-visual-star-search"
 
 Bundle 'nathanaelkane/vim-indent-guides'
 set ts=2 sw=2 et
-let g:indent_guides_start_level=2
+let g:indent_guides_start_level=1
 
+" Colors
 Bundle 'sjl/badwolf'
 Bundle 'altercation/vim-colors-solarized'
 Bundle 'tomasr/molokai'
 Bundle 'zaiste/Atom'
 Bundle 'w0ng/vim-hybrid'
-Bundle 'chriskempson/base16-vim'
-Bundle 'Elive/vim-colorscheme-elive'
-Bundle 'zeis/vim-kolor'
 
 Bundle 'zaiste/tmux.vim'
 Bundle 'benmills/vimux'
@@ -228,7 +226,7 @@ map <LocalLeader>d :call VimuxRunCommand(@v, 0)<CR>
 Bundle 'majutsushi/tagbar'
 nmap <leader>t :TagbarToggle<CR>
 
-Bundle 'gregsexton/gitv'
+Bundle 'gregsexton/gitv' " git log
 
 Bundle 'scrooloose/nerdcommenter'
 nmap <leader># :call NERDComment(0, "invert")<cr>
@@ -266,8 +264,8 @@ set laststatus=2 " always show the status line
 set guifont=Monaco:h12,Andale\ Mono\ Regular:h16,Menlo\ Regular:h15,Consolas\ Regular:h16,Courier\ New\ Regular:h18
 set wrap " quebra de linhas
 
-set lines=999
-set columns=999
+set lines=120
+set columns=120
 
 set encoding=utf-8
 
