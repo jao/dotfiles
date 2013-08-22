@@ -32,11 +32,11 @@ do
 done
 
 # Vim
-mkdir -p vim/tmp vim/swap;
+mkdir -p ~/.vim/tmp ~/.vim/swap;
 git submodule update --init;
 
 vim +BundleInstall +qall
 
 # reading the profile
-source .bash_profile
+source ~/.bash_profile
 
