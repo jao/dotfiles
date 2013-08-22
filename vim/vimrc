@@ -21,15 +21,15 @@ Bundle 'ervandew/supertab'
 " Programming
 Bundle "jQuery"
 Bundle "rails.vim"
-Bundle 'https://github.com/vim-ruby/vim-ruby'
-Bundle 'https://github.com/tpope/vim-rails'
-Bundle 'https://github.com/nelstrom/vim-textobj-rubyblock'
-Bundle 'https://github.com/ecomba/vim-ruby-refactoring'
-Bundle 'https://github.com/tpope/vim-haml'
-Bundle 'https://github.com/tpope/vim-markdown'
-Bundle 'https://github.com/wavded/vim-stylus'
+Bundle 'vim-ruby/vim-ruby'
+Bundle 'tpope/vim-rails'
+Bundle 'nelstrom/vim-textobj-rubyblock'
+Bundle 'ecomba/vim-ruby-refactoring'
+Bundle 'tpope/vim-haml'
+Bundle 'tpope/vim-markdown'
+Bundle 'wavded/vim-stylus'
 
-Bundle 'https://github.com/matthias-guenther/hammer.vim'
+Bundle 'matthias-guenther/hammer.vim'
 
 Bundle "mileszs/ack.vim"
 nnoremap <leader>a :Ack!<space>
@@ -137,7 +137,7 @@ Bundle "tomtom/tlib_vim"
 Bundle "honza/vim-snippets"
 
 " Snippets
-Bundle "http://github.com/gmarik/snipmate.vim.git"
+Bundle "gmarik/snipmate.vim"
 
 Bundle 'https://github.com/tpope/vim-surround'
 Bundle 'https://github.com/tpope/vim-unimpaired'
@@ -152,13 +152,13 @@ let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 let g:airline_branch_prefix = ''
 
-Bundle 'Yggdroot/indentLine'
-set list lcs=tab:\|\
-let g:indentLine_color_term = 111
-let g:indentLine_color_gui = '#DADADA'
-let g:indentLine_char = 'c'
-"let g:indentLine_char = '∙▹¦'
-let g:indentLine_char = '∙'
+" Bundle 'Yggdroot/indentLine'
+" set list lcs=tab:\|\
+" let g:indentLine_color_term = 111
+" let g:indentLine_color_gui = '#DADADA'
+" let g:indentLine_char = 'c'
+" "let g:indentLine_char = '∙▹¦'
+" let g:indentLine_char = '∙'
 
 Bundle 'majutsushi/tagbar'
 nmap <leader>t :TagbarToggle<CR>
@@ -199,13 +199,13 @@ vnoremap <LocalLeader># "ay:Ack <C-r>a<CR>
 
 " Command-T
 Bundle "git://git.wincent.com/command-t.git"
-Bundle 'wincent/commant-t.git'
+Bundle 'wincent/commant-t'
 let g:CommandTMatchWindowAtTop=1 " show window at top
 
 " Navigation
-Bundle "http://github.com/gmarik/vim-visual-star-search.git"
+Bundle "gmarik/vim-visual-star-search"
 
-Bundle 'nathanaelkane/vim-indent-guides.git'
+Bundle 'nathanaelkane/vim-indent-guides'
 set ts=2 sw=2 et
 let g:indent_guides_start_level=2
 
@@ -218,44 +218,38 @@ Bundle 'chriskempson/base16-vim'
 Bundle 'Elive/vim-colorscheme-elive'
 Bundle 'zeis/vim-kolor'
 
-    Bundle 'zaiste/tmux.vim'
-    Bundle 'benmills/vimux'
-    map <Leader>rp :VimuxPromptCommand<CR>
-    map <Leader>rl :VimuxRunLastCommand<CR>
+Bundle 'zaiste/tmux.vim'
+Bundle 'benmills/vimux'
+map <Leader>rp :VimuxPromptCommand<CR>
+map <Leader>rl :VimuxRunLastCommand<CR>
 
-    map <LocalLeader>d :call VimuxRunCommand(@v, 0)<CR>
+map <LocalLeader>d :call VimuxRunCommand(@v, 0)<CR>
 
-    Bundle 'majutsushi/tagbar'
-    nmap <leader>t :TagbarToggle<CR>
+Bundle 'majutsushi/tagbar'
+nmap <leader>t :TagbarToggle<CR>
 
-    Bundle 'gregsexton/gitv'
+Bundle 'gregsexton/gitv'
 
-    Bundle 'scrooloose/nerdcommenter'
-    nmap <leader># :call NERDComment(0, "invert")<cr>
-    vmap <leader># :call NERDComment(0, "invert")<cr>
+Bundle 'scrooloose/nerdcommenter'
+nmap <leader># :call NERDComment(0, "invert")<cr>
+vmap <leader># :call NERDComment(0, "invert")<cr>
 
-    " - Bundle 'msanders/snipmate.vim'
-    Bundle 'sjl/splice.vim'
+" - Bundle 'msanders/snipmate.vim'
+Bundle 'sjl/splice.vim'
 
-    Bundle 'tpope/vim-fugitive'
-    nmap <leader>g :Ggrep
-    " ,f for global git serach for word under the cursor (with highlight)
-    nmap <leader>f :let @/="\\<<C-R><C-W>\\>"<CR>:set hls<CR>:silent Ggrep -w "<C-R><C-W>"<CR>:ccl<CR>:cw<CR><CR>
-    " same in visual mode
-    :vmap <leader>f y:let @/=escape(@", '\\[]$^*.')<CR>:set hls<CR>:silent Ggrep -F "<C-R>=escape(@", '\\"#')<CR>"<CR>:ccl<CR>:cw<CR><CR>
+Bundle 'tpope/vim-fugitive'
+nmap <leader>g :Ggrep
+" ,f for global git serach for word under the cursor (with highlight)
+nmap <leader>f :let @/="\\<<C-R><C-W>\\>"<CR>:set hls<CR>:silent Ggrep -w "<C-R><C-W>"<CR>:ccl<CR>:cw<CR><CR>
+" same in visual mode
+:vmap <leader>f y:let @/=escape(@", '\\[]$^*.')<CR>:set hls<CR>:silent Ggrep -F "<C-R>=escape(@", '\\"#')<CR>"<CR>:ccl<CR>:cw<CR><CR>
 
-    Bundle 'scrooloose/syntastic'
-    let g:syntastic_enable_signs=1
-    let g:syntastic_auto_loc_list=1
-    let g:syntastic_mode_map = { 'mode': 'active', 'active_filetypes': ['ruby'], 'passive_filetypes': ['html', 'css', 'slim'] }
+Bundle 'scrooloose/syntastic'
+let g:syntastic_enable_signs=1
+let g:syntastic_auto_loc_list=1
+let g:syntastic_mode_map = { 'mode': 'active', 'active_filetypes': ['ruby'], 'passive_filetypes': ['html', 'css', 'slim'] }
 
-    " --
-
-    Bundle 'vim-scripts/Reindent'
-
-    autocmd FileType gitcommit set tw=68 spell
-    autocmd FileType gitcommit setlocal foldmethod=manual
-
+" --
 
 
 " VIM setup
@@ -287,10 +281,9 @@ set showmatch
 set history=300 " number of commands saved in the history list
 set undolevels=300 " number of undo levels
 
+set backup " turn on backup
 set backupdir=~/.vim/tmp " the directory where the swap/backup files should be stored
 set dir=~/.vim/tmp
-
-set backup " turn on backup
 set swapfile
 
 set title " show the current filename on the window title
@@ -304,14 +297,16 @@ set tabstop=2 " default tab size
 set shiftwidth=2
 set expandtab " convert tabs to spaces
 set autoindent " self explanatory, huh? (like the most of commands hehe)
+set smartindent
+set pastetoggle=<f5>
 
 set list
 "set listchars=tab:▷⋅,trail:⋅,nbsp:⋅ " show tabs and trailing spaces
 
 
-
 set t_Co=256 " the term has 256 colors
 
+set smartcase
 set hlsearch " highlight search
 set incsearch " show matches while typing
 
@@ -334,8 +329,8 @@ autocmd FileType sh         call UseTabs()
 autocmd FileType xml        call UseTabs()
 
 autocmd FileType ruby       set expandtab sw=2 ts=2 sts=2
-autocmd FileType python     set expandtab sw=4 ts=4 sts=4
-autocmd FileType javascript set expandtab sw=4 ts=4 sts=4
+autocmd FileType python     set expandtab sw=2 ts=2 sts=2
+autocmd FileType javascript set expandtab sw=2 ts=2 sts=2
 autocmd FileType tex        call Writing()
 autocmd FileType plaintex   call Writing()
 autocmd FileType vimwiki    call Writing()
@@ -354,20 +349,20 @@ autocmd! BufWritePost vimrc source ~/.vimrc
 " Cursorline {{{
 " Only show cursorline in the current window and in normal mode.
 augroup cline
-    au!
-    au WinLeave * set nocursorline
-    au WinEnter * set cursorline
-    au InsertEnter * set nocursorline
-    au InsertLeave * set cursorline
+  au!
+  au WinLeave * set nocursorline
+  au WinEnter * set cursorline
+  au InsertEnter * set nocursorline
+  au InsertLeave * set cursorline
 augroup END
 " }}}
 
 " Trailing whitespace {{{
 " Only shown when not in insert mode so I don't go insane.
 augroup trailing
-    au!
-    au InsertEnter * :set listchars-=trail:␣
-    au InsertLeave * :set listchars+=trail:␣
+  au!
+  au InsertEnter * :set listchars-=trail:␣
+  au InsertLeave * :set listchars+=trail:␣
 augroup END
 
 " Remove trailing whitespaces when saving
