@@ -273,13 +273,13 @@ my-prompt () {
   local BC=$GREEN # base color
   [ -f ~/.rvm/bin/rvm-prompt ] && RVM=" \e[0;30;43m $(~/.rvm/bin/rvm-prompt v g) \e[0m" # rvm rubies
   PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m${RVM}" # basic ps1
-  
+
   # GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
   local GITBRANCH=`__git_ps1 "%s" | awk '{print $1;}'`
   if [ "$GITBRANCH" != "" ]; then
     # delimiters
     ini="("; end=")"
-    
+
     local BEHIND="# Your branch is behind"
     local AHEAD="# Your branch is ahead"
     local UNTRACKED="# Untracked files"
@@ -288,7 +288,7 @@ my-prompt () {
     local TO_BE_COMMITED="# Changes to be committed"
     local CHANGES_NOT_STAGED="# Changes not staged for commit"
     STATUS=`git status 2>/dev/null`
-    
+
     if [[ "$STATUS" =~ "$DIVERGED" ]]; then
       BC=$RED; STATE="${RED}↕${NC}"
     elif [[ "$STATUS" =~ "$BEHIND" ]]; then
@@ -296,20 +296,21 @@ my-prompt () {
     elif [[ "$STATUS" =~ "$AHEAD" ]]; then
       BC=$RED; STATE="${RED}↑${NC}"
     fi
-    
+
     if [[ "$STATUS" =~ "$TO_BE_COMMITED" ]] || [[ "$STATUS" =~ "$CHANGED" ]] || [[ "$STATUS" =~ "$CHANGES_NOT_STAGED" ]]; then
       BC=$YELLOW; STATE="${STATE}${YELLOW}+${NC}"
     fi
-    
+
     if [[ "$STATUS" =~ "$UNTRACKED" ]]; then
       STATE="${STATE}${CYAN}?${NC}"
     fi
-    
+
     [ -z "$STATE" ] && BC=$GREEN
-    
+
     PS1="${PS1} ${ini}${BC}${GITBRANCH}${NC}${STATE}${end}"
   fi
-  
+
   PS1="${PS1} \n\$ "
 }
 PROMPT_COMMAND=my-prompt
+

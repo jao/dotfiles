@@ -3,6 +3,9 @@
 DOTFILES=`pwd`
 DOTFILES_DIR=`echo $DOTFILES | sed "s|$HOME/||"`
 
+# reading the profile
+source ~/.bash_profile
+
 # Files to link
 # .bash_profile
 # .bash_functions
@@ -25,10 +28,11 @@ do
   if [ -f $DOTFILES_DIR/$FILE ]; then
     ln -sfn $DOTFILES_DIR/$FILE .${FILE##*/}
   fi
-  ls -laG .$FILE
+  ls -laG .${FILE##*/}
 done
 
 # Vim
+mkdir -p vim/tmp vim/swap;
 git submodule update --init;
 
 vim +BundleInstall +qall
