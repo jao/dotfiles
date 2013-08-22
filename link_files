@@ -31,6 +31,8 @@ done
 # Vim
 git submodule update --init;
 
+vim +BundleInstall +qall
+
 # reading the profile
 source .bash_profile
 
