@@ -14,19 +14,16 @@ DOTFILES_DIR=`echo $DOTFILES | sed "s|$HOME/||"`
 # .ackrc
 # .gvimrc
 # .vim
+# .vimrc
+# .fonts
 
 cd $HOME
 
-for FILE in "bash_profile" "bash_functions" "gemrc" "gitconfig" "gitignore_global" "aprc" "rvmrc" "ackrc" "gvimrc" "vim"
+for FILE in "bash_profile" "bash_functions" "gemrc" "gitconfig" "gitignore_global" "aprc" "rvmrc" "ackrc" "vim/gvimrc" "vim" "vim/vimrc" "vim/fonts"
 do
-  # removing existing file, if exists
-  if [ -f .$FILE ]; then
-    rm .$FILE
-  fi
-  
   # linking project file, if exists
   if [ -f $DOTFILES_DIR/$FILE ]; then
-    ln -nfs $DOTFILES_DIR/$FILE .$FILE
+    ln -sfn $DOTFILES_DIR/$FILE .${FILE##*/}
   fi
   ls -laG .$FILE
 done

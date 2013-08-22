@@ -1,12 +1,13 @@
 set nocompatible " turn off Vi compatibility mode
 filetype off " required (to be honest, I don't know why :P)
 
-" Vundle
-" ======
-set rtp+=~/.vim/bundle/vundle/
+" VUNDLE {{{
+let s:bundle_path=$HOME."/.vim/bundle/"
+execute "set rtp+=".s:bundle_path."vundle/"
 call vundle#rc()
-filetype plugin indent on
-Bundle 'gmarik/vundle' " required!
+
+Bundle 'gmarik/vundle'
+" }}}
 
 " CSApprox
 " Bundle 'CSApprox'
@@ -28,10 +29,59 @@ Bundle 'https://github.com/tpope/vim-haml'
 Bundle 'https://github.com/tpope/vim-markdown'
 Bundle 'https://github.com/wavded/vim-stylus'
 
+Bundle 'https://github.com/matthias-guenther/hammer.vim'
+
+Bundle "mileszs/ack.vim"
+nnoremap <leader>a :Ack!<space>
+
+Bundle 'matthias-guenther/hammer.vim'
+nmap <leader>p :Hammer<cr>
+
+Bundle 'tsaleh/vim-align'
+Bundle 'tpope/vim-endwise'
+Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-speeddating'
+Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-unimpaired'
+Bundle 'maxbrunsfeld/vim-yankstack'
+Bundle 'tpope/vim-eunuch'
+
+Bundle 'scrooloose/nerdtree'
+nmap <C-i> :NERDTreeToggle<CR>
+" Disable the scrollbars (NERDTree)
+set guioptions-=r
+set guioptions-=L
+
+
+Bundle 'kana/vim-textobj-user'
+Bundle 'vim-scripts/YankRing.vim'
+let g:yankring_replace_n_pkey = '<leader>['
+let g:yankring_replace_n_nkey = '<leader>]'
+let g:yankring_history_dir = '~/.vim/tmp/'
+nmap <leader>y :YRShow<cr>
+
+Bundle 'michaeljsmith/vim-indent-object'
+let g:indentobject_meaningful_indentation = ["haml", "sass", "python", "yaml", "markdown"]
+
+Bundle 'Spaceghost/vim-matchit'
+Bundle 'kien/ctrlp.vim'
+let g:ctrlp_working_path_mode = ''
+
+Bundle 'vim-scripts/scratch.vim'
+
+Bundle 'troydm/easybuffer.vim'
+nmap <leader>be :EasyBufferToggle<enter>
+
+Bundle 'terryma/vim-multiple-cursors'
+
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-rails'
+Bundle 'skwp/vim-rspec'
+Bundle 'tpope/vim-rake'
 Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'ecomba/vim-ruby-refactoring'
+Bundle 'othree/html5.vim'
+Bundle 'scrooloose/syntastic'
 
 autocmd FileType ruby,eruby,yaml set tw=80 ai sw=2 sts=2 et
 autocmd FileType ruby,eruby,yaml setlocal foldmethod=manual
@@ -74,11 +124,6 @@ let g:gist_post_private = 1 " create private gist by default
 Bundle 'tpope/vim-fugitive'
 
 Bundle 'https://github.com/tpope/vim-endwise'
-
-" Powerline
-"  Bundle 'Lokaltog/vim-powerline'
-"  let g:Powerline_symbols = 'fancy'
-"  let g:Powerline_colorscheme = 'default'
 
 " Airline
 Bundle 'bling/vim-airline'
@@ -155,10 +200,15 @@ vnoremap <LocalLeader># "ay:Ack <C-r>a<CR>
 
 " Command-T
 Bundle "git://git.wincent.com/command-t.git"
+Bundle 'wincent/commant-t.git'
 let g:CommandTMatchWindowAtTop=1 " show window at top
 
 " Navigation
 Bundle "http://github.com/gmarik/vim-visual-star-search.git"
+
+Bundle 'nathanaelkane/vim-indent-guides.git'
+set ts=2 sw=2 et
+let g:indent_guides_start_level=2
 
 Bundle 'sjl/badwolf'
 Bundle 'altercation/vim-colors-solarized'
@@ -168,6 +218,45 @@ Bundle 'w0ng/vim-hybrid'
 Bundle 'chriskempson/base16-vim'
 Bundle 'Elive/vim-colorscheme-elive'
 Bundle 'zeis/vim-kolor'
+
+    Bundle 'zaiste/tmux.vim'
+    Bundle 'benmills/vimux'
+    map <Leader>rp :VimuxPromptCommand<CR>
+    map <Leader>rl :VimuxRunLastCommand<CR>
+
+    map <LocalLeader>d :call VimuxRunCommand(@v, 0)<CR>
+
+    Bundle 'majutsushi/tagbar'
+    nmap <leader>t :TagbarToggle<CR>
+
+    Bundle 'gregsexton/gitv'
+
+    Bundle 'scrooloose/nerdcommenter'
+    nmap <leader># :call NERDComment(0, "invert")<cr>
+    vmap <leader># :call NERDComment(0, "invert")<cr>
+
+    " - Bundle 'msanders/snipmate.vim'
+    Bundle 'sjl/splice.vim'
+
+    Bundle 'tpope/vim-fugitive'
+    nmap <leader>g :Ggrep
+    " ,f for global git serach for word under the cursor (with highlight)
+    nmap <leader>f :let @/="\\<<C-R><C-W>\\>"<CR>:set hls<CR>:silent Ggrep -w "<C-R><C-W>"<CR>:ccl<CR>:cw<CR><CR>
+    " same in visual mode
+    :vmap <leader>f y:let @/=escape(@", '\\[]$^*.')<CR>:set hls<CR>:silent Ggrep -F "<C-R>=escape(@", '\\"#')<CR>"<CR>:ccl<CR>:cw<CR><CR>
+
+    Bundle 'scrooloose/syntastic'
+    let g:syntastic_enable_signs=1
+    let g:syntastic_auto_loc_list=1
+    let g:syntastic_mode_map = { 'mode': 'active', 'active_filetypes': ['ruby'], 'passive_filetypes': ['html', 'css', 'slim'] }
+
+    " --
+
+    Bundle 'vim-scripts/Reindent'
+
+    autocmd FileType gitcommit set tw=68 spell
+    autocmd FileType gitcommit setlocal foldmethod=manual
+
 
 
 " VIM setup
@@ -193,6 +282,8 @@ set number " show line numbers
 set showmode " show current mode on status line
 set showcmd " show commands on status line
 set nowrap " disable automatic word wrapping
+set ruler
+set showmatch
 
 set history=300 " number of commands saved in the history list
 set undolevels=300 " number of undo levels
@@ -218,6 +309,8 @@ set autoindent " self explanatory, huh? (like the most of commands hehe)
 set list
 "set listchars=tab:▷⋅,trail:⋅,nbsp:⋅ " show tabs and trailing spaces
 
+
+
 set t_Co=256 " the term has 256 colors
 
 set hlsearch " highlight search
@@ -225,6 +318,7 @@ set incsearch " show matches while typing
 
 syntax on " turn on syntax highlighting
 colorscheme twilight " the color scheme (srsly)
+set background=dark
 
 "Trailing Space Remove
 autocmd BufWritePre * :%s/\s\+$//e
@@ -251,3 +345,182 @@ autocmd FileType markdown   call Writing()
 set wildmode=list:longest                       " Make cmdline tab completion similar to bash
 set listchars=tab:\ \ ,extends:>,precedes:<     " Special chars to show tabs, eol and bol
 
+" Save when losing focus
+au FocusLost    * :silent! wall
+
+" When vimrc is edited, reload it
+autocmd! BufWritePost vimrc source ~/.vimrc
+
+
+" Cursorline {{{
+" Only show cursorline in the current window and in normal mode.
+augroup cline
+    au!
+    au WinLeave * set nocursorline
+    au WinEnter * set cursorline
+    au InsertEnter * set nocursorline
+    au InsertLeave * set cursorline
+augroup END
+" }}}
+
+" Trailing whitespace {{{
+" Only shown when not in insert mode so I don't go insane.
+augroup trailing
+    au!
+    au InsertEnter * :set listchars-=trail:␣
+    au InsertLeave * :set listchars+=trail:␣
+augroup END
+
+" Remove trailing whitespaces when saving
+" Wanna know more? http://vim.wikia.com/wiki/Remove_unwanted_spaces
+" If you want to remove trailing spaces when you want, so not automatically,
+" see
+" http://vim.wikia.com/wiki/Remove_unwanted_spaces#Display_or_remove_unwanted_whitespace_with_a_script.
+autocmd BufWritePre * :%s/\s\+$//e
+" }}}
+
+
+" . searching {{{
+
+" sane regexes
+nnoremap / /\v
+vnoremap / /\v
+
+set ignorecase
+set smartcase
+set showmatch
+set gdefault
+set hlsearch
+
+" clear search matching
+noremap <leader><space> :noh<cr>:call clearmatches()<cr>
+
+" Don't jump when using * for search
+nnoremap * *<c-o>
+
+" Keep search matches in the middle of the window.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Same when jumping around
+nnoremap g; g;zz
+nnoremap g, g,zz
+
+" Open a Quickfix window for the last search.
+nnoremap <silent> <leader>? :execute 'vimgrep /'.@/.'/g %'<CR>:copen<CR>
+
+" Highlight word {{{
+
+nnoremap <silent> <leader>hh :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<cr>
+nnoremap <silent> <leader>h1 :execute 'match InterestingWord1 /\<<c-r><c-w>\>/'<cr>
+nnoremap <silent> <leader>h2 :execute '2match InterestingWord2 /\<<c-r><c-w>\>/'<cr>
+nnoremap <silent> <leader>h3 :execute '3match InterestingWord3 /\<<c-r><c-w>\>/'<cr>
+
+" }}}
+
+" }}}
+
+" Navigation & UI {{{
+
+" Begining & End of line in Normal mode
+noremap H ^
+noremap L g_
+
+" more natural movement with wrap on
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+
+" Easy splitted window navigation
+noremap <C-h>  <C-w>h
+noremap <C-j>  <C-w>j
+noremap <C-k>  <C-w>k
+noremap <C-l>  <C-w>l
+
+" Easy buffer navigation
+noremap <leader>bp :bprevious<cr>
+noremap <leader>bn :bnext<cr>
+
+" Splits ,v and ,h to open new splits (vertical and horizontal)
+nnoremap <leader>v <C-w>v<C-w>l
+nnoremap <leader>h <C-w>s<C-w>j
+
+" Reselect visual block after indent/outdent
+vnoremap < <gv
+vnoremap > >gv
+
+" Bubbling lines
+nmap <C-Up> [e
+nmap <C-Down> ]e
+vmap <C-Up> [egv
+vmap <C-Down> ]egv
+
+" }}}
+
+" . folding {{{
+
+set foldlevelstart=0
+set foldmethod=syntax
+
+" Space to toggle folds.
+nnoremap <space> za
+vnoremap <space> za
+
+" Make zO recursively open whatever top level fold we're in, no matter where the
+" cursor happens to be.
+nnoremap zO zCzO
+
+" Use ,z to "focus" the current fold.
+nnoremap <leader>z zMzvzz
+
+" }}}
+
+" Quick editing {{{
+
+nnoremap <leader>ev <C-w>s<C-w>j:e $MYVIMRC<cr>
+nnoremap <leader>es <C-w>s<C-w>j:e ~/.vim/snippets/<cr>
+nnoremap <leader>eg <C-w>s<C-w>j:e ~/.gitconfig<cr>
+nnoremap <leader>ez <C-w>s<C-w>j:e ~/.zshrc<cr>
+nnoremap <leader>et <C-w>s<C-w>j:e ~/.tmux.conf<cr>
+
+" --------------------
+
+set ofu=syntaxcomplete#Complete
+let g:rubycomplete_buffer_loading = 0
+let g:rubycomplete_classes_in_global = 1
+
+" showmarks
+let g:showmarks_enable = 1
+hi! link ShowMarksHLl LineNr
+hi! link ShowMarksHLu LineNr
+hi! link ShowMarksHLo LineNr
+hi! link ShowMarksHLm LineNr
+
+" }}}
+
+" _ Vim {{{
+augroup ft_vim
+    au!
+
+    au FileType vim setlocal foldmethod=marker
+    au FileType help setlocal textwidth=78
+    au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
+augroup END
+" }}}
+
+" _. Gist {{{
+" Send visual selection to gist.github.com as a private, filetyped Gist
+" Requires the gist command line too (brew install gist)
+vnoremap <leader>G :w !gist -p -t %:e \| pbcopy<cr>
+" }}}
+
+" TEXT OBJECTS {{{
+
+" Shortcut for [] motion
+onoremap ir i[
+onoremap ar a[
+vnoremap ir i[
+vnoremap ar a[
+
+" }}}
