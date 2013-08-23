@@ -19,6 +19,7 @@ alias v="vim"
 alias s="subl ."
 
 alias vim="vim -u ~/.vim/vimrc"
+alias mvim="mvim -u ~/.vim/vimrc"
 
 alias g="git"
 alias ga='git add -A'
