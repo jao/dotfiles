@@ -1,5 +1,6 @@
-rvm_archflags="-Os -arch x86_64 -fno-common"
-rvm_project_rvmrc=1
-rvm_project_rvmrc_default=1
-rvm_auto_reload_flag=1
+export rvm_archflags="-Os -arch x86_64 -fno-common"
+export rvm_project_rvmrc=1
+export rvm_project_rvmrc_default=1
+export rvm_install_on_use_flag=1
+export rvm_auto_reload_flag=1
 export rvm_path="/Users/jao/.rvm"
