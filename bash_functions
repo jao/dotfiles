@@ -69,6 +69,9 @@ alias gs.='git show --color-words="."'
 alias gst='git stash'
 alias gstp='git stash pop'
 
+alias lock='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
+alias screensaver='open -a /System/Library/Frameworks/ScreenSaver.framework//Versions/A/Resources/ScreenSaverEngine.app'
+
 git-new() {
   [ -d "$1" ] || mkdir "$1" &&
   cd "$1" &&
