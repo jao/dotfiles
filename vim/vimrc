@@ -52,7 +52,6 @@ nmap <C-i> :NERDTreeToggle<CR>
 set guioptions-=r
 set guioptions-=L
 
-
 Bundle 'kana/vim-textobj-user'
 Bundle 'vim-scripts/YankRing.vim'
 let g:yankring_replace_n_pkey = '<leader>['
@@ -223,32 +222,7 @@ map <Leader>rl :VimuxRunLastCommand<CR>
 
 map <LocalLeader>d :call VimuxRunCommand(@v, 0)<CR>
 
-Bundle 'majutsushi/tagbar'
-nmap <leader>t :TagbarToggle<CR>
-
-Bundle 'gregsexton/gitv' " git log
-
-Bundle 'scrooloose/nerdcommenter'
-nmap <leader># :call NERDComment(0, "invert")<cr>
-vmap <leader># :call NERDComment(0, "invert")<cr>
-
-" - Bundle 'msanders/snipmate.vim'
-Bundle 'sjl/splice.vim'
-
-Bundle 'tpope/vim-fugitive'
-nmap <leader>g :Ggrep
-" ,f for global git serach for word under the cursor (with highlight)
-nmap <leader>f :let @/="\\<<C-R><C-W>\\>"<CR>:set hls<CR>:silent Ggrep -w "<C-R><C-W>"<CR>:ccl<CR>:cw<CR><CR>
-" same in visual mode
-:vmap <leader>f y:let @/=escape(@", '\\[]$^*.')<CR>:set hls<CR>:silent Ggrep -F "<C-R>=escape(@", '\\"#')<CR>"<CR>:ccl<CR>:cw<CR><CR>
-
-Bundle 'scrooloose/syntastic'
-let g:syntastic_enable_signs=1
-let g:syntastic_auto_loc_list=1
-let g:syntastic_mode_map = { 'mode': 'active', 'active_filetypes': ['ruby'], 'passive_filetypes': ['html', 'css', 'slim'] }
-
 " --
-
 
 " VIM setup
 " =========
@@ -473,7 +447,7 @@ nnoremap <leader>z zMzvzz
 nnoremap <leader>ev <C-w>s<C-w>j:e $MYVIMRC<cr>
 nnoremap <leader>es <C-w>s<C-w>j:e ~/.vim/snippets/<cr>
 nnoremap <leader>eg <C-w>s<C-w>j:e ~/.gitconfig<cr>
-nnoremap <leader>ez <C-w>s<C-w>j:e ~/.zshrc<cr>
+nnoremap <leader>eb <C-w>s<C-w>j:e ~/.bash_profile<cr>
 nnoremap <leader>et <C-w>s<C-w>j:e ~/.tmux.conf<cr>
 
 " --------------------

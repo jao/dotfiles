@@ -77,7 +77,8 @@ for dir in `ls`; do
   if [ -d $dir/.git ]; then
     cd $dir
     title "Pulling ${dir}"
-    git pull
+    git fetch --all
+    git pull --rebase
     echo;
     cd ..
   fi
