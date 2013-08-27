@@ -15,9 +15,6 @@ Bundle 'gmarik/vundle'
 " CtrlP
 Bundle 'kien/ctrlp.vim'
 
-" SuperTab continued
-Bundle 'ervandew/supertab'
-
 " Programming
 Bundle "jQuery"
 Bundle "rails.vim"
@@ -81,6 +78,7 @@ Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'ecomba/vim-ruby-refactoring'
 Bundle 'othree/html5.vim'
 Bundle 'scrooloose/syntastic'
+Bundle 'Valloric/YouCompleteMe'
 
 autocmd FileType ruby,eruby,yaml set tw=80 ai sw=2 sts=2 et
 autocmd FileType ruby,eruby,yaml setlocal foldmethod=manual
@@ -198,7 +196,6 @@ vnoremap <LocalLeader># "ay:Ack <C-r>a<CR>
 
 " Command-T
 Bundle "git://git.wincent.com/command-t.git"
-Bundle 'wincent/commant-t'
 let g:CommandTMatchWindowAtTop=1 " show window at top
 
 " Navigation
