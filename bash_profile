@@ -122,7 +122,7 @@ fi
 . ~/.ack_completion
 
 # load ruby completions from dotfiles
-DOTFILES_PATH=~/projects/dotfiles
+DOTFILES_PATH=~/dotfiles
 # rake completion
 complete -C $DOTFILES_PATH/rake_completion -o default rake
 
