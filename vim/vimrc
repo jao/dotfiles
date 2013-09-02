@@ -279,6 +279,11 @@ set smartcase
 set hlsearch " highlight search
 set incsearch " show matches while typing
 
+filetype off
+filetype plugin indent off
+set runtimepath+=$GOROOT/misc/vim
+filetype plugin indent on
+
 syntax on " turn on syntax highlighting
 colorscheme twilight " the color scheme (srsly)
 set background=dark

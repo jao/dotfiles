@@ -105,7 +105,10 @@ if [ -d $BREW_PREFIX/etc/bash_completion.d ]; then
   # go lang completion
   [ -f $BREW_PREFIX/etc/bash_completion.d/go-completion.bash ] && . $BREW_PREFIX/etc/bash_completion.d/go-completion.bash
 fi
-
+if [ -d $BREW_PREFIX ]; then
+  GOPATH=$BREW_PREFIX/Cellar/go/1.1.2/
+  GOROOT=$GOPATH
+fi
 # Homebrew
 . $BREW_PREFIX/Library/Contributions/brew_bash_completion.sh
 
