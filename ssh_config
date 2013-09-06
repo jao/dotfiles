@@ -1,8 +1,0 @@
-Host dev
-  HostName development.olook.com.br
-  User root
-  Port 13630
-
-Host cidadedemocratica
-  HostName cidadedemocratica.org.br
-  User cidadedemocratica
