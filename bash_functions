@@ -259,6 +259,16 @@ pow () {
   esac
 }
 
+# iso to img using hdiutil
+iso2img () {
+  if [ "$1" != "" ] && [ "$2" != "" ]; then
+    hdiutil convert -format UDRW -o $2 $1;
+  else
+    echo "Missing arguments, usage:
+  iso2img <image_file> <output_file>"
+  fi
+}
+
 # Colors
 BLUE="\e[0;34m"
 CYAN="\e[0;36m"
