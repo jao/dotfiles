@@ -180,6 +180,9 @@ cdp () { builtin cd "${@:-$HOME}" && ls; if [ -d ".git" ]; then git pull; fi }
 # mkdir, cd into it
 mkcd () { mkdir -p "$*"; cd "$*"; }
 
+# mv verbose
+mv () { /bin/mv -v $@; }
+
 man2pdf () { man -t $* | open -f -a Preview; }
 
 # taken from http://github.com/bryanl/zshkit/
