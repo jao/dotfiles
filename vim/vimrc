@@ -1,5 +1,6 @@
 set nocompatible " turn off Vi compatibility mode
 filetype off " required (to be honest, I don't know why :P)
+filetype plugin indent off
 
 " VUNDLE {{{
 let s:bundle_path=$HOME."/.vim/bundle/"
@@ -109,6 +110,11 @@ au BufNewFile,BufReadPost *.coffee setl shiftwidth=2 tabstop=2 softtabstop=2 exp
 Bundle 'alfredodeza/jacinto.vim'
 au BufNewFile,BufReadPost *.coffee setl foldmethod=indent nofoldenable
 au BufNewFile,BufReadPost *.coffee setl tabstop=2 softtabstop=2 shiftwidth=2 expandtab
+
+" Go
+Bundle 'jnwhiteh/vim-golang'
+Bundle 'Blackrush/vim-gocode'
+au BufRead,BufNewFile *.go setl filetype=go expandtab tabstop=2 softtabstop=2 shiftwidth=2
 
 " Gist.vim
 Bundle 'mattn/webapi-vim'
@@ -272,19 +278,20 @@ set pastetoggle=<f5>
 set list
 "set listchars=tab:▷⋅,trail:⋅,nbsp:⋅ " show tabs and trailing spaces
 
-
 set t_Co=256 " the term has 256 colors
 
 set smartcase
 set hlsearch " highlight search
 set incsearch " show matches while typing
 
-filetype off
-filetype plugin indent off
-set runtimepath+=$GOROOT/misc/vim
-filetype plugin indent on
+" go vim stuff
+set rtp+=$GOROOT/misc/vim
+autocmd BufWritePost *.go :silent Fmt
 
-syntax on " turn on syntax highlighting
+" turn on filetype and syntax
+filetype plugin indent on
+filetype on
+syntax on
 colorscheme twilight " the color scheme (srsly)
 set background=dark
 

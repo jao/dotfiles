@@ -13,6 +13,9 @@ export GREP_COLOR="1;33;40"
 # android sdk
 export ANDROID_HOME=/usr/local/opt/android-sdk
 
+# go root
+export GOROOT=/
+
 # Prefer US English and use UTF-8
 export LC_ALL="en_US.UTF-8"
 export LANG="en_US"
@@ -105,10 +108,13 @@ if [ -d $BREW_PREFIX/etc/bash_completion.d ]; then
   # go lang completion
   [ -f $BREW_PREFIX/etc/bash_completion.d/go-completion.bash ] && . $BREW_PREFIX/etc/bash_completion.d/go-completion.bash
 fi
+
 if [ -d $BREW_PREFIX ]; then
-  GOPATH=$BREW_PREFIX/Cellar/go/1.1.2/
-  GOROOT=$GOPATH
+  export GOROOT=$BREW_PREFIX/Cellar/go/1.1.2/
 fi
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
 # Homebrew
 . $BREW_PREFIX/Library/Contributions/brew_bash_completion.sh
 
