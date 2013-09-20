@@ -13,8 +13,13 @@ export GREP_COLOR="1;33;40"
 # android sdk
 export ANDROID_HOME=/usr/local/opt/android-sdk
 
+BREW_PREFIX=$(brew --prefix)
+
 # go root
-export GOROOT=/
+if [ -d $BREW_PREFIX ]; then
+  export GOROOT=$BREW_PREFIX/Cellar/go/1.1.2/
+fi
+export GOPATH=$HOME/go
 
 # Prefer US English and use UTF-8
 export LC_ALL="en_US.UTF-8"
@@ -23,13 +28,16 @@ export LANG="en_US"
 # Postgresql
 # export PGDATA='/usr/local/var/postgres'
 
+# load ruby completions from dotfiles
+export DOTFILES_PATH=~/dotfiles
+
 # PATH
-export PATH="${HOME}/scripts:${HOME}/projects/termite:${HOME}/projects/prime/content-prep:/usr/local/bin:${PATH}"
-export PATH="${PATH}:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/bin"
-export PATH="${PATH}:${ANDROID_SDK_ROOT}/tools"
+export PATH=${HOME}/scripts:${HOME}/projects/termite:${HOME}/projects/prime/content-prep:/usr/local/bin:${PATH}
+export PATH=${PATH}:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/bin
+export PATH=${PATH}:${ANDROID_SDK_ROOT}/tools:${DOTFILES_PATH}/scripts
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
-
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
@@ -94,8 +102,6 @@ set input-meta on
 set output-meta on
 set convert-meta off
 
-BREW_PREFIX=$(brew --prefix)
-
 if [ -f $BREW_PREFIX/etc/bash_completion ]; then
   . $BREW_PREFIX/etc/bash_completion
 fi
@@ -108,12 +114,6 @@ if [ -d $BREW_PREFIX/etc/bash_completion.d ]; then
   # go lang completion
   [ -f $BREW_PREFIX/etc/bash_completion.d/go-completion.bash ] && . $BREW_PREFIX/etc/bash_completion.d/go-completion.bash
 fi
-
-if [ -d $BREW_PREFIX ]; then
-  export GOROOT=$BREW_PREFIX/Cellar/go/1.1.2/
-fi
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
 # Homebrew
 . $BREW_PREFIX/Library/Contributions/brew_bash_completion.sh
@@ -130,8 +130,6 @@ fi
 # load ack completion
 . ~/.ack_completion
 
-# load ruby completions from dotfiles
-DOTFILES_PATH=~/dotfiles
 # rake completion
 complete -C $DOTFILES_PATH/rake_completion -o default rake
 
@@ -140,3 +138,7 @@ complete -C $DOTFILES_PATH/project_completion -o default pcd
 
 # pow completion
 complete -C $DOTFILES_PATH/pow_completion -o default pow
+
+# go tool completion
+. $GOROOT/misc/bash/go
+

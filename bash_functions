@@ -204,7 +204,7 @@ googl () {
 
 # ascii character table
 ascii () { for i in {32..255}; do printf "\e[0;33m$i\e[0m "\\$(($i/64*100+$i%64/8*10+$i%8))"\n"; done | column; }
-colors () { ruby ~/projects/dotfiles/scripts/colors; }
+colors () { ruby ~/dotfiles/scripts/colors; }
 
 # clear ASL logs
 clean_asl_logs () { sudo rm -f /private/var/log/asl/*.asl; }
