@@ -18,9 +18,9 @@ echo -e "\033[0;30;42m Starting script at \033[1;30m`date "+%H:%M:%S %d/%m/%Y"` 
 
 CURRENT_DATE=`date "+%Y-%m-%d_%H-%M-%S"`
 
-while [[ "$CURRENT_DATE" < "2013-11-30_00-00-00" ]]; do
+while [[ "$CURRENT_DATE" < "2013-11-30_00-30-00" ]]; do
   echo " Saving images..."
-  for website in submarino magazineluiza buscape americanas walmart; do
+  for website in submarino magazineluiza buscape americanas walmart ricardoeletro casasbahia pontofrio shoptime extra; do
     echo "   saving ${website}'s screenshot..."
     filename="image_${website}_${CURRENT_DATE}.png"
 
@@ -29,7 +29,7 @@ while [[ "$CURRENT_DATE" < "2013-11-30_00-00-00" ]]; do
     until [[ $COMMAND_STATUS -eq 0 || $RETRIES -eq 5 ]]; do
 
       [[ $RETRIES -lt 0 ]] && echo -e " \033[31mAn error has occurred, retrying...\033[0m"
-      curl -s -L -D /tmp/headers "http://api.snapito.com/?url=http://${website}.com.br&type=png&um=box&freshness=1&delay=-1&filename=${filename}" -o $filename
+      curl -s -L -D /tmp/headers "http://api.snapito.com/?url=http://${website}.com.br&type=png&um=box&freshness=1&delay=30&filename=${filename}" -o $filename
 
       COMMAND_STATUS=$?
       if [[ $COMMAND_STATUS -ne 0 ]]; then
