@@ -30,9 +30,9 @@ while [[ "$CURRENT_DATE" < "2013-11-30_00-30-00" ]]; do
 
       [[ $RETRIES -lt 0 ]] && echo -e " \033[31mAn error has occurred, retrying...\033[0m"
       if [[ "$website" == "magazineluiza" || "$website" == "" ]]; then
-        delay="30"
+        delay="10"
       else
-        delay="5"
+        delay="-1"
       fi
       curl -s -L -D /tmp/headers "http://api.snapito.com/?url=http://${website}.com.br&type=png&um=box&freshness=1&delay=${delay}&filename=${filename}" -o $filename
 
