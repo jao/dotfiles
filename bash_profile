@@ -36,6 +36,7 @@ export PATH=${HOME}/scripts:${HOME}/projects/termite:${HOME}/projects/prime/cont
 export PATH=${PATH}:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/bin
 export PATH=${PATH}:${ANDROID_SDK_ROOT}/tools:${DOTFILES_PATH}/scripts
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
 ### Added by the Heroku Toolbelt
 export PATH="/usr/local/heroku/bin:$PATH"
 
