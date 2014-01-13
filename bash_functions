@@ -303,13 +303,13 @@ my-prompt () {
     # delimiters
     ini="("; end=")"
 
-    local BEHIND="# Your branch is behind"
-    local AHEAD="# Your branch is ahead"
-    local UNTRACKED="# Untracked files"
+    local BEHIND="Your branch is behind"
+    local AHEAD="Your branch is ahead"
+    local UNTRACKED="Untracked files"
     local DIVERGED="have diverged"
-    local CHANGED="# Changed but not updated"
-    local TO_BE_COMMITED="# Changes to be committed"
-    local CHANGES_NOT_STAGED="# Changes not staged for commit"
+    local CHANGED="Changed but not updated"
+    local TO_BE_COMMITED="Changes to be committed"
+    local CHANGES_NOT_STAGED="Changes not staged for commit"
     STATUS=`git status 2>/dev/null`
 
     if [[ "$STATUS" =~ "$DIVERGED" ]]; then
@@ -336,4 +336,3 @@ my-prompt () {
   PS1="${PS1} \n\$ "
 }
 PROMPT_COMMAND=my-prompt
-
