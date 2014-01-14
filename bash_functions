@@ -224,11 +224,16 @@ pow () {
       local pow_app=`pwd`;
       case $2 in
         delete)
-          rm -i ~/.pow/$3;;
+          if [ -z "$3" ]; then
+            rm -i ~/.pow/$3
+          else
+            rm -i ~/.pow/$pow_app
+          fi;;
         new)
           $(cd ~/.pow && ln -s $pow_app);;
-        remove)
-          $(cd ~/.pow && rm -i $pow_app);;
+        restart)
+          echo "restarting app..."
+          touch tmp/restart.txt;;
         *)
           echo "App info"
           echo $pow_app;;
@@ -245,7 +250,6 @@ pow () {
       portproxy
         pow portproxy port# appname
       restart
-        pow restart [project]
       upgrade
       uninstall";;
     manual)
@@ -253,14 +257,8 @@ pow () {
     portproxy)
       echo $2 > ~/.pow/$3;;
     restart)
-      case $2 in
-        project)
-          echo "restarting app..."
-          touch tmp/restart.txt;;
-        *)
-          echo "restarting Pow..."
-          touch ~/.pow/restart.txt;;
-      esac;;
+      echo "restarting Pow..."
+      touch ~/.pow/restart.txt;;
     uninstall)
       curl get.pow.cx/uninstall.sh | sh;;
     upgrade)

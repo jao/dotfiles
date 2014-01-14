@@ -31,13 +31,12 @@ class PowCompletion
       'app',
       'app delete',
       'app new',
-      'app remove',
+      'app restart'
       'endpoint',
       'help',
       'manual',
       'portproxy',
       'restart',
-      'restart project',
       'uninstall',
       'upgrade'
     ]
