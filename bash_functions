@@ -73,7 +73,7 @@ alias lock='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resourc
 alias screensaver='open -a /System/Library/Frameworks/ScreenSaver.framework//Versions/A/Resources/ScreenSaverEngine.app'
 
 gtag() {
-  VERSION=`git describe --tags --match "$1*" | awk -F- '{ print $1 }'`
+  VERSION=`git describe --tags --match "$1*"`
   git tag ${VERSION%.*}.`expr ${VERSION##*.} + 1`
   git push --tags
 }
