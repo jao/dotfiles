@@ -278,6 +278,39 @@ iso2img () {
   fi
 }
 
+# locaweb deploy tools
+locatools () {
+  local dir=`pwd`
+  local repo=${dir##*/}
+  local system="-${repo##*-}"
+  local area='registro'
+
+  if [ $system == "sys1" ] || [ $system == "system1" ]; then
+    system="services-sys1"
+  else
+    system="services"
+  fi
+
+  local url="http://deploy.${system}.${area}.systemintegration.locaweb.com.br"
+
+  case $1 in
+    deploy)
+      curl -XPUT -d '' $url/pkg/${repo}
+      ;;
+    stop)
+      curl $url/daemon/${repo}/stop
+      ;;
+    start)
+      curl $url/daemon/${repo}/start
+      ;;
+    *)
+      echo -e "Usage:\n  locatools (deploy|start|stop)"
+      ;;
+  esac
+}
+
+
+
 # Colors
 BLUE="\e[0;34m"
 CYAN="\e[0;36m"

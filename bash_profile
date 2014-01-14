@@ -116,6 +116,12 @@ if [ -d $BREW_PREFIX/etc/bash_completion.d ]; then
   [ -f $BREW_PREFIX/etc/bash_completion.d/go-completion.bash ] && . $BREW_PREFIX/etc/bash_completion.d/go-completion.bash
 fi
 
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+  . $(brew --prefix)/etc/bash_completion
+fi
+
+[ -f $DOTFILES_PATH/completion-ruby/completion-ruby-all ] && . $DOTFILES_PATH/completion-ruby/completion-ruby-all
+
 # Homebrew
 . $BREW_PREFIX/Library/Contributions/brew_bash_completion.sh
 
