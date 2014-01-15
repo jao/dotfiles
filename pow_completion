@@ -4,13 +4,13 @@ class PowCompletion
   def initialize(command)
     @command = command
   end
-  
+
   def matches
     matching_tasks.map do |task|
       task.sub(typed_before_space, '')
     end
   end
-  
+
   def typed
     @command[/\s(.+?)$/, 1] || ''
   end
@@ -18,7 +18,7 @@ class PowCompletion
   def typed_before_space
     typed[/.+\ /] || ''
   end
-  
+
   def matching_tasks
     pow_commands.select do |task|
       task[0, typed.length] == typed
@@ -31,7 +31,7 @@ class PowCompletion
       'app',
       'app delete',
       'app new',
-      'app restart'
+      'app restart',
       'endpoint',
       'help',
       'manual',
