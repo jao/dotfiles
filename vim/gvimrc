@@ -10,6 +10,7 @@ end
 if has('mac')
   " set fullscreen
   set fuoptions=maxvert,maxhorz ",background:#00AAaaaa
+  set lines=999 columns=9999
 
   set guifont=Monaco:h12,Consolas\ Regular:h12,Courier\ New\ Regular:h18
   set noantialias
