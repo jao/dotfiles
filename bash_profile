@@ -17,7 +17,7 @@ BREW_PREFIX=$(brew --prefix)
 
 # go root
 if [ -d $BREW_PREFIX ]; then
-  export GOROOT=$BREW_PREFIX/Cellar/go/1.1.2/
+  export GOROOT=$BREW_PREFIX/Cellar/go/1.2
 fi
 export GOPATH=$HOME/go
 
@@ -145,7 +145,4 @@ complete -C $DOTFILES_PATH/project_completion -o default pcd
 
 # pow completion
 complete -C $DOTFILES_PATH/pow_completion -o default pow
-
-# go tool completion
-. $GOROOT/misc/bash/go
 
