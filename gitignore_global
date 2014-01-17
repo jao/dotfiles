@@ -3,3 +3,7 @@ cache/
 *.log
 .DS*
 .rake_tasks*
+.rvmrc
+.ruby-version
+.ruby-gemset
+.powrc

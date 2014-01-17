@@ -296,15 +296,15 @@ locatools () {
   case $1 in
     deploy)
       echo "Deploying $repo - using $url"
-      curl -XPUT -d '' $url/pkg/${repo}
+      curl -XPUT -d '' ${url}/pkg/${repo}
       ;;
     stop)
       echo "Stopping $repo - using $url"
-      curl $url/daemon/${repo}/stop
+      curl ${url}/daemon/${repo}/stop
       ;;
     start)
       echo "Starting $repo - using $url"
-      curl $url/daemon/${repo}/start
+      curl ${url}/daemon/${repo}/start
       ;;
     *)
       echo -e "Usage:\n  locatools (deploy|start|stop)"
