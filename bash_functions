@@ -229,6 +229,8 @@ pow () {
           else
             rm -i ~/.pow/$pow_app
           fi;;
+        list)
+          ls -la ~/.pow/;;
         new)
           $(cd ~/.pow && ln -s $pow_app);;
         restart)
@@ -293,12 +295,15 @@ locatools () {
 
   case $1 in
     deploy)
+      echo "Deploying $repo - using $url"
       curl -XPUT -d '' $url/pkg/${repo}
       ;;
     stop)
+      echo "Stopping $repo - using $url"
       curl $url/daemon/${repo}/stop
       ;;
     start)
+      echo "Starting $repo - using $url"
       curl $url/daemon/${repo}/start
       ;;
     *)
