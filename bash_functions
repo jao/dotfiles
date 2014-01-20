@@ -296,19 +296,25 @@ locatools () {
   case $1 in
     deploy)
       url="${url}/pkg/${repo}"
-      echo "Deploying $repo - using $url"
+      echo "Deploying $repo - $url"
       curl -XPUT -d '' ${url}
       echo ""
       ;;
     stop)
       url="${url}/daemon/${repo}/stop"
-      echo "Stopping $repo - using $url"
+      echo "Stopping $repo - $url"
       curl ${url}
       echo ""
       ;;
     start)
       url="${url}/daemon/${repo}/start"
-      echo "Starting $repo - using $url"
+      echo "Starting $repo - $url"
+      curl ${url}
+      echo ""
+      ;;
+    logs)
+      url="${url}/logs/syslog"
+      echo "Showing logs for $repo - $url"
       curl ${url}
       echo ""
       ;;

@@ -302,6 +302,7 @@ autocmd BufWritePre * :%s/\s\+$//e
 " LANGUAGUE INDENT CONFIGURATION
 " ****************************************************************
 autocmd FileType make       set noexpandtab
+autocmd FileType makefile   set noexpandtab
 
 autocmd FileType eruby      call UseTabs()
 autocmd FileType html       call UseTabs()
