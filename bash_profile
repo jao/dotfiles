@@ -146,3 +146,5 @@ complete -C $DOTFILES_PATH/project_completion -o default pcd
 # pow completion
 complete -C $DOTFILES_PATH/pow_completion -o default pow
 
+# locatools completion
+complete -C $DOTFILES_PATH/locatools_completion -o default locatools

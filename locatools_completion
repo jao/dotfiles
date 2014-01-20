@@ -1,0 +1,40 @@
+#!/usr/bin/env ruby
+
+class LocatoolsCompletion
+  def initialize(command)
+    @command = command
+  end
+
+  def matches
+    matching_tasks.map do |task|
+      task.sub(typed_before_space, '')
+    end
+  end
+
+  def typed
+    @command[/\s(.+?)$/, 1] || ''
+  end
+
+  def typed_before_space
+    typed[/.+\ /] || ''
+  end
+
+  def matching_tasks
+    pow_commands.select do |task|
+      task[0, typed.length] == typed
+    end
+  end
+
+  def pow_commands
+    [
+      'deploy',
+      'logs',
+      'start',
+      'stop'
+    ]
+  end
+end
+
+puts LocatoolsCompletion.new(ENV["COMP_LINE"]).matches
+exit 0
+
