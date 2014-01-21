@@ -72,14 +72,46 @@ alias gstp='git stash pop'
 alias lock='/System/Library/CoreServices/Menu\ Extras/User.menu/Contents/Resources/CGSession -suspend'
 alias screensaver='open -a /System/Library/Frameworks/ScreenSaver.framework//Versions/A/Resources/ScreenSaverEngine.app'
 
+# https://gist.github.com/davejamesmiller/1965569
+function ask {
+  while true; do
+    if [ "${2:-}" = "Y" ]; then
+        prompt="Y/n"
+        default=Y
+    elif [ "${2:-}" = "N" ]; then
+        prompt="y/N"
+        default=N
+    else
+        prompt="y/n"
+        default=
+    fi
+
+    # Ask the question
+    read -p "$1 [$prompt] " REPLY
+
+    # Default?
+    if [ -z "$REPLY" ]; then
+        REPLY=$default
+    fi
+
+    # Check if the reply is valid
+    case "$REPLY" in
+      Y*|y*) return 0 ;;
+      N*|n*) return 1 ;;
+    esac
+  done
+}
+
 gtag() {
   VERSION=`git describe --tags --match "$1*"`
   echo "Current version: ${VERSION}"
   if [ -n "${VERSION##*.}" ] && [ "${VERSION##*.}" -eq "${VERSION##*.}" ] 2>/dev/null; then
     NEW_VERSION="${VERSION%.*}.`expr ${VERSION##*.} + 1`"
-    echo "New version: ${NEW_VERSION}"
-    git tag ${NEW_VERSION}
-    git push --tags
+    # echo "New version: ${NEW_VERSION}"
+    if ask "Do you want to use the new tag '${NEW_VERSION}'?" Y; then
+      git tag ${NEW_VERSION}
+      git push --tags
+    fi
   fi
 }
 
@@ -99,6 +131,9 @@ gls() {
   shift
   glog --pickaxe-regex "-S$query" "$@"
 }
+
+
+
 
 # ls aliases
 alias ls="ls -G"
