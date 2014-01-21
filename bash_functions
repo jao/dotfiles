@@ -74,8 +74,13 @@ alias screensaver='open -a /System/Library/Frameworks/ScreenSaver.framework//Ver
 
 gtag() {
   VERSION=`git describe --tags --match "$1*"`
-  git tag ${VERSION%.*}.`expr ${VERSION##*.} + 1`
-  git push --tags
+  echo "Current version: ${VERSION}"
+  if [ -n "${VERSION##*.}" ] && [ "${VERSION##*.}" -eq "${VERSION##*.}" ] 2>/dev/null; then
+    NEW_VERSION="${VERSION%.*}.`expr ${VERSION##*.} + 1`"
+    echo "New version: ${NEW_VERSION}"
+    git tag ${NEW_VERSION}
+    git push --tags
+  fi
 }
 
 git-new() {
