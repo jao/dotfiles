@@ -1,3 +1,9 @@
 auth:
   username: 'lsap user'
   password: 'ldap password'
+groups:
+  - groups
+  - you
+  - are
+  - part
+  - of
