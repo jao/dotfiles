@@ -48,19 +48,17 @@ groups_to_download = config['groups_from_gitlab'] ? get_groups : config['groups'
 
 # loop through groups
 groups_to_download.each do |group|
-  puts "\e[30;43m Reading repos for group: " + group + " \e[0m"
+  puts "\e[30;43m Reading repos from group: " + group + " \e[0m"
 
   get_repos(group).each do |url|
     base_dir, repo = url.split('/')
     puts "\e[33m  " + repo + " \e[0m"
 
     # create the base dir if necessary
-    # FileUtils.mkdir(base_dir) unless File.directory?(base_dir) || File.directory?(group)
-    puts " - #{base_dir}" unless File.directory?(base_dir) || File.directory?(group)
+    FileUtils.mkdir(base_dir) unless File.directory?(base_dir) || File.directory?(group)
 
     # clone the repo
-    # `git clone git@code.locaweb.com.br:#{url}.git #{url}` unless File.directory?(url)
-    puts "   - #{url}" unless File.directory?(url)
+    `git clone git@code.locaweb.com.br:#{url}.git #{url}` unless File.directory?(url)
   end
   puts
 end
