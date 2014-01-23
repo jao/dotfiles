@@ -76,8 +76,8 @@ info () {
 _pull_fetch () {
   local dir=`pwd`
   title "Pulling ${dir#\/Users\/jao\/projects}"
-  # git fetch --all
-  # git pull --rebase
+  git fetch --all
+  git pull --rebase
   echo;
 }
 
