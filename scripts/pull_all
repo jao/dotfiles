@@ -73,13 +73,28 @@ info () {
   colorize "$msg" 34 47 1;
 }
 
+_pull_fetch () {
+  local dir=`pwd`
+  title "Pulling ${dir#\/Users\/jao\/projects}"
+  # git fetch --all
+  # git pull --rebase
+  echo;
+}
+
+_list_directories () {
 for dir in `ls`; do
-  if [ -d $dir/.git ]; then
-    cd $dir
-    title "Pulling ${dir}"
-    git fetch --all
-    git pull --rebase
-    echo;
-    cd ..
+  if [ -d $dir ]; then
+    if [ -d $dir/.git ]; then
+      cd $dir
+      _pull_fetch $dir
+      cd ..
+    else
+      cd $dir
+      _list_directories
+      cd ..
+    fi
   fi
 done
+}
+
+_list_directories

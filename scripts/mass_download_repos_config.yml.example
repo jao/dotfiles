@@ -1,6 +1,7 @@
 auth:
   username: 'lsap user'
   password: 'ldap password'
+groups_from_gitlab: true
 groups:
   - groups
   - you
