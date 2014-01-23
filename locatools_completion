@@ -30,6 +30,7 @@ class LocatoolsCompletion
       'deploy',
       'logs',
       'start',
+      'status',
       'stop'
     ]
   end

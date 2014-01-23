@@ -340,6 +340,12 @@ locatools () {
       curl -XPUT -d '' ${url}
       echo ""
       ;;
+    status)
+      url="${url}/pkg/${repo}"
+      echo "Getting status for $repo - $url"
+      curl ${url}
+      echo ""
+      ;;
     stop)
       url="${url}/daemon/${repo}/stop"
       echo "Stopping $repo - $url"
