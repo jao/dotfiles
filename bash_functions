@@ -384,7 +384,7 @@ YELLOW="\e[0;33m"
 NC="\e[0m" # no color
 
 export GIT_PS1_SHOWDIRTYSTATE=1
-my-prompt () {
+_my_prompt () {
   # basic variables
   local STATE=''; local RVM=''; local STATUS=''; local ini=''; local end='';
   local BC=$GREEN # base color
@@ -429,4 +429,4 @@ my-prompt () {
 
   PS1="${PS1} \n\$ "
 }
-PROMPT_COMMAND=my-prompt
+PROMPT_COMMAND=_my_prompt

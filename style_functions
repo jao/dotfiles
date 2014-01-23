@@ -1,0 +1,85 @@
+#!/usr/bin/env bash
+
+###########################################################
+# Appearance
+###########################################################
+
+# BLACK=30, RED=31, GREEN=32, YELLOW=33, BLUE=34, PINK=35, CYAN=36, WHITE=37
+
+# Examples of colored boxes (default colors)
+# title "Testing a title box"
+# info "Testing an information box"
+# warning "Testing a warning box"
+# error "Testing an error box"
+# colorize "text message" #fg #bg #format
+
+# Terminal size
+export COLUMNS=`tput cols`
+
+# Default color values
+D_FG=39
+D_BG=49
+D_FM=0
+
+# Colors
+export BLUE="\e[0;34m"
+export CYAN="\e[0;36m"
+export GRAY="\e[1;30m"
+export GREEN="\e[0;32m"
+export PINK="\e[0;35m"
+export RED="\e[0;31m"
+export WHITE="\e[1;37m"
+export YELLOW="\e[0;33m"
+export NC="\e[0m" # no color
+
+_style_colorize () {
+  [ -n "$1" ] || return 65;
+  local FC="\033["
+  local RC="\033[0m"
+  [ -n "$4" ] && FC="${FC}${4};" || FC="${FC}${D_FM};"
+  [ -n "$2" ] && FC="${FC}${2};" || FC="${FC}${D_FG};"
+  [ -n "$3" ] && FC="${FC}${3}m" || FC="${FC}${D_BG}m"
+  local msg="$1"
+  echo -e "${FC}${msg}${RC}";
+}
+
+_style_center () {
+  local msg=" $1 ";
+  while [ ${#msg} -lt $COLUMNS ]; do
+    [ $((${#msg} % 2)) -eq 0 ] && msg="$msg " || msg=" $msg"
+  done
+}
+
+_style_banner () {
+  local msg=" $1 ";
+  while [ ${#msg} -lt $COLUMNS ]; do
+    msg="$msg "
+  done
+}
+
+_style_banner_right () {
+  local msg=" $1 ";
+  while [ ${#msg} -lt $COLUMNS ]; do
+    msg=" $msg"
+  done
+}
+
+_style_title () {
+  _style_banner "$1";
+  _style_colorize "$msg" 30 42 1
+}
+
+_style_warning () {
+  _style_banner "$1";
+  _style_colorize "$msg" 30 43 1
+}
+
+_style_error () {
+  _style_banner "$1";
+  _style_colorize "$msg" 37 41 1
+}
+
+_style_info () {
+  _style_banner "$1";
+  _style_colorize "$msg" 34 47 1
+}

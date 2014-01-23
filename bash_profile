@@ -103,6 +103,20 @@ set input-meta on
 set output-meta on
 set convert-meta off
 
+# load rvm stuff
+if [ -d ~/.rvm ]; then
+  . ~/.rvm/scripts/rvm
+  . ~/.rvm/scripts/completion
+fi
+
+# load my style functions
+. $DOTFILES_PATH/style_functions
+
+# load my functions
+. ~/.bash_functions
+
+# completion files
+
 if [ -f $BREW_PREFIX/etc/bash_completion ]; then
   . $BREW_PREFIX/etc/bash_completion
 fi
@@ -124,15 +138,6 @@ fi
 
 # Homebrew
 . $BREW_PREFIX/Library/Contributions/brew_bash_completion.sh
-
-# load rvm stuff
-if [ -d ~/.rvm ]; then
-  . ~/.rvm/scripts/rvm
-  . ~/.rvm/scripts/completion
-fi
-
-# load my functions
-. ~/.bash_functions
 
 # load ack completion
 . ~/.ack_completion
