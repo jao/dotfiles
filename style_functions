@@ -39,26 +39,26 @@ _style_colorize () {
   [ -n "$4" ] && FC="${FC}${4};" || FC="${FC}${D_FM};"
   [ -n "$2" ] && FC="${FC}${2};" || FC="${FC}${D_FG};"
   [ -n "$3" ] && FC="${FC}${3}m" || FC="${FC}${D_BG}m"
-  local msg="$1"
+  msg="$1"
   echo -e "${FC}${msg}${RC}";
 }
 
 _style_center () {
-  local msg=" $1 ";
+  msg=" $1 ";
   while [ ${#msg} -lt $COLUMNS ]; do
     [ $((${#msg} % 2)) -eq 0 ] && msg="$msg " || msg=" $msg"
   done
 }
 
 _style_banner () {
-  local msg=" $1 ";
+  msg=" $1 ";
   while [ ${#msg} -lt $COLUMNS ]; do
     msg="$msg "
   done
 }
 
 _style_banner_right () {
-  local msg=" $1 ";
+  msg=" $1 ";
   while [ ${#msg} -lt $COLUMNS ]; do
     msg=" $msg"
   done
