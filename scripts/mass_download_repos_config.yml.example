@@ -1,0 +1,3 @@
+auth:
+  username: 'lsap user'
+  password: 'ldap password'
