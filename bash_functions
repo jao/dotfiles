@@ -103,13 +103,13 @@ function ask {
 }
 
 gtag() {
-  VERSION=`git describe --tags --match "$1*"`
-  echo "Current version: ${VERSION}"
+  VERSION=$(git describe --tags --match="$1*" --abbrev=0 `git rev-list --tags --max-count=1`)
+  echo "Current version: $(_style_colorize ${VERSION} 33)"
   if [ -n "${VERSION##*.}" ] && [ "${VERSION##*.}" -eq "${VERSION##*.}" ] 2>/dev/null; then
     NEW_VERSION="${VERSION%.*}.`expr ${VERSION##*.} + 1`"
     # echo "New version: ${NEW_VERSION}"
-    if ask "Do you want to use the new tag '${NEW_VERSION}'?" Y; then
-      git tag ${NEW_VERSION}
+    if ask "Do you want to use the new tag '$(_style_colorize ${NEW_VERSION} 32)'?" Y; then
+      git tag ${NEW_VERSION} -m ""
       git push --tags
     fi
   fi
@@ -123,9 +123,11 @@ git-new() {
   git add .gitignore &&
   git commit -m "Added .gitignore."
 }
+
 git_current_branch() {
   cat "$(git rev-parse --git-dir 2>/dev/null)/HEAD" | sed -e 's/^.*refs\/heads\///'
 }
+
 gls() {
   query="$1"
   shift
