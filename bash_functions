@@ -326,7 +326,9 @@ locatools () {
   local system="-${repo##*-}"
   local area='registro'
 
-  if [ $system == "sys1" ] || [ $system == "system1" ]; then
+  if [ -f .locatools ]; then
+    source .locatools
+  elif [ $system == "sys1" ] || [ $system == "system1" ]; then
     system="services-sys1"
   else
     system="services"
