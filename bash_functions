@@ -132,9 +132,6 @@ gls() {
   glog --pickaxe-regex "-S$query" "$@"
 }
 
-
-
-
 # ls aliases
 alias ls="ls -G"
 alias ll="ls -Glh"
@@ -272,7 +269,9 @@ pow () {
         list)
           ls -la ~/.pow/;;
         new)
-          $(cd ~/.pow && ln -s $pow_app);;
+          ln -sf $pow_app ~/.pow/${pow_app##*/}
+          ls -lA ~/.pow/ | grep ${pow_app##*/}
+        ;;
         restart)
           echo "restarting app..."
           touch tmp/restart.txt;;
@@ -283,17 +282,6 @@ pow () {
     endpoint)
       curl -H host:pow localhost/status.json
       echo;;
-    help)
-      echo "Pow Rack Server:
-      about
-      endpoint
-      help
-      manual
-      portproxy
-        pow portproxy port# appname
-      restart
-      upgrade
-      uninstall";;
     manual)
       open "http://pow.cx/manual.html";;
     portproxy)
@@ -305,6 +293,17 @@ pow () {
       curl get.pow.cx/uninstall.sh | sh;;
     upgrade)
       curl get.pow.cx | sh;;
+    help|*)
+      echo "Pow Rack Server:
+      about
+      endpoint
+      help
+      manual
+      portproxy
+        pow portproxy port# appname
+      restart
+      upgrade
+      uninstall";;
   esac
 }
 
