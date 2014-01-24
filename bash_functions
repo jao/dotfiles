@@ -259,7 +259,7 @@ clean_asl_logs () { sudo rm -f /private/var/log/asl/*.asl; }
 pow () {
   case $1 in
     about)
-      open "http://http://pow.cx";;
+      open "http://pow.cx";;
     app)
       local pow_app=`pwd`;
       case $2 in
@@ -369,7 +369,6 @@ locatools () {
       ;;
   esac
 }
-
 
 
 # Colors
