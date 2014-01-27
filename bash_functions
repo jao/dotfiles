@@ -103,12 +103,11 @@ function ask {
 }
 
 gtag() {
-  VERSION=$(git describe --tags --match="$1*" --abbrev=0 `git rev-list --tags --max-count=1`)
-  echo "Current version: $(_style_colorize ${VERSION} 33)"
+  VERSION=$(git describe --tags --abbrev=0 --match "$1*" `git rev-list --tags --max-count=1`)
+  echo "Current version: $(_style_colorize $VERSION 33)"
   if [ -n "${VERSION##*.}" ] && [ "${VERSION##*.}" -eq "${VERSION##*.}" ] 2>/dev/null; then
     NEW_VERSION="${VERSION%.*}.`expr ${VERSION##*.} + 1`"
-    # echo "New version: ${NEW_VERSION}"
-    if ask "Do you want to use the new tag '$(_style_colorize ${NEW_VERSION} 32)'?" Y; then
+    if ask "Do you want to use the new tag '$(_style_colorize $NEW_VERSION 32)'?" Y; then
       git tag ${NEW_VERSION} -m ""
       git push --tags
     fi
@@ -337,34 +336,54 @@ locatools () {
   local url="http://deploy.${system}.${area}.systemintegration.locaweb.com.br"
 
   case $1 in
+    delete)
+      url="${url}/pkg/${repo}"
+      _style_title "Removing $repo"
+      echo "$url"
+      curl -XDELETE -i -d '' ${url}
+      echo ""
+      ;;
     deploy)
       url="${url}/pkg/${repo}"
-      echo "Deploying $repo - $url"
-      curl -XPUT -d '' ${url}
+      _style_title "Deploying $repo"
+      echo "$url"
+      curl -XPUT -i -d '' ${url}
+      echo ""
+      ;;
+    install)
+      url="${url}/pkg/${repo}"
+      _style_title "Installing $repo"
+      echo "$url"
+      curl -XPOST -i -d '' ${url}
       echo ""
       ;;
     status)
       url="${url}/pkg/${repo}"
-      echo "Getting status for $repo - $url"
-      curl ${url}
+      _style_title "Getting status for $repo"
+      echo "$url"
+      curl -i ${url}
       echo ""
       ;;
     stop)
       url="${url}/daemon/${repo}/stop"
-      echo "Stopping $repo - $url"
-      curl ${url}
+      _style_title "Stopping $repo"
+      echo "$url"
+      curl -i ${url}
       echo ""
       ;;
     start)
       url="${url}/daemon/${repo}/start"
-      echo "Starting $repo - $url"
-      curl ${url}
+      _style_title "Starting $repo"
+      echo "$url"
+      curl -i ${url}
       echo ""
       ;;
     logs)
       url="${url}/logs/syslog"
-      echo "Showing logs for $repo - $url"
-      curl ${url}
+      # [ -n "$2" ] && [ "$2" == "-tail" ] url="${url}?type=tail"
+      _style_title "Showing logs for $repo"
+      echo "$url"
+      curl -i "${url}?type=tail&grep=${repo}&lines=200"
       echo ""
       ;;
     *)

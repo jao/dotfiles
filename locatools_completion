@@ -27,7 +27,9 @@ class LocatoolsCompletion
 
   def pow_commands
     [
+      'delete',
       'deploy',
+      'install',
       'logs',
       'start',
       'status',
