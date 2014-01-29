@@ -32,13 +32,13 @@ export LANG="en_US"
 export DOTFILES_PATH=~/dotfiles
 
 # PATH
-export PATH=${HOME}/scripts:${HOME}/projects/termite:${HOME}/projects/prime/content-prep:/usr/local/bin:${PATH}
-export PATH=${PATH}:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/bin
-export PATH=${PATH}:${ANDROID_SDK_ROOT}/tools:${DOTFILES_PATH}/scripts
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-
-### Added by the Heroku Toolbelt
-export PATH="/usr/local/heroku/bin:$PATH"
+export PATH=/usr/local/bin:$PATH
+export PATH=$PATH:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/bin
+export PATH=$PATH:${DOTFILES_PATH}/scripts          # dotfiles scripts
+export PATH=$PATH:${ANDROID_SDK_ROOT}/tools         # android sdk
+export PATH=$PATH:${GOROOT}/bin:${GOPATH}/bin       # go lang
+export PATH=$PATH:${HOME}/.rvm/bin                  # rvm
+export PATH=$PATH:/usr/local/heroku/bin             # heroku
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
