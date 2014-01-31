@@ -37,7 +37,7 @@ export PATH=$PATH:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/b
 export PATH=$PATH:${DOTFILES_PATH}/scripts          # dotfiles scripts
 export PATH=$PATH:${ANDROID_SDK_ROOT}/tools         # android sdk
 export PATH=$PATH:${GOROOT}/bin:${GOPATH}/bin       # go lang
-export PATH=$PATH:${HOME}/.rvm/bin                  # rvm
+export PATH=$PATH:$HOME/.rvm/bin                    # rvm
 export PATH=$PATH:/usr/local/heroku/bin             # heroku
 
 # Case-insensitive globbing (used in pathname expansion)
@@ -128,10 +128,6 @@ if [ -d $BREW_PREFIX/etc/bash_completion.d ]; then
   [ -f $BREW_PREFIX/etc/bash_completion.d/adb-completion.bash ] && . $BREW_PREFIX/etc/bash_completion.d/adb-completion.bash
   # go lang completion
   [ -f $BREW_PREFIX/etc/bash_completion.d/go-completion.bash ] && . $BREW_PREFIX/etc/bash_completion.d/go-completion.bash
-fi
-
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-  . $(brew --prefix)/etc/bash_completion
 fi
 
 [ -f $DOTFILES_PATH/completion-ruby/completion-ruby-all ] && . $DOTFILES_PATH/completion-ruby/completion-ruby-all

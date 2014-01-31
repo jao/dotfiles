@@ -13,14 +13,19 @@ alias -- -="cd -"
 # Shortcuts
 alias d="cd ~/Documents/Dropbox"
 alias p="cd ~/projects"
+
+# rails related shortcuts
 alias r="rails"
 alias be="bundle exec"
-alias v="vim"
+
+# editor related shortcuts
+alias v="mvim"
 alias s="subl ."
 
 alias vim="vim -u ~/.vim/vimrc"
 alias mvim="mvim -u ~/.vim/vimrc"
 
+# git related shortcuts
 alias g="git"
 alias ga='git add -A'
 alias gap='ga -p'
@@ -409,7 +414,7 @@ _my_prompt () {
   # basic variables
   local STATE=''; local RVM=''; local STATUS=''; local ini=''; local end='';
   local BC=$GREEN # base color
-  [ -f ~/.rvm/bin/rvm-prompt ] && RVM=" \e[0;30;43m $(~/.rvm/bin/rvm-prompt v g) \e[0m" # rvm rubies
+  [ -f ~/.rvm/bin/rvm-prompt ] && RVM=" \e[0;37m|\e[0m\e[1;36m$(~/.rvm/bin/rvm-prompt v g)\e[0m\e[0;37m|\e[0m" # rvm rubies
   PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m${RVM}" # basic ps1
 
   # GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
