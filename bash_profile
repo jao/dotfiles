@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # configurations
-export EDITOR=="mvim -f --nomru -c \"au VimLeave * !open -a iTerm2\""
+export EDITOR="mvim -f --nomru -c \"au VimLeave * !open -a iTerm2\""
 
 export SUBL_EDITOR="subl -w"
 
@@ -148,4 +148,4 @@ complete -C $DOTFILES_PATH/project_completion -o default pcd
 complete -C $DOTFILES_PATH/pow_completion -o default pow
 
 # locatools completion
-complete -C $DOTFILES_PATH/locatools_completion -o default locatools
+complete -C $DOTFILES_PATH/locatools_completion -o default lwtools

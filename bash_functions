@@ -20,7 +20,6 @@ alias be="bundle exec"
 
 # editor related shortcuts
 alias v="mvim"
-alias s="subl ."
 
 alias vim="vim -u ~/.vim/vimrc"
 alias mvim="mvim -u ~/.vim/vimrc"
@@ -52,7 +51,7 @@ alias gmf='git merge --ff-only'
 alias gf="git fetch"
 alias gp="git push"
 alias gwc="git whatchanged -p --abbrev-commit --pretty=medium"
-alias glog='git log --date-order --pretty="format:%C(yellow)%h%Cblue%d%Creset %s %C(white) %an, %ar%Creset"'
+alias glog='git log --date-order --pretty="format:%C(yellow)%h%C(magenta)%d%Creset %s %C(white) %an, %ar%Creset"'
 alias gl='glog --graph'
 alias gla='gl --all'
 alias gm='git merge --no-ff'
@@ -324,21 +323,23 @@ iso2img () {
 }
 
 # locaweb deploy tools
-locatools () {
+lwtools () {
   local dir=`pwd`
   local repo=${dir##*/}
   local system="-${repo##*-}"
-  local area='registro'
+  local machine=''; local area=''
 
   if [ -f .locatools ]; then
     source .locatools
-  elif [ $system == "sys1" ] || [ $system == "system1" ]; then
-    system="services-sys1"
-  else
-    system="services"
   fi
 
-  local url="http://deploy.${system}.${area}.systemintegration.locaweb.com.br"
+  if [ "$machine" != "" ] && [ "${machine##*-}" != "sys1" ] && [ "$system" == "sys1" ] || [ "$system" == "system1" ]; then
+    machine="${machine}-sys1"
+  fi
+
+  [ "$area" == "" ] && area='registro'
+
+  local url="http://deploy.${machine}.${area}.systemintegration.locaweb.com.br"
 
   case $1 in
     delete)
@@ -349,10 +350,9 @@ locatools () {
       echo ""
       ;;
     deploy)
-      url="${url}/pkg/${repo}"
-      _style_title "Deploying $repo"
-      echo "$url"
-      curl -XPUT -i -d '' ${url}
+      locatools install
+      locatools stop
+      locatools start
       echo ""
       ;;
     install)
