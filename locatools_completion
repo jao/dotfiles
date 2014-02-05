@@ -20,12 +20,12 @@ class LocatoolsCompletion
   end
 
   def matching_tasks
-    pow_commands.select do |task|
+    commands.select do |task|
       task[0, typed.length] == typed
     end
   end
 
-  def pow_commands
+  def commands
     [
       'delete',
       'deploy',
