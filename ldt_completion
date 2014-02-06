@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-class LocatoolsCompletion
+class LdtCompletion
   def initialize(command)
     @command = command
   end
@@ -40,6 +40,6 @@ class LocatoolsCompletion
   end
 end
 
-puts LocatoolsCompletion.new(ENV["COMP_LINE"]).matches
+puts LdtCompletion.new(ENV["COMP_LINE"]).matches
 exit 0
 
