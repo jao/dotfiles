@@ -28,7 +28,7 @@ ldt () {
     delete)
       url="${url}/pkg/${repo}"
       _style_title "Removing $repo"
-      echo " curl -XDELETE -i -d '' $url"
+      echo -e " curl -XDELETE -i -d '' $url\n"
       curl -XDELETE -i -d '' ${url}
       echo ""
       ;;
@@ -41,49 +41,56 @@ ldt () {
     install)
       url="${url}/pkg/${repo}"
       _style_title "Installing $repo"
-      echo " curl -XPOST -i -d '' $url"
+      echo -e " curl -XPOST -i -d '' $url\n"
       curl -XPOST -i -d '' ${url}
       echo ""
       ;;
     update)
       url="${url}/pkg/${repo}"
-      _style_title "Installing $repo"
-      echo " curl -XPUT -i -d '' $url"
+      _style_title "Updating $repo"
+      echo -e " curl -XPUT -i -d '' $url\n"
       curl -XPUT -i -d '' ${url}
       echo ""
       ;;
-    status)
+    pkginfo)
       url="${url}/pkg/${repo}"
+      _style_title "Getting info for $repo"
+      echo -e " curl -i $url\n"
+      curl -i ${url}
+      echo ""
+      ;;
+    status)
+      url="${url}/daemon/${repo}/status"
       _style_title "Getting status for $repo"
-      echo " curl -i $url"
+      echo -e " curl -i $url\n"
       curl -i ${url}
       echo ""
       ;;
     restart)
       url="${url}/daemon/${repo}/restart"
       _style_title "Restarting $repo"
-      echo " curl -i $url"
+      echo -e " curl -i $url\n"
       curl -i ${url}
       echo ""
       ;;
     stop)
       url="${url}/daemon/${repo}/stop"
       _style_title "Stopping $repo"
-      echo " curl -i $url"
+      echo -e " curl -i $url\n"
       curl -i ${url}
       echo ""
       ;;
     start)
       url="${url}/daemon/${repo}/start"
       _style_title "Starting $repo"
-      echo " curl -i $url"
+      echo -e " curl -i $url\n"
       curl -i ${url}
       echo ""
       ;;
     logs)
       url="${url}/logs/syslog"
       _style_title "Showing logs for $repo"
-      echo " curl -i $url"
+      echo -e " curl -i $url\n"
       curl -i "${url}?type=tail&lines=200"
       echo ""
       ;;
