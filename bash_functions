@@ -284,6 +284,23 @@ pow () {
           echo "App info"
           echo $pow_app;;
       esac;;
+    powrc)
+      case $2 in
+        show)
+          if [ -f .powrc ]; then
+            _style_colorize ".powrc contents" 33
+            cat .powrc
+          else
+            _style_colorize ".powrc not found" 31
+          fi
+          ;;
+        write)
+          cp $DOTFILES_PATH/powrc_base .powrc
+          _style_colorize ".powrc contents" 32
+          cat .powrc
+          ;;
+      esac
+      ;;
     endpoint)
       curl -H host:pow localhost/status.json
       echo;;
@@ -294,6 +311,16 @@ pow () {
     restart)
       echo "restarting Pow..."
       touch ~/.pow/restart.txt;;
+    rvm)
+      if [ ! -f .ruby-version ] || [ ! -f .ruby-gemset ]; then
+        _style_colorize "Creating rvm files" 33
+        rvm --ruby-version use $(cat .rvmrc.example | grep @ | awk -F' ' '{ print $2 }') --create
+      else
+        _style_colorize ".ruby-version and .ruby-gemset contents" 33
+        cat .ruby-version
+        cat .ruby-gemset
+      fi
+      ;;
     uninstall)
       curl get.pow.cx/uninstall.sh | sh;;
     upgrade)

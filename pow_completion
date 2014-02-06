@@ -36,7 +36,10 @@ class PowCompletion
       'help',
       'manual',
       'portproxy',
+      'powrc show',
+      'powrc write',
       'restart',
+      'rvm fix',
       'uninstall',
       'upgrade'
     ]
