@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+
+# This program is free software. It comes without any warranty, to
+# the extent permitted by applicable law. You can redistribute it
+# and/or modify it under the terms of the Do What The Fuck You Want
+
+# locaweb deploy tools
+ldt () {
+  local dir=`pwd`
+  local repo=${dir##*/}
+  local system="-${repo##*-}"
+  local machine=''; local area=''
+
+  if [ -f .locatools ]; then
+    source .locatools
+  fi
+
+  if [ "$machine" != "" ] && [ "${machine##*-}" != "sys1" ] && [ "$system" == "sys1" ] || [ "$system" == "system1" ]; then
+    machine="${machine}-sys1"
+  fi
+
+  [ "$area" == "" ] && area='registro'
+
+  local url="http://deploy.${machine}.${area}.systemintegration.locaweb.com.br"
+
+  case $1 in
+    delete)
+      url="${url}/pkg/${repo}"
+      _style_title "Removing $repo"
+      echo "curl -XDELETE -i -d '' $url"
+      curl -XDELETE -i -d '' ${url}
+      echo ""
+      ;;
+    deploy)
+      ldt stop
+      ldt update
+      ldt start
+      echo ""
+      ;;
+    install)
+      url="${url}/pkg/${repo}"
+      _style_title "Installing $repo"
+      echo "curl -XPOST -i -d '' $url"
+      curl -XPOST -i -d '' ${url}
+      echo ""
+      ;;
+    update)
+      url="${url}/pkg/${repo}"
+      _style_title "Installing $repo"
+      echo "curl -XPUT -i -d '' $url"
+      curl -XPUT -i -d '' ${url}
+      echo ""
+      ;;
+    status)
+      url="${url}/pkg/${repo}"
+      _style_title "Getting status for $repo"
+      echo "curl -i $url"
+      curl -i ${url}
+      echo ""
+      ;;
+    restart)
+      url="${url}/daemon/${repo}/restart"
+      _style_title "Restarting $repo"
+      echo "curl -i $url"
+      curl -i ${url}
+      echo ""
+      ;;
+    stop)
+      url="${url}/daemon/${repo}/stop"
+      _style_title "Stopping $repo"
+      echo "curl -i $url"
+      curl -i ${url}
+      echo ""
+      ;;
+    start)
+      url="${url}/daemon/${repo}/start"
+      _style_title "Starting $repo"
+      echo "curl -i $url"
+      curl -i ${url}
+      echo ""
+      ;;
+    logs)
+      url="${url}/logs/syslog"
+      _style_title "Showing logs for $repo"
+      echo "curl -i $url"
+      curl -i "${url}?type=tail&lines=200"
+      echo ""
+      ;;
+    *)
+      echo -e "Usage:\n  ldt (deploy|start|stop)"
+      ;;
+  esac
+}
+

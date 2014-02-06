@@ -322,95 +322,6 @@ iso2img () {
   fi
 }
 
-# locaweb deploy tools
-lwtools () {
-  local dir=`pwd`
-  local repo=${dir##*/}
-  local system="-${repo##*-}"
-  local machine=''; local area=''
-
-  if [ -f .locatools ]; then
-    source .locatools
-  fi
-
-  if [ "$machine" != "" ] && [ "${machine##*-}" != "sys1" ] && [ "$system" == "sys1" ] || [ "$system" == "system1" ]; then
-    machine="${machine}-sys1"
-  fi
-
-  [ "$area" == "" ] && area='registro'
-
-  local url="http://deploy.${machine}.${area}.systemintegration.locaweb.com.br"
-
-  case $1 in
-    delete)
-      url="${url}/pkg/${repo}"
-      _style_title "Removing $repo"
-      echo "$url"
-      curl -XDELETE -i -d '' ${url}
-      echo ""
-      ;;
-    deploy)
-      lwtools stop
-      lwtools update
-      lwtools start
-      echo ""
-      ;;
-    install)
-      url="${url}/pkg/${repo}"
-      _style_title "Installing $repo"
-      echo "$url"
-      curl -XPOST -i -d '' ${url}
-      echo ""
-      ;;
-    update)
-      url="${url}/pkg/${repo}"
-      _style_title "Installing $repo"
-      echo "$url"
-      curl -XPUT -i -d '' ${url}
-      echo ""
-      ;;
-    status)
-      url="${url}/pkg/${repo}"
-      _style_title "Getting status for $repo"
-      echo "$url"
-      curl -i ${url}
-      echo ""
-      ;;
-    restart)
-      url="${url}/daemon/${repo}/restart"
-      _style_title "Restarting $repo"
-      echo "$url"
-      curl -i ${url}
-      echo ""
-      ;;
-    stop)
-      url="${url}/daemon/${repo}/stop"
-      _style_title "Stopping $repo"
-      echo "$url"
-      curl -i ${url}
-      echo ""
-      ;;
-    start)
-      url="${url}/daemon/${repo}/start"
-      _style_title "Starting $repo"
-      echo "$url"
-      curl -i ${url}
-      echo ""
-      ;;
-    logs)
-      url="${url}/logs/syslog"
-      _style_title "Showing logs for $repo"
-      echo "$url"
-      curl -i "${url}?type=tail&lines=200"
-      echo ""
-      ;;
-    *)
-      echo -e "Usage:\n  locatools (deploy|start|stop)"
-      ;;
-  esac
-}
-
-
 # Colors
 BLUE="\e[0;34m"
 CYAN="\e[0;36m"
@@ -427,14 +338,21 @@ _my_prompt () {
   # basic variables
   local STATE=''; local RVM=''; local STATUS=''; local ini=''; local end='';
   local BC=$GREEN # base color
-  [ -f ~/.rvm/bin/rvm-prompt ] && RVM=" \e[0;37m|\e[0m\e[1;36m$(~/.rvm/bin/rvm-prompt v g)\e[0m\e[0;37m|\e[0m" # rvm rubies
-  PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m${RVM}" # basic ps1
+  if [ -f ~/.rvm/bin/rvm-prompt ]; then
+    local RVM_STRING=$(~/.rvm/bin/rvm-prompt v g)
+    local RVM_RUBY=${RVM_STRING%%@*}
+    local RVM_GEMSET=${RVM_STRING##*@}
+    [ "$RVM_RUBY" == "$RVM_GEMSET" ] && RVM_GEMSET=""
+    RVM="\e[36m$RVM_RUBY\e[0m" # rvm ruby
+    [ "$RVM_GEMSET" != "" ] && RVM="$RVM \e[1;30m$RVM_GEMSET\e[0m"
+  fi
+  PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m" # basic ps1
 
   # GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
   local GITBRANCH=`__git_ps1 "%s" | awk '{print $1;}'`
   if [ "$GITBRANCH" != "" ]; then
     # delimiters
-    ini="("; end=")"
+    ini=""; end=""; separator=" "
 
     local BEHIND="Your branch is behind"
     local AHEAD="Your branch is ahead"
@@ -463,7 +381,9 @@ _my_prompt () {
 
     [ -z "$STATE" ] && BC=$GREEN
 
-    PS1="${PS1} ${ini}${BC}${GITBRANCH}${NC}${STATE}${end}"
+    PS1="${PS1} ${ini}${RVM}${separator}${BC}${GITBRANCH}${NC}${STATE}${end}"
+  else
+    PS1="${PS1} ${ini}${RVM}${end}"
   fi
 
   PS1="${PS1} \n\$ "
