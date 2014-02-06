@@ -350,9 +350,9 @@ lwtools () {
       echo ""
       ;;
     deploy)
-      locatools install
-      locatools stop
-      locatools start
+      lwtools stop
+      lwtools update
+      lwtools start
       echo ""
       ;;
     install)
@@ -362,9 +362,23 @@ lwtools () {
       curl -XPOST -i -d '' ${url}
       echo ""
       ;;
+    update)
+      url="${url}/pkg/${repo}"
+      _style_title "Installing $repo"
+      echo "$url"
+      curl -XPUT -i -d '' ${url}
+      echo ""
+      ;;
     status)
       url="${url}/pkg/${repo}"
       _style_title "Getting status for $repo"
+      echo "$url"
+      curl -i ${url}
+      echo ""
+      ;;
+    restart)
+      url="${url}/daemon/${repo}/restart"
+      _style_title "Restarting $repo"
       echo "$url"
       curl -i ${url}
       echo ""
@@ -385,10 +399,9 @@ lwtools () {
       ;;
     logs)
       url="${url}/logs/syslog"
-      # [ -n "$2" ] && [ "$2" == "-tail" ] url="${url}?type=tail"
       _style_title "Showing logs for $repo"
       echo "$url"
-      curl -i "${url}?type=tail&grep=${repo}&lines=200"
+      curl -i "${url}?type=tail&lines=200"
       echo ""
       ;;
     *)
