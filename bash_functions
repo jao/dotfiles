@@ -314,10 +314,11 @@ pow () {
     rvm)
       if [ ! -f .ruby-version ] || [ ! -f .ruby-gemset ]; then
         _style_colorize "Creating rvm files" 33
-        rvm --ruby-version use $(cat .rvmrc.example | grep @ | awk -F' ' '{ print $2 }') --create
+        rvm use $(cat .rvmrc.example | grep @ | awk -F' ' '{ print $2 }') --ruby-version --create
       else
-        _style_colorize ".ruby-version and .ruby-gemset contents" 33
+        _style_colorize ".ruby-version contents" 33
         cat .ruby-version
+        _style_colorize ".ruby-gemset contents" 33
         cat .ruby-gemset
       fi
       ;;

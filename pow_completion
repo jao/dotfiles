@@ -39,7 +39,7 @@ class PowCompletion
       'powrc show',
       'powrc write',
       'restart',
-      'rvm fix',
+      'rvm',
       'uninstall',
       'upgrade'
     ]
