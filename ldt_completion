@@ -30,7 +30,9 @@ class LocatoolsCompletion
       'delete',
       'deploy',
       'install',
+      'update',
       'logs',
+      'restart',
       'start',
       'status',
       'stop'

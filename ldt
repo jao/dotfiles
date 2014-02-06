@@ -6,9 +6,10 @@
 
 # locaweb deploy tools
 ldt () {
+  [ ! -d .git ] && _style_error "Not a repo, can't continue." && return
   local dir=`pwd`
   local repo=${dir##*/}
-  local system="-${repo##*-}"
+  local system="${repo##*-}"
   local machine=''; local area=''
 
   if [ -f .locatools ]; then
@@ -27,7 +28,7 @@ ldt () {
     delete)
       url="${url}/pkg/${repo}"
       _style_title "Removing $repo"
-      echo "curl -XDELETE -i -d '' $url"
+      echo " curl -XDELETE -i -d '' $url"
       curl -XDELETE -i -d '' ${url}
       echo ""
       ;;
@@ -40,54 +41,54 @@ ldt () {
     install)
       url="${url}/pkg/${repo}"
       _style_title "Installing $repo"
-      echo "curl -XPOST -i -d '' $url"
+      echo " curl -XPOST -i -d '' $url"
       curl -XPOST -i -d '' ${url}
       echo ""
       ;;
     update)
       url="${url}/pkg/${repo}"
       _style_title "Installing $repo"
-      echo "curl -XPUT -i -d '' $url"
+      echo " curl -XPUT -i -d '' $url"
       curl -XPUT -i -d '' ${url}
       echo ""
       ;;
     status)
       url="${url}/pkg/${repo}"
       _style_title "Getting status for $repo"
-      echo "curl -i $url"
+      echo " curl -i $url"
       curl -i ${url}
       echo ""
       ;;
     restart)
       url="${url}/daemon/${repo}/restart"
       _style_title "Restarting $repo"
-      echo "curl -i $url"
+      echo " curl -i $url"
       curl -i ${url}
       echo ""
       ;;
     stop)
       url="${url}/daemon/${repo}/stop"
       _style_title "Stopping $repo"
-      echo "curl -i $url"
+      echo " curl -i $url"
       curl -i ${url}
       echo ""
       ;;
     start)
       url="${url}/daemon/${repo}/start"
       _style_title "Starting $repo"
-      echo "curl -i $url"
+      echo " curl -i $url"
       curl -i ${url}
       echo ""
       ;;
     logs)
       url="${url}/logs/syslog"
       _style_title "Showing logs for $repo"
-      echo "curl -i $url"
+      echo " curl -i $url"
       curl -i "${url}?type=tail&lines=200"
       echo ""
       ;;
     *)
-      echo -e "Usage:\n  ldt (deploy|start|stop)"
+      echo -e "Usage:\n  ldt (deploy|start|stop|...)"
       ;;
   esac
 }
