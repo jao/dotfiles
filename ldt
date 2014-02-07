@@ -16,11 +16,12 @@ ldt () {
     source .locatools
   fi
 
-  if [ "$machine" != "" ] && [ "${machine##*-}" != "sys1" ] && [ "$system" == "sys1" ] || [ "$system" == "system1" ]; then
+  [ "$area" == "" ] && area='registro'
+  [ "$machine" == "" ] && machine='services'
+
+  if [ "$machine" != "" ] && [ "${machine##*-}" != "sys1" ] && [ "$system" == "sys1" ]; then
     machine="${machine}-sys1"
   fi
-
-  [ "$area" == "" ] && area='registro'
 
   local url="http://deploy.${machine}.${area}.systemintegration.locaweb.com.br"
 
