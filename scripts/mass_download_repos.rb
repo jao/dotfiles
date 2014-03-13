@@ -19,12 +19,16 @@ def get_repos(group)
 end
 
 def get_groups
-  profile_page = @agent.get("http://#{URL}/profile/groups")
+  #profile_page = @agent.get("http://#{URL}/profile/groups")
+  profile_page = @agent.get("http://#{URL}")
 
   doc = Nokogiri::HTML(profile_page.body)
 
+  #puts doc.xpath('//ul[@class="well-list dash-list"]/li[@class="group-row"]/a').inspect
+
   groups = []
-  doc.xpath('//ul[@class="well-list"]/li/a[@class="group-name"]').each do |link|
+  #doc.xpath('//ul[@class="well-list"]/li/a[@class="group-name"]').each do |link|
+  doc.xpath('//ul[@class="well-list dash-list"]/li[@class="group-row"]/a').each do |link|
     groups << link.attributes['href'].to_s.gsub(/^\/groups\//,'')
   end
   groups
@@ -49,18 +53,28 @@ page = form.submit form.buttons.first
 groups_to_download = config['groups_from_gitlab'] ? get_groups : config['groups']
 
 # loop through groups
-groups_to_download.each do |group|
-  puts "\e[30;43m Reading repos from group: " + group + " \e[0m"
-
-  get_repos(group).each do |url|
-    base_dir, repo = url.split('/')
-    puts "\e[33m  " + repo + " \e[0m"
-
-    # create the base dir if necessary
-    FileUtils.mkdir(base_dir) unless File.directory?(base_dir) || File.directory?(group)
-
-    # clone the repo
-    `git clone git@#{URL}:#{url}.git #{url}` unless File.directory?(url)
-  end
-  puts
+all_repos = []
+groups_to_download.each.with_index(1) do |group, g_index|
+  puts "\e[30;43m #{"%03d" % g_index}/#{"%03d" % groups_to_download.size} - Reading repos from group: #{group} \e[0m"
+  repos = get_repos(group)
+  all_repos.concat repos
+  puts "   found #{repos.size} repositories in this group."
 end
+puts "found #{all_repos.size} repositories to work with."
+
+puts "\e[30;43m Reading repositories from a list of #{all_repos.size} \e[0m"
+all_repos.each.with_index(1) do |url, r_index|
+  base_dir, repo = url.split('/')
+  puts "\e[33m  #{"%03d" % r_index}/#{"%03d" % all_repos.size} - #{repo} \e[0m"
+
+  # create the base dir if necessary
+  FileUtils.mkdir(base_dir) unless File.directory?(base_dir)
+
+  # clone the repo
+  if File.directory?(url)
+    puts "skipping #{url}, directory exists."
+  else
+    `git clone git@#{URL}:#{url}.git #{url}`
+  end
+end
+puts
