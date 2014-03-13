@@ -8,7 +8,7 @@ require 'open-uri'
 require 'yaml'
 
 def get_repos(group)
-  group_page = @agent.get("https://code.locaweb.com.br/groups/#{group}")
+  group_page = @agent.get("http://#{URL}/groups/#{group}")
   doc = Nokogiri::HTML(group_page.body)
 
   repos = []
@@ -19,7 +19,7 @@ def get_repos(group)
 end
 
 def get_groups
-  profile_page = @agent.get("https://code.locaweb.com.br/profile/groups")
+  profile_page = @agent.get("http://#{URL}/profile/groups")
 
   doc = Nokogiri::HTML(profile_page.body)
 
@@ -35,8 +35,10 @@ end
 
 config = YAML.load_file File.join(File.dirname(__FILE__), 'mass_download_repos_config.yml')
 
+URL = config['url']
+
 # login page
-page = @agent.get("https://code.locaweb.com.br/users/sign_in")
+page = @agent.get("http://#{URL}/users/sign_in")
 
 # login
 form = page.forms.first
@@ -58,7 +60,7 @@ groups_to_download.each do |group|
     FileUtils.mkdir(base_dir) unless File.directory?(base_dir) || File.directory?(group)
 
     # clone the repo
-    `git clone git@code.locaweb.com.br:#{url}.git #{url}` unless File.directory?(url)
+    `git clone git@#{URL}:#{url}.git #{url}` unless File.directory?(url)
   end
   puts
 end
