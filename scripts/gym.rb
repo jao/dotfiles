@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
-# require "~/projects/dotfiles/scripts/util.rb"
-require "~/projects/dotfiles/scripts/integer_class.rb"
-require "~/projects/dotfiles/scripts/time_class.rb"
+# require "~/dotfiles/scripts/util.rb"
+require "~/dotfiles/scripts/integer_class.rb"
+require "~/dotfiles/scripts/time_class.rb"
 trap("INT") {
   print "\n\n"
   exit 128
@@ -20,7 +20,7 @@ def text_animation p
     else
       ['.',' ']
   end
-  
+
   ANIMATION_COUNTER[p] = 0 if !ANIMATION_COUNTER.key?(p)
   s = frames[ANIMATION_COUNTER[p]%frames.size]
   duration = ANIMATION_COUNTER[p].to_t
