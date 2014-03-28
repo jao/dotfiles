@@ -15,14 +15,16 @@ _pull_fetch () {
 _list_directories () {
 for dir in `ls`; do
   if [ -d $dir ]; then
-    if [ -d $dir/.git ]; then
+    if [ -d $dir/.git ] && [ ! -f .pull_all_ignore ]; then
       cd $dir
       _pull_fetch $dir
       cd ..
     else
-      cd $dir
-      _list_directories
-      cd ..
+      if [ ! -f .pull_all_ignore ]; then
+        cd $dir
+        _list_directories
+        cd ..
+      fi
     fi
   fi
 done
