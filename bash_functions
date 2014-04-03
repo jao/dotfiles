@@ -383,7 +383,7 @@ _my_prompt () {
   # battery=$(ioreg -l | awk '$3~/Capacity/{c[$3]=$5}END{OFMT="%.2f%";max=c["\"MaxCapacity\""];print(max>0?100*c["\"CurrentCapacity\""]/max:"?")}')
   # battery=$(pmset -g batt)
 
-  DATERIGHT=$(($COLUMNS - 0))
+  DATERIGHT=$(($COLUMNS + 16))
   HEADLINE=$(printf "%-${DATERIGHT}s %s" "\[\e[1;33m\]\u$NC|\[\e[1;32m\]\h$NC" "$GRAY\D{%d/%m/%Y} \t$NC")
   PS1="$HEADLINE\n\[\e[1;34m\]\w$NC" # basic ps1
 
