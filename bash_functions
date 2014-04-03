@@ -363,6 +363,7 @@ NC="\e[0m" # no color
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 _my_prompt () {
+  local last_command=$?
   # basic variables
   local STATE=''; local RVM=''; local STATUS=''; local ini=''; local end='';
   local BC=$GREEN # base color
@@ -374,7 +375,9 @@ _my_prompt () {
     RVM="\e[36m$RVM_RUBY\e[0m" # rvm ruby
     [ "$RVM_GEMSET" != "" ] && RVM="$RVM \e[1;30m$RVM_GEMSET\e[0m"
   fi
-  PS1="\e[1;33m\u\e[0m|\e[1;32m\h\e[0m \e[1;34m\w\e[0m" # basic ps1
+  DATERIGHT=$(($COLUMNS - 0))
+  HEADLINE=$(printf "%-${DATERIGHT}s %s" "\e[1;33m\u$NC|\e[1;32m\h$NC" "$GRAY\D{%d/%m/%Y} \t$NC")
+  PS1="$HEADLINE\n\e[1;34m\w$NC" # basic ps1
 
   # GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
   local GITBRANCH=`__git_ps1 "%s" | awk '{print $1;}'`
@@ -414,6 +417,12 @@ _my_prompt () {
     PS1="${PS1} ${ini}${RVM}${end}"
   fi
 
-  PS1="${PS1} \n\$ "
+  if [[ $last_command == 0 ]]; then
+    checkornot="$GREEN\342\234\223$NC"
+  else
+    checkornot="$RED\342\234\227$NC"
+  fi
+
+  PS1="\n${PS1}\n${checkornot} \$ "
 }
 PROMPT_COMMAND=_my_prompt
