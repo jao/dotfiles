@@ -361,6 +361,10 @@ WHITE="\[\e[1;37m\]"
 YELLOW="\[\e[0;33m\]"
 NC="\[\e[0m\]" # no color
 
+_battery_status () {
+  local response=$(pmset -g batt | )
+}
+
 export GIT_PS1_SHOWDIRTYSTATE=1
 _my_prompt () {
   local last_command=$?
@@ -376,7 +380,8 @@ _my_prompt () {
     [ "$RVM_GEMSET" != "" ] && RVM="$RVM \[\e[1;30m\]${RVM_GEMSET}${NC}"
   fi
 
-  #battery=$(ioreg -l | awk '$3~/Capacity/{c[$3]=$5}END{OFMT="%.2f%";max=c["\"MaxCapacity\""];print(max>0?100*c["\"CurrentCapacity\""]/max:"?")}')
+  # battery=$(ioreg -l | awk '$3~/Capacity/{c[$3]=$5}END{OFMT="%.2f%";max=c["\"MaxCapacity\""];print(max>0?100*c["\"CurrentCapacity\""]/max:"?")}')
+  # battery=$(pmset -g batt)
 
   DATERIGHT=$(($COLUMNS - 0))
   HEADLINE=$(printf "%-${DATERIGHT}s %s" "\[\e[1;33m\]\u$NC|\[\e[1;32m\]\h$NC" "$GRAY\D{%d/%m/%Y} \t$NC")
