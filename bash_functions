@@ -351,15 +351,15 @@ iso2img () {
 }
 
 # Colors
-BLUE="\e[0;34m"
-CYAN="\e[0;36m"
-GRAY="\e[1;30m"
-GREEN="\e[0;32m"
-PINK="\e[0;35m"
-RED="\e[0;31m"
-WHITE="\e[1;37m"
-YELLOW="\e[0;33m"
-NC="\e[0m" # no color
+BLUE="\[\e[0;34m\]"
+CYAN="\[\e[0;36m\]"
+GRAY="\[\e[1;30m\]"
+GREEN="\[\e[0;32m\]"
+PINK="\[\e[0;35m\]"
+RED="\[\e[0;31m\]"
+WHITE="\[\e[1;37m\]"
+YELLOW="\[\e[0;33m\]"
+NC="\[\e[0m\]" # no color
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 _my_prompt () {
@@ -372,12 +372,15 @@ _my_prompt () {
     local RVM_RUBY=${RVM_STRING%%@*}
     local RVM_GEMSET=${RVM_STRING##*@}
     [ "$RVM_RUBY" == "$RVM_GEMSET" ] && RVM_GEMSET=""
-    RVM="\e[36m$RVM_RUBY\e[0m" # rvm ruby
-    [ "$RVM_GEMSET" != "" ] && RVM="$RVM \e[1;30m$RVM_GEMSET\e[0m"
+    RVM="${CYAN}${RVM_RUBY}${NC}" # rvm ruby
+    [ "$RVM_GEMSET" != "" ] && RVM="$RVM \[\e[1;30m\]${RVM_GEMSET}${NC}"
   fi
+
+  #battery=$(ioreg -l | awk '$3~/Capacity/{c[$3]=$5}END{OFMT="%.2f%";max=c["\"MaxCapacity\""];print(max>0?100*c["\"CurrentCapacity\""]/max:"?")}')
+
   DATERIGHT=$(($COLUMNS - 0))
-  HEADLINE=$(printf "%-${DATERIGHT}s %s" "\e[1;33m\u$NC|\e[1;32m\h$NC" "$GRAY\D{%d/%m/%Y} \t$NC")
-  PS1="$HEADLINE\n\e[1;34m\w$NC" # basic ps1
+  HEADLINE=$(printf "%-${DATERIGHT}s %s" "\[\e[1;33m\]\u$NC|\[\e[1;32m\]\h$NC" "$GRAY\D{%d/%m/%Y} \t$NC")
+  PS1="$HEADLINE\n\[\e[1;34m\]\w$NC" # basic ps1
 
   # GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
   local GITBRANCH=`__git_ps1 "%s" | awk '{print $1;}'`
@@ -422,6 +425,7 @@ _my_prompt () {
   else
     checkornot="$RED\342\234\227$NC"
   fi
+
 
   PS1="\n${PS1}\n${checkornot} \$ "
 }
