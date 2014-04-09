@@ -362,7 +362,7 @@ YELLOW="\[\e[0;33m\]"
 NC="\[\e[0m\]" # no color
 
 _battery_status () {
-  local response=$(pmset -g batt | )
+  local response=$(pmset -g batt)
 }
 
 export GIT_PS1_SHOWDIRTYSTATE=1
