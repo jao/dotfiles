@@ -1,0 +1,5 @@
+echo "git branch/sed"
+time (c=1; while [ $c -le 1000 ]; do git branch 2>&1 | grep \* | sed 's/* //' &>-; (( c++ )); done)
+
+echo "__git_ps1"
+time (c=1; while [ $c -le 1000 ]; do __git_ps1 "%s" | awk '{print $1;}' &>-; (( c++ )); done)

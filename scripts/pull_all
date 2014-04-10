@@ -6,10 +6,14 @@
 
 _pull_fetch () {
   local dir=`pwd`
-  _style_title "Updating ${dir#\/Users\/jao\/projects}"
-  git fetch --all 2>/dev/null
-  git pull --rebase 2>/dev/null
-  echo;
+
+  remote=$(git remote)
+  printf "\r\e[K$(_style_colorize "${dir#\/Users\/jao\/projects}" 32) => Fetching $remote"
+  git fetch --all 2>&1 | tr '\n' ' '
+
+  branch=$(git branch 2>&1 | grep \* | sed 's/* //')
+  printf "\r\e[K$(_style_colorize "${dir#\/Users\/jao\/projects}" 32) => Pulling $branch, "
+  git pull --rebase 2>&1 | tr '\n' ' ' | sed "s/Current branch ${branch}/branch/g"
 }
 
 _list_directories () {

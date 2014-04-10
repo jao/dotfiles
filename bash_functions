@@ -387,8 +387,8 @@ _my_prompt () {
   HEADLINE=$(printf "%-${DATERIGHT}s %s" "\[\e[1;33m\]\u$NC|\[\e[1;32m\]\h$NC" "$GRAY\D{%d/%m/%Y} \t$NC")
   PS1="$HEADLINE\n\[\e[1;34m\]\w$NC" # basic ps1
 
-  # GITBRANCH=`git branch 2> /dev/null | grep \* | sed 's/* //'`
-  local GITBRANCH=`__git_ps1 "%s" | awk '{print $1;}'`
+  local GITBRANCH=`git branch 2>&1 | grep \* | sed 's/* //'`
+  # local GITBRANCH=`__git_ps1 "%s" | awk '{print $1;}'`
   if [ "$GITBRANCH" != "" ]; then
     # delimiters
     ini=""; end=""; separator=" "

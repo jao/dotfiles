@@ -73,7 +73,7 @@ _style_colorize () {
   [ -n "$2" ] && FC="${FC}${2};" || FC="${FC}${D_FG};"
   [ -n "$3" ] && FC="${FC}${3}m" || FC="${FC}${D_BG}m"
   msg="$1"
-  echo -e "${FC}${msg}${RC}";
+  echo -en "${FC}${msg}${RC}";
 }
 
 _style_center () {
