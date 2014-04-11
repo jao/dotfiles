@@ -4,15 +4,17 @@
 
 . $DOTFILES_PATH/style_functions
 
+BASEDIR=$(basename `pwd`)
+
 _pull_fetch () {
-  local dir=`pwd`
+  local DIR=`pwd`
 
   remote=$(git remote)
-  printf "\r\e[K$(_style_colorize "${dir#\/Users\/jao\/projects}" 32) => Fetching $remote"
+  printf "\r\e[K$(_style_colorize "${DIR#*$BASEDIR/}" 32) => Fetching $remote"
   git fetch --all 2>&1 | tr '\n' ' '
 
   branch=$(git branch 2>&1 | grep \* | sed 's/* //')
-  printf "\r\e[K$(_style_colorize "${dir#\/Users\/jao\/projects}" 32) => Pulling $branch, "
+  printf "\r\e[K$(_style_colorize "${DIR#*$BASEDIR/}" 32) => Pulling $remote/$branch, "
   git pull --rebase 2>&1 | tr '\n' ' ' | sed "s/Current branch ${branch}/branch/g"
 }
 

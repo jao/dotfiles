@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 require "fileutils";
-(1..20).each_with_index do |i,n|
-  FileUtils.mv(Dir.glob("Avatar - The Last Airbender Ep. #{"%02d" % i}*.mkv").first, "Avatar.The.Last.Airbender.S03E#{"%02d" % (n + 1)}.mkv")
-  FileUtils.mv(Dir.glob("Avatar - The Last Airbender Ep. #{"%02d" % i}*.srt").first, "Avatar.The.Last.Airbender.S03E#{"%02d" % (n + 1)}.srt")
+Dir.glob("*.*").sort.each_with_index do |file,n|
+  # title = file.gsub(/^\d+\s.\s|\.\w{3}/,'')
+  FileUtils.mv(file, "Serial.Experiments.Lain.S01E#{"%02d" % (n + 1)}.720p.mkv")
 end
