@@ -107,14 +107,24 @@ function ask {
 }
 
 gtag() {
-  VERSION=$(git describe --tags --abbrev=0 --match "$1*" `git rev-list --tags --max-count=1`)
-  echo "Current version: $(_style_colorize $VERSION 33)"
-  if [ -n "${VERSION##*.}" ] && [ "${VERSION##*.}" -eq "${VERSION##*.}" ] 2>/dev/null; then
-    NEW_VERSION="${VERSION%.*}.`expr ${VERSION##*.} + 1`"
-    if ask "Do you want to use the new tag '$(_style_colorize $NEW_VERSION 32)'?" Y; then
-      git tag ${NEW_VERSION} -m ""
-      git push --tags
+  TAG=$(git rev-list --tags --max-count=1 2> /dev/null)
+  [ "$?" == "0" ] || TAG=''
+  if [ -n "$TAG" ]; then
+    if [ -n "$1" ]; then
+      VERSION=$(git describe --tags --abbrev=0 --match "$1*" $TAG)
+    else
+      VERSION=$(git describe --tags --abbrev=0 $TAG)
     fi
+    echo "Current version: $(_style_colorize $VERSION 33)"
+    if [ -n "${VERSION##*.}" ] && [ "${VERSION##*.}" -eq "${VERSION##*.}" ] 2>/dev/null; then
+      NEW_VERSION="${VERSION%.*}.`expr ${VERSION##*.} + 1`"
+      if ask "Do you want to use the new tag '$(_style_colorize $NEW_VERSION 32)'?" Y; then
+        git tag ${NEW_VERSION} -m ""
+        git push --tags
+      fi
+    fi
+  else
+    echo "No tags were found..."
   fi
 }
 
