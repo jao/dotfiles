@@ -147,9 +147,3 @@ complete -C $DOTFILES_PATH/project_completion -o default pcd
 # pow completion
 complete -C $DOTFILES_PATH/pow_completion -o default pow
 
-# locaweb deploy tools and completion
-if [ -f $DOTFILES_PATH/ldt ]; then
-  source $DOTFILES_PATH/ldt
-  [ -f $DOTFILES_PATH/ldt_completion ] && complete -C $DOTFILES_PATH/ldt_completion -o default ldt
-fi
-
