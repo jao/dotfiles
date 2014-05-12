@@ -17,7 +17,7 @@ BREW_PREFIX=$(brew --prefix)
 
 # go root
 if [ -d $BREW_PREFIX ]; then
-  export GOROOT=$BREW_PREFIX/Cellar/go/1.2
+  export GOROOT=$BREW_PREFIX/Cellar/go/1.2.2/libexec
 fi
 export GOPATH=$HOME/go
 
@@ -36,7 +36,7 @@ export PATH=/usr/local/bin:$PATH
 export PATH=$PATH:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/bin
 export PATH=$PATH:${DOTFILES_PATH}/scripts          # dotfiles scripts
 export PATH=$PATH:${ANDROID_SDK_ROOT}/tools         # android sdk
-export PATH=$PATH:${GOROOT}/bin:${GOPATH}/bin       # go lang
+export PATH=$PATH:${GOROOT}/libexec/bin:${GOPATH}/bin       # go lang
 export PATH=$PATH:$HOME/.rvm/bin                    # rvm
 export PATH=$PATH:/usr/local/heroku/bin             # heroku
 
