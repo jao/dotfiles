@@ -20,7 +20,7 @@ do
   if [ -f $DOTFILES_DIR/$FILE ] || [ -d $DOTFILES_DIR/$FILE ]; then
     ln -snf $DOTFILES_DIR/$FILE .${FILE##*/}
   fi
-  ls -laG .${FILE##*/}
+  ls -la --color .${FILE##*/}
 done
 
 # Vim
