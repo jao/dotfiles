@@ -19,10 +19,9 @@ alias r="rails"
 alias be="bundle exec"
 
 # editor related shortcuts
-alias v="mvim"
+alias v="vim"
 
 alias vim="vim -u ~/.vim/vimrc"
-alias mvim="mvim -u ~/.vim/vimrc"
 
 # git related shortcuts
 alias g="git"
@@ -148,10 +147,10 @@ gls() {
 }
 
 # ls aliases
-alias ls="ls -G"
-alias ll="ls -Glh"
-alias lah="ls -GlAh" # list all but hide . and ..
-alias la="ls -Gla" # List all files colorized in long format, including dot files
+alias ls="ls --color"
+alias ll="ls -lh --color"
+alias lah="ls -lAh --color" # list all but hide . and ..
+alias la="ls -la --color" # List all files colorized in long format, including dot files
 alias lsd='ls -l | grep "^d"' # List only directories
 
 # IP addresses
