@@ -12,7 +12,7 @@ fi
 # reading the profile
 [ -f '~/.bash_profile' ] && source ~/.bash_profile;
 
-cd $HOME
+cd ~;
 
 for FILE in "ack_completion" "bash_profile" "bash_functions" "gemrc" "gitconfig" "gitignore_global" "aprc" "rvmrc" "ackrc" "vim" "vim/gvimrc" "vim/vimrc" "fonts" "rspec"
 do
