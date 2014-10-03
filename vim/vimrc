@@ -126,7 +126,7 @@ let g:gist_post_private = 1 " create private gist by default
 " fugitive.vim
 Bundle 'tpope/vim-fugitive'
 
-Bundle 'https://github.com/tpope/vim-endwise'
+Bundle 'tpope/vim-endwise'
 
 " Airline
 Bundle 'bling/vim-airline'
@@ -142,12 +142,12 @@ Bundle "honza/vim-snippets"
 " Snippets
 Bundle "gmarik/snipmate.vim"
 
-Bundle 'https://github.com/tpope/vim-surround'
-Bundle 'https://github.com/tpope/vim-unimpaired'
+Bundle 'tpope/vim-surround'
+Bundle 'tpope/vim-unimpaired'
 
-Bundle 'https://github.com/scrooloose/nerdtree'
+Bundle 'scrooloose/nerdtree'
 
-Bundle 'https://github.com/troydm/easybuffer.vim'
+Bundle 'troydm/easybuffer.vim'
 
 " Fancy
 Bundle 'bling/vim-airline'
@@ -201,7 +201,7 @@ noremap <LocalLeader># "ayiw:Ack <C-r>a<CR>
 vnoremap <LocalLeader># "ay:Ack <C-r>a<CR>
 
 " Command-T
-Bundle "git://git.wincent.com/command-t.git"
+Bundle "wincent/command-t.git"
 let g:CommandTMatchWindowAtTop=1 " show window at top
 
 " Navigation
