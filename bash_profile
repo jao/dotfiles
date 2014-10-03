@@ -34,11 +34,12 @@ export DOTFILES_PATH=~/dotfiles
 # PATH
 export PATH=/usr/local/bin:$PATH
 export PATH=$PATH:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/bin
-export PATH=$PATH:${DOTFILES_PATH}/scripts          # dotfiles scripts
-export PATH=$PATH:${ANDROID_SDK_ROOT}/tools         # android sdk
-export PATH=$PATH:${GOROOT}/libexec/bin:${GOPATH}/bin       # go lang
-export PATH=$PATH:$HOME/.rvm/bin                    # rvm
-export PATH=$PATH:/usr/local/heroku/bin             # heroku
+export PATH=$PATH:${DOTFILES_PATH}/scripts            # dotfiles scripts
+export PATH=$PATH:${ANDROID_HOME}/tools               # android sdk
+export PATH=$PATH:${GOROOT}/libexec/bin:${GOPATH}/bin # go lang
+export PATH=$PATH:/usr/local/heroku/bin               # heroku
+
+export PATH=`echo $PATH | tr ':' '\n' | uniq | tr '\n' ':'`
 
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
@@ -103,40 +104,33 @@ set input-meta on
 set output-meta on
 set convert-meta off
 
-# load rvm stuff
-if [ -d ~/.rvm ]; then
-  . ~/.rvm/scripts/rvm
-  . ~/.rvm/scripts/completion
-fi
-
 # load my style functions
-. $DOTFILES_PATH/style_functions
+source $DOTFILES_PATH/style_functions
 
 # load my functions
-. ~/.bash_functions
+source $HOME/.bash_functions
 
 # completion files
 
-if [ -f $BREW_PREFIX/etc/bash_completion ]; then
-  . $BREW_PREFIX/etc/bash_completion
-fi
-if [ -d $BREW_PREFIX/etc/bash_completion.d ]; then
-  # load git awesomeness
-  [ -f $BREW_PREFIX/etc/bash_completion.d/git-completion.bash ] && . $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
-  [ -f $BREW_PREFIX/etc/bash_completion.d/git-prompt.sh ] && . $BREW_PREFIX/etc/bash_completion.d/git-prompt.sh
-  # load android adb
-  [ -f $BREW_PREFIX/etc/bash_completion.d/adb-completion.bash ] && . $BREW_PREFIX/etc/bash_completion.d/adb-completion.bash
-  # go lang completion
-  [ -f $BREW_PREFIX/etc/bash_completion.d/go-completion.bash ] && . $BREW_PREFIX/etc/bash_completion.d/go-completion.bash
-fi
+[ -f $BREW_PREFIX/etc/bash_completion ] && source $BREW_PREFIX/etc/bash_completion
 
-[ -f $DOTFILES_PATH/completion-ruby/completion-ruby-all ] && . $DOTFILES_PATH/completion-ruby/completion-ruby-all
+# load git awesomeness
+[ -f $BREW_PREFIX/etc/bash_completion.d/git-completion.bash ] && source $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
+[ -f $BREW_PREFIX/etc/bash_completion.d/git-prompt.sh ] && source $BREW_PREFIX/etc/bash_completion.d/git-prompt.sh
+
+# load android adb
+[ -f $BREW_PREFIX/etc/bash_completion.d/adb-completion.bash ] && source $BREW_PREFIX/etc/bash_completion.d/adb-completion.bash
+
+# go lang completion
+[ -f $BREW_PREFIX/etc/bash_completion.d/go-completion.bash ] && source $BREW_PREFIX/etc/bash_completion.d/go-completion.bash
+
+[ -f $DOTFILES_PATH/completion-ruby/completion-ruby-all ] && source $DOTFILES_PATH/completion-ruby/completion-ruby-all
 
 # Homebrew
-. $BREW_PREFIX/Library/Contributions/brew_bash_completion.sh
+source $BREW_PREFIX/Library/Contributions/brew_bash_completion.sh
 
 # load ack completion
-. ~/.ack_completion
+source $HOME/.ack_completion
 
 # rake completion
 complete -C $DOTFILES_PATH/rake_completion -o default rake
@@ -147,3 +141,7 @@ complete -C $DOTFILES_PATH/project_completion -o default pcd
 # pow completion
 complete -C $DOTFILES_PATH/pow_completion -o default pow
 
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+
+# load rvm stuff
+[ -d "$HOME/.rvm" ] && source "$HOME/.rvm/scripts/completion"
