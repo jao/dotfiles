@@ -38,6 +38,7 @@ export PATH=$PATH:${DOTFILES_PATH}/scripts            # dotfiles scripts
 export PATH=$PATH:${ANDROID_HOME}/tools               # android sdk
 export PATH=$PATH:${GOROOT}/libexec/bin:${GOPATH}/bin # go lang
 export PATH=$PATH:/usr/local/heroku/bin               # heroku
+export PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
 
 export PATH=`echo $PATH | tr ':' '\n' | uniq | tr '\n' ':'`
 
