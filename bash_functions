@@ -148,10 +148,10 @@ gls() {
 }
 
 # ls aliases
-alias ls="ls -G"
-alias ll="ls -Glh"
-alias lah="ls -GlAh" # list all but hide . and ..
-alias la="ls -Gla" # List all files colorized in long format, including dot files
+alias ls="ls --color"
+alias ll="ls -lh"
+alias lah="ls -lAh" # list all but hide . and ..
+alias la="ls -la" # List all files colorized in long format, including dot files
 alias lsd='ls -l | grep "^d"' # List only directories
 
 # IP addresses
