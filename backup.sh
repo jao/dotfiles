@@ -13,6 +13,7 @@ BACKUP_DIR=~/Dropbox/backup/macosx_dev_env
 # Homebrew
 
 printf "%s\n" `brew list` > ~/.backup/brew
+printf "%s\n" `brew cask list` > ~/.backup/brew_cask
 
 # Cellar
 
