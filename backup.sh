@@ -1,10 +1,10 @@
-#!/usb/bin/sh
+#!/usr/bin/env bash
 
 # backup environment files
 
 BACKUP_DIR=~/Dropbox/backup/macosx_dev_env
 [ -d $BACKUP_DIR ] || mkdir -p $BACKUP_DIR
-[ -d $BACKUP_DIR ] && ln -nfs ~/.macosx_backup $BACKUP_DIR
+[ -d $BACKUP_DIR ] && ln -nfs $BACKUP_DIR ~/.backup
 
 # home folder
 

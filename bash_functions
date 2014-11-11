@@ -7,36 +7,6 @@ gc() {
     git commit -v "$@"
 }
 
-# https://gist.github.com/davejamesmiller/1965569
-ask() {
-  while true; do
-    if [ "${2:-}" = "Y" ]; then
-        prompt="Y/n"
-        default=Y
-    elif [ "${2:-}" = "N" ]; then
-        prompt="y/N"
-        default=N
-    else
-        prompt="y/n"
-        default=
-    fi
-
-    # Ask the question
-    read -p "$1 [$prompt] " REPLY
-
-    # Default?
-    if [ -z "$REPLY" ]; then
-        REPLY=$default
-    fi
-
-    # Check if the reply is valid
-    case "$REPLY" in
-      Y*|y*) return 0 ;;
-      N*|n*) return 1 ;;
-    esac
-  done
-}
-
 gtag() {
   TAG=$(git rev-list --tags --max-count=1 2> /dev/null)
   [ "$?" == "0" ] || TAG=''
@@ -78,10 +48,40 @@ gls() {
   glog --pickaxe-regex "-S$query" "$@"
 }
 
+# taken from http://github.com/bryanl/zshkit/
+github-url () { git config remote.origin.url | sed -En 's/git(@|:\/\/)github.com(:|\/)(.+)\/(.+).git/https:\/\/github.com\/\3\/\4/p'; }
+github () { open $(github-url); }
+git-scoreboard () { git log | grep '^Author' | sort | uniq -ci | sort -r; }
 
+# https://gist.github.com/davejamesmiller/1965569
+ask() {
+  while true; do
+    if [ "${2:-}" = "Y" ]; then
+        prompt="Y/n"
+        default=Y
+    elif [ "${2:-}" = "N" ]; then
+        prompt="y/N"
+        default=N
+    else
+        prompt="y/n"
+        default=
+    fi
 
-# changing directory to project
-pcd () { cd ~/projects/$1; }
+    # Ask the question
+    read -p "$1 [$prompt] " REPLY
+
+    # Default?
+    if [ -z "$REPLY" ]; then
+        REPLY=$default
+    fi
+
+    # Check if the reply is valid
+    case "$REPLY" in
+      Y*|y*) return 0 ;;
+      N*|n*) return 1 ;;
+    esac
+  done
+}
 
 # reload source
 reload () { source ~/.bash_profile; }
@@ -89,21 +89,10 @@ reload () { source ~/.bash_profile; }
 # list directory after cd | -p parameter will run git pull after ls when it is a git repo
 cd () { if [ "$1" == "-p" ]; then builtin cd "${2:-$HOME}" && ls; [ -d ".git" ] && git pull; else builtin cd "${@:-$HOME}" && ls; fi; }
 
-# cd && pull
-cdp () { builtin cd "${@:-$HOME}" && ls; if [ -d ".git" ]; then git pull; fi }
-
-# mkdir, cd into it
-mkcd () { mkdir -p "$*"; cd "$*"; }
-
 # mv verbose
 mv () { /bin/mv -v $@; }
 
 man2pdf () { man -t $* | open -f -a Preview; }
-
-# taken from http://github.com/bryanl/zshkit/
-github-url () { git config remote.origin.url | sed -En 's/git(@|:\/\/)github.com(:|\/)(.+)\/(.+).git/https:\/\/github.com\/\3\/\4/p'; }
-github () { open $(github-url); }
-git-scoreboard () { git log | grep '^Author' | sort | uniq -ci | sort -r; }
 
 # get the goo.gl
 googl () {
@@ -297,7 +286,6 @@ _my_prompt () {
   else
     checkornot="$RED\342\234\227$NC"
   fi
-
 
   PS1="\n${PS1}\n${checkornot} \$ "
 }
