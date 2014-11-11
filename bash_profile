@@ -31,6 +31,10 @@ export LANG="en_US"
 # load ruby completions from dotfiles
 export DOTFILES_PATH=~/dotfiles
 
+# Larger bash history (default is 500)
+export HISTFILESIZE=10000
+export HISTSIZE=10000
+
 # PATH
 export PATH=/usr/local/bin:$PATH
 export PATH=$PATH:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/bin

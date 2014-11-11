@@ -1,9 +1,5 @@
 #!/usr/bin/env bash
 
-# Larger bash history (default is 500)
-export HISTFILESIZE=10000
-export HISTSIZE=10000
-
 # git related function
 gc() {
   git diff --cached | grep '\btap[ph]\b' >/dev/null &&
@@ -12,7 +8,7 @@ gc() {
 }
 
 # https://gist.github.com/davejamesmiller/1965569
-function ask {
+ask() {
   while true; do
     if [ "${2:-}" = "Y" ]; then
         prompt="Y/n"
