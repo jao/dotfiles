@@ -1,0 +1,204 @@
+[ -f "$DOTFILES_PATH/scripts/vtex.conf" ] && source $DOTFILES_PATH/scripts/vtex.conf;
+vtex(){
+  [ "$VTEX_API_KEY" == "" ] && echo "missing configuration" && return 1;
+  case $1 in
+    order)
+      case $2 in
+        list)
+          curl -i -X GET \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: application/json' \
+            -H "x-vtex-api-appKey: $VTEX_API_KEY" \
+            -H "x-vtex-api-appToken: $VTEX_API_TOKEN" \
+            -d '' $VTEX_OMS_API_URL?an=$VTEX_STORE_ID;;
+        find)
+          [ "$3" == "" ] && echo "missing order id" && return 135;
+          curl -i -X GET \
+            -H 'Content-Type: application/json' \
+            -H 'Accept: application/json' \
+            -H "x-vtex-api-appKey: $VTEX_API_KEY" \
+            -H "x-vtex-api-appToken: $VTEX_API_TOKEN" \
+            -d '' $VTEX_OMS_API_URL/$3?an=$VTEX_STORE_ID;;
+        *)
+          echo "missing parameters";
+          return 131;;
+      esac;;
+    # price)
+    #   ;;
+    *)
+      echo "not implemented yet";
+      return 11;;
+  esac;
+}
+
+# __vtex_types=$(vtex --help=types 2>/dev/null | perl -ne 'print "$1 no$1 " if /^\s+--\[no\](\S+)\s+/' 2>/dev/null)
+
+# __vtex_typeopts=""
+
+# for type in $__vtex_types ; do
+#   __vtex_typeopts="${__vtex_typeopts} --${type}"
+# done
+
+# _vtex() {
+#   local lngopt shtopt clropt
+#   local cur prev
+
+#   COMPREPLY=()
+#   cur=$(_get_cword "=")
+#   prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+#   _expand || return 0
+
+#   # these options are final
+#   if [[ ${COMP_WORDS[@]} == *+([[:space:]])--@(help|man|th+([pt])+(t)|version)+([[:space:]])* ]] ; then
+#     return 0
+#   fi
+
+#   lngopt='
+#     --after-context=
+#     --all-types
+#     --before-context=
+#     --break
+#     --nobreak
+#     --color
+#     --nocolor
+#     --colour
+#     --nocolour
+#     --color-filename=
+#     --color-match=
+#     --column
+#     --context=
+#     --count
+#     --env
+#     --noenv
+#     --files-with-matches
+#     --files-without-matches
+#     --flush
+#     --follow
+#     --nofollow
+#     --group
+#     --nogroup
+#     --heading
+#     --noheading
+#     --ignore-case
+#     --ignore-dir=
+#     --noignore-dir=
+#     --invert-match
+#     --line=
+#     --literal
+#     --match
+#     --max-count=
+#     --no-filename
+#     --output=
+#     --pager=
+#     --nopager
+#     --passthru
+#     --print0
+#     --recurse
+#     --norecurse
+#     --rc=
+#     --smart-case
+#     --nosmart-case
+#     --sort-files
+#     --type=
+#     --type-add
+#     --type-set
+#     --unrestricted
+#     --with-filename
+#     --word-regexp
+#   '
+#   fnlopt='
+#     --help
+#     --man
+#     --thpppt
+#     --version
+#   '
+#   shtopt='
+#     -a -A -B -C -c
+#     -f -G -g -H -h
+#     -i -l -L -m -n
+#     -o -Q -r -R -u
+#     -v -w -1
+#   '
+#   clropt='
+#     clear
+#     reset
+#     dark
+#     bold
+#     underline
+#     underscore
+#     blink
+#     reverse
+#     concealed
+#     black
+#     red
+#     green
+#     yellow
+#     blue
+#     magenta
+#     on_black
+#     on_red
+#     on_green
+#     on_yellow
+#     on_blue
+#     on_magenta
+#     on_cyan
+#     on_white
+#   '
+
+#   # these options require an argument
+#   if [[ "${prev}" == -@(A|B|C|G|g|-match) ]] ; then
+#     return 0
+#   fi
+
+#   case "${cur}" in
+#     --?*=*)
+#           _split_longopt || return 0
+
+#           case "${prev}" in
+#             --?(no)ignore-dir) # directory completion
+#                       _filedir -d
+#                       return 0;;
+#             --pager) # command completion
+#                       COMPREPLY=( $(compgen -c -- "${cur}") )
+#                       return 0;;
+#                       --rc) # file completion
+#                       _filedir
+#                       return 0;;
+#             --color-@(filename|match)) # color completion
+#                       COMPREPLY=( $(compgen -W "${clropt}" -- "${cur}") )
+#                       return 0;;
+#             --type) # type completion
+#                       COMPREPLY=( $(compgen -W "${__vtex_types}" -- "${cur}") )
+#                       return 0;;
+#           esac;;
+#     -*)
+#           # -a and -u negate the use of type options
+#           if [[ " ${COMP_WORDS[@]} " == *" -a "* || " ${COMP_WORDS[@]} " == *" -u "* ]] ; then
+#             if [[ "${COMP_CWORD}" -eq 1 ]] ; then
+#               COMPREPLY=( $(compgen -W \
+#                 "${lngopt} ${shtopt} ${fnlopt}" -- "${cur}") )
+#             else
+#               COMPREPLY=( $(compgen -W \
+#                 "${lngopt} ${shtopt}" -- "${cur}") )
+#             fi
+#           else
+#             if [[ "${COMP_CWORD}" -eq 1 ]] ; then
+#               COMPREPLY=( $(compgen -W \
+#                 "${lngopt} ${shtopt} ${fnlopt} ${__vtex_typeopts}" -- "${cur}") )
+#             else
+#               COMPREPLY=( $(compgen -W \
+#                 "${lngopt} ${shtopt} ${__vtex_typeopts}" -- "${cur}") )
+#             fi
+#           fi
+#           return 0;;
+#     *)
+#           if [[ " ${COMP_WORDS[@]} " == *" -f "* ]] ; then
+#             _filedir -d
+#           elif [[ "${prev}" != -* ]] ; then
+#             _filedir
+#           fi
+#           return 0;;
+#   esac
+# }
+# complete -F _vtex ${nospace} vtex
