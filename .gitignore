@@ -3,3 +3,4 @@
 tmp*
 vim/*
 *.yml
+*.conf
