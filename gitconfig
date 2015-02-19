@@ -21,7 +21,7 @@
   changed = green
   untracked = cyan
 [core]
-  editor = mvim -f
+  editor = subl -n -w
   whitespace = fix,-indent-with-non-tab,trailing-space,cr-at-eol
 	excludesfile = ~/.gitignore_global
 [alias]
@@ -56,23 +56,18 @@
   wc = whatchanged -p --abbrev-commit --pretty=medium
 	# Undo a `git push`
 	undopush = push -f origin HEAD^:master
-  tig = !tig
+[mergetool "Kaleidoscope"]
+  cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
 [mergetool]
-  keepBackup = false
   prompt = false
-[mergetool "mvimdiff"]
-  cmd = /usr/local/bin/mvimdiff -f $LOCAL $MERGED $REMOTE
 [merge]
-  tool = vimdiff
-	# Include summaries of merged commits in newly created merge commit messages
-	log = true
-[difftool "gvimdiff"]
-  path = /usr/local/bin/mvimdiff
-[diff]
-  tool = vimdiff
-  guitool = vimdiff
+  tool = Kaleidoscope
+[difftool "Kaleidoscope"]
+  cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [difftool]
   prompt = false
+[diff]
+  tool = Kaleidoscope
 [help]
   autocorrect = 1
 [blame]

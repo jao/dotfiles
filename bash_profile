@@ -42,6 +42,7 @@ export PATH=$PATH:${DOTFILES_PATH}/scripts            # dotfiles scripts
 export PATH=$PATH:${ANDROID_HOME}/tools               # android sdk
 export PATH=$PATH:${GOROOT}/libexec/bin:${GOPATH}/bin # go lang
 export PATH=$PATH:/usr/local/heroku/bin               # heroku
+export PATH=$PATH:$HOME/.rvm/bin                      # rvm
 export PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
 
 export PATH=`echo $PATH | tr ':' '\n' | uniq | tr '\n' ':'`
@@ -112,8 +113,14 @@ set convert-meta off
 # load my style functions
 source $DOTFILES_PATH/style_functions
 
+# load my aliases
+source $HOME/.bash_aliases
+
 # load my functions
 source $HOME/.bash_functions
+
+# load vtex api curl based calls
+source $DOTFILES_PATH/scripts/vtex-api
 
 # completion files
 

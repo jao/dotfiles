@@ -94,6 +94,15 @@ mv () { /bin/mv -v $@; }
 
 man2pdf () { man -t $* | open -f -a Preview; }
 
+# mac downloads log
+show_downloads() {
+  sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'select LSQuarantineDataURLString from LSQuarantineEvent'
+}
+
+clear_downloads() {
+  sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'
+}
+
 # get the goo.gl
 googl () {
   echo "shortening url..."
@@ -220,6 +229,11 @@ NC="\[\e[0m\]" # no color
 _battery_status () {
   local response=$(pmset -g batt)
 }
+
+_archey () {
+  archey --color
+}
+_archey
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 _my_prompt () {
