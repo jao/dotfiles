@@ -17,7 +17,6 @@ Bundle 'gmarik/vundle'
 Bundle 'kien/ctrlp.vim'
 
 " Programming {{{
-Bundle "jQuery"
 Bundle "rails.vim"
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-rails'
@@ -28,8 +27,8 @@ Bundle 'tpope/vim-markdown'
 Bundle 'wavded/vim-stylus'
 
 " frontend
+Bundle "jQuery"
 Bundle 'burnettk/vim-angular'
-
 Bundle 'matthias-guenther/hammer.vim'
 
 Bundle "mileszs/ack.vim"
@@ -37,7 +36,6 @@ nnoremap <leader>a :Ack!<space>
 
 Bundle 'matthias-guenther/hammer.vim'
 nmap <leader>p :Hammer<cr>
-
 " }}}
 
 Bundle 'tsaleh/vim-align'

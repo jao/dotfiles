@@ -12,3 +12,6 @@ cache/
 .env
 .env.*
 tmp/*.txt
+*.orig
+.capistrano/
+coverage/
