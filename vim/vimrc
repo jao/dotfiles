@@ -20,12 +20,13 @@ Bundle 'kien/ctrlp.vim'
 Bundle "rails.vim"
 Bundle 'vim-ruby/vim-ruby'
 Bundle 'tpope/vim-rails'
+Bundle 'thoughtbot/vim-rspec'
 Bundle 'nelstrom/vim-textobj-rubyblock'
 Bundle 'ecomba/vim-ruby-refactoring'
 Bundle 'tpope/vim-haml'
 Bundle 'tpope/vim-markdown'
 Bundle 'wavded/vim-stylus'
-
+Bundle 'tpope/vim-dispatch'
 " frontend
 Bundle "jQuery"
 Bundle 'burnettk/vim-angular'
@@ -46,6 +47,7 @@ Bundle 'tpope/vim-surround'
 Bundle 'tpope/vim-unimpaired'
 Bundle 'maxbrunsfeld/vim-yankstack'
 Bundle 'tpope/vim-eunuch'
+Bundle 'ngmy/vim-rubocop'
 
 Bundle 'scrooloose/nerdtree'
 nmap <C-i> :NERDTreeToggle<CR>
