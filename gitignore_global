@@ -8,7 +8,6 @@ cache/
 .ruby-gemset
 .powrc
 .powenv
-.locatools
 .env
 .env.*
 tmp/*.txt
