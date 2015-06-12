@@ -1,24 +1,17 @@
 #!/usr/bin/env bash
 
 # configurations
-export EDITOR="mvim -f --nomru -c \"au VimLeave * !open -a iTerm2\""
+export EDITOR="vim -f --nomru -c \"au VimLeave * !open -a iTerm2\""
 
 export SUBL_EDITOR="subl -w"
 
-export VIM_EDITOR="mvim -f --nomru -c \"au VimLeave * !open -a iTerm2\""
+export VIM_EDITOR="vim -f --nomru -c \"au VimLeave * !open -a iTerm2\""
 
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="1;33;40"
 
-# android sdk
-export ANDROID_HOME=/usr/local/opt/android-sdk
-
-BREW_PREFIX=$(brew --prefix)
-
 # go root
-if [ -d $BREW_PREFIX ]; then
-  export GOROOT=$BREW_PREFIX/Cellar/go/1.2.2/libexec
-fi
+export GOROOT=$BREW_PREFIX/Cellar/go/1.2.2/libexec
 export GOPATH=$HOME/go
 
 # Prefer US English and use UTF-8
@@ -39,12 +32,6 @@ export HISTSIZE=10000
 export PATH=/usr/local/bin:$PATH
 export PATH=$PATH:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/bin
 export PATH=$PATH:${DOTFILES_PATH}/scripts            # dotfiles scripts
-export PATH=$PATH:${ANDROID_HOME}/tools               # android sdk
-export PATH=$PATH:${GOROOT}/libexec/bin:${GOPATH}/bin # go lang
-export PATH=$PATH:/usr/local/heroku/bin               # heroku
-export PATH=$PATH:$HOME/.rvm/bin                      # rvm
-export PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
-
 export PATH=`echo $PATH | tr ':' '\n' | uniq | tr '\n' ':'`
 
 # Case-insensitive globbing (used in pathname expansion)
@@ -111,49 +98,31 @@ set output-meta on
 set convert-meta off
 
 # load my style functions
-source $DOTFILES_PATH/style_functions
+[ -f $DOTFILES_PATH/style_functions ] && source $DOTFILES_PATH/style_functions
 
 # load my aliases
-source $HOME/.bash_aliases
+[ -f $DOTFILES_PATH/bash_aliases ] && source $DOTFILES_PATH/bash_aliases
 
 # load my functions
-source $HOME/.bash_functions
+[ -f $DOTFILES_PATH/bash_functions ] && source $DOTFILES_PATH/bash_functions
 
 # load vtex api curl based calls
-source $DOTFILES_PATH/scripts/vtex-api
+[ -f $DOTFILES_PATH//scripts/vtex-api ] && source $DOTFILES_PATH/scripts/vtex-api
 
-# completion files
-
-[ -f $BREW_PREFIX/etc/bash_completion ] && source $BREW_PREFIX/etc/bash_completion
-
-# load git awesomeness
-[ -f $BREW_PREFIX/etc/bash_completion.d/git-completion.bash ] && source $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
-[ -f $BREW_PREFIX/etc/bash_completion.d/git-prompt.sh ] && source $BREW_PREFIX/etc/bash_completion.d/git-prompt.sh
-
-# load android adb
-[ -f $BREW_PREFIX/etc/bash_completion.d/adb-completion.bash ] && source $BREW_PREFIX/etc/bash_completion.d/adb-completion.bash
-
-# go lang completion
-[ -f $BREW_PREFIX/etc/bash_completion.d/go-completion.bash ] && source $BREW_PREFIX/etc/bash_completion.d/go-completion.bash
-
+# load ruby completion
 [ -f $DOTFILES_PATH/completion-ruby/completion-ruby-all ] && source $DOTFILES_PATH/completion-ruby/completion-ruby-all
 
-# Homebrew
-source $BREW_PREFIX/Library/Contributions/brew_bash_completion.sh
-
 # load ack completion
-source $HOME/.ack_completion
+[ -f $DOTFILES_PATH/ack_completion ] && source $DOTFILES_PATH/ack_completion
 
 # rake completion
-complete -C $DOTFILES_PATH/rake_completion -o default rake
+[ -f $DOTFILES_PATH/rake_completion ] && complete -C $DOTFILES_PATH/rake_completion -o default rake
 
 # projects completion
-complete -C $DOTFILES_PATH/project_completion -o default pcd
+[ -f $DOTFILES_PATH/project_completion ] && complete -C $DOTFILES_PATH/project_completion -o default pcd
 
-# pow completion
-complete -C $DOTFILES_PATH/pow_completion -o default pow
-
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
+# Load RVM into a shell session *as a function*
+[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
 
 # load rvm stuff
 [ -d "$HOME/.rvm" ] && source "$HOME/.rvm/scripts/completion"

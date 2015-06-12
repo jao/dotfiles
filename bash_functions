@@ -86,22 +86,11 @@ ask() {
 # reload source
 reload () { source ~/.bash_profile; }
 
-# list directory after cd | -p parameter will run git pull after ls when it is a git repo
-cd () { if [ "$1" == "-p" ]; then builtin cd "${2:-$HOME}" && ls; [ -d ".git" ] && git pull; else builtin cd "${@:-$HOME}" && ls; fi; }
+# list directory after cd
+cd () { builtin cd "${@:-$HOME}" && ls; }
 
 # mv verbose
-mv () { /bin/mv -v $@; }
-
-man2pdf () { man -t $* | open -f -a Preview; }
-
-# mac downloads log
-show_downloads() {
-  sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'select LSQuarantineDataURLString from LSQuarantineEvent'
-}
-
-clear_downloads() {
-  sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'
-}
+mv () { builtin mv -v $@; }
 
 # get the goo.gl
 googl () {
@@ -122,98 +111,8 @@ colors () { ruby ~/dotfiles/scripts/colors; }
 # clear ASL logs
 clean_asl_logs () { sudo rm -f /private/var/log/asl/*.asl; }
 
-# pow
-pow () {
-  case $1 in
-    about)
-      open "http://pow.cx";;
-    app)
-      local pow_app=`pwd`;
-      case $2 in
-        delete)
-          if [ -z "$3" ]; then
-            rm -i ~/.pow/$3
-          else
-            rm -i ~/.pow/$pow_app
-          fi;;
-        list)
-          ls -la ~/.pow/;;
-        new)
-          ln -sf $pow_app ~/.pow/${pow_app##*/}
-          ls -lA ~/.pow/ | grep ${pow_app##*/}
-        ;;
-        restart)
-          echo "restarting app..."
-          touch tmp/restart.txt;;
-        *)
-          echo "App info"
-          echo $pow_app;;
-      esac;;
-    powrc)
-      case $2 in
-        show)
-          if [ -f .powrc ]; then
-            _style_colorize ".powrc contents" 33
-            cat .powrc
-          else
-            _style_colorize ".powrc not found" 31
-          fi
-          ;;
-        write)
-          cp $DOTFILES_PATH/powrc_base .powrc
-          _style_colorize ".powrc contents" 32
-          cat .powrc
-          ;;
-      esac
-      ;;
-    endpoint)
-      curl -H host:pow localhost/status.json
-      echo;;
-    manual)
-      open "http://pow.cx/manual.html";;
-    portproxy)
-      echo $2 > ~/.pow/$3;;
-    restart)
-      echo "restarting Pow..."
-      touch ~/.pow/restart.txt;;
-    rvm)
-      if [ ! -f .ruby-version ] || [ ! -f .ruby-gemset ]; then
-        _style_colorize "Creating rvm files" 33
-        rvm use $(cat .rvmrc.example | grep @ | awk -F' ' '{ print $2 }') --ruby-version --create
-      else
-        _style_colorize ".ruby-version contents" 33
-        cat .ruby-version
-        _style_colorize ".ruby-gemset contents" 33
-        cat .ruby-gemset
-      fi
-      ;;
-    uninstall)
-      curl get.pow.cx/uninstall.sh | sh;;
-    upgrade)
-      curl get.pow.cx | sh;;
-    help|*)
-      echo "Pow Rack Server:
-      about
-      endpoint
-      help
-      manual
-      portproxy
-        pow portproxy port# appname
-      restart
-      upgrade
-      uninstall";;
-  esac
-}
-
-# iso to img using hdiutil
-iso2img () {
-  if [ "$1" != "" ] && [ "$2" != "" ]; then
-    hdiutil convert -format UDRW -o $2 $1;
-  else
-    echo "Missing arguments, usage:
-  iso2img <image_file> <output_file>"
-  fi
-}
+# load macosx stuff if needed
+[ "$(uname)" == "Darwin" ] && source ~/dotfiles/bash_macosx
 
 # Colors
 BLUE="\[\e[0;34m\]"
@@ -225,15 +124,6 @@ RED="\[\e[0;31m\]"
 WHITE="\[\e[1;37m\]"
 YELLOW="\[\e[0;33m\]"
 NC="\[\e[0m\]" # no color
-
-_battery_status () {
-  local response=$(pmset -g batt)
-}
-
-_archey () {
-  archey --color
-}
-_archey
 
 export GIT_PS1_SHOWDIRTYSTATE=1
 _my_prompt () {
