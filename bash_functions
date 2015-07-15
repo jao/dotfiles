@@ -89,9 +89,6 @@ reload () { source ~/.bash_profile; }
 # list directory after cd
 cd () { builtin cd "${@:-$HOME}" && ls; }
 
-# mv verbose
-mv () { builtin mv -v $@; }
-
 # get the goo.gl
 googl () {
   echo "shortening url..."

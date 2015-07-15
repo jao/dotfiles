@@ -32,6 +32,7 @@ export HISTSIZE=10000
 export PATH=/usr/local/bin:$PATH
 export PATH=$PATH:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/bin
 export PATH=$PATH:${DOTFILES_PATH}/scripts            # dotfiles scripts
+export PATH=$PATH:$HOME/.rvm/bin
 export PATH=`echo $PATH | tr ':' '\n' | uniq | tr '\n' ':'`
 
 # Case-insensitive globbing (used in pathname expansion)

@@ -7,6 +7,9 @@ alias lah="ls -lAh" # list all but hide . and ..
 alias la="ls -la" # List all files colorized in long format, including dot files
 alias lsd='ls -l | grep "^d"' # List only directories
 
+# mv aliases
+alias mv="mv -v"
+
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en1"
