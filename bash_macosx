@@ -42,7 +42,7 @@ fi
 export GOPATH=$HOME/go
 
 # load bash completion from brew
-[ -f $BREW_PREFIX/etc/bash_completion ] && source $BREW_PREFIX/etc/bash_completiom
+[ -f $BREW_PREFIX/etc/bash_completion ] && source $BREW_PREFIX/etc/bash_completion
 
 # load git awesomeness
 [ -f $BREW_PREFIX/etc/bash_completion.d/git-completion.bash ] && source $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
