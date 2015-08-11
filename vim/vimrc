@@ -1,5 +1,5 @@
-set nocompatible " turn off Vi compatibility mode
-filetype off " required (to be honest, I don't know why :P)
+set nocompatible
+filetype off
 filetype plugin indent off
 
 " VUNDLE {{{
