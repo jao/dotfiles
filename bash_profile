@@ -104,17 +104,14 @@ set convert-meta off
 # load my aliases
 [ -f $DOTFILES_PATH/bash_aliases ] && source $DOTFILES_PATH/bash_aliases
 
+# Do something under Mac OS X platform
+[ "$(uname)" == "Darwin" ] && [ -f $DOTFILES_PATH/bash_macosx ] && source $DOTFILES_PATH/bash_macosx
+
 # load my functions
 [ -f $DOTFILES_PATH/bash_functions ] && source $DOTFILES_PATH/bash_functions
 
-# load vtex api curl based calls
-[ -f $DOTFILES_PATH//scripts/vtex-api ] && source $DOTFILES_PATH/scripts/vtex-api
-
 # load ruby completion
 [ -f $DOTFILES_PATH/completion-ruby/completion-ruby-all ] && source $DOTFILES_PATH/completion-ruby/completion-ruby-all
-
-# load ack completion
-[ -f $DOTFILES_PATH/ack_completion ] && source $DOTFILES_PATH/ack_completion
 
 # rake completion
 [ -f $DOTFILES_PATH/rake_completion ] && complete -C $DOTFILES_PATH/rake_completion -o default rake

@@ -108,9 +108,6 @@ colors () { ruby ~/dotfiles/scripts/colors; }
 # clear ASL logs
 clean_asl_logs () { sudo rm -f /private/var/log/asl/*.asl; }
 
-# load macosx stuff if needed
-[ "$(uname)" == "Darwin" ] && source ~/dotfiles/bash_macosx
-
 # Colors
 BLUE="\[\e[0;34m\]"
 CYAN="\[\e[0;36m\]"

@@ -14,6 +14,10 @@ export VIM_EDITOR="mvim -f --nomru -c \"au VimLeave * !open -a iTerm2\""
 export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="1;33;40"
 
+export CLICOLOR=1
+# export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
+
+
 # android sdk
 export ANDROID_HOME=/usr/local/opt/android-sdk
 
@@ -54,11 +58,16 @@ export GOPATH=$HOME/go
 # go lang completion
 [ -f $BREW_PREFIX/etc/bash_completion.d/go-completion.bash ] && source $BREW_PREFIX/etc/bash_completion.d/go-completion.bash
 
+# load ack completion
+[ -f $DOTFILES_PATH/ack_completion ] && source $DOTFILES_PATH/ack_completion
+
 ################################################################################
 # Aliases
 ################################################################################
 
 # editor related shortcuts
+alias ls="ls -G --color"
+
 alias v="mvim"
 
 alias vim="vim -u ~/.vim/vimrc"
@@ -213,4 +222,3 @@ _archey () {
   archey --color
 }
 _archey
-
