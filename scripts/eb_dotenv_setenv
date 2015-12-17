@@ -1,0 +1,5 @@
+#!/bin/sh
+
+PARAMS=`cat $1 | sed 's/export //' | sed 's/^\# .*//' | xargs`
+
+eb setenv $PARAMS -e $2

@@ -1,0 +1,14 @@
+#!/bin/sh
+
+echo "ENV:"
+echo $1
+
+echo "FILE TO READ:"
+echo ${2:=.env}
+
+VARS=`cat $2 | sed 's/export //' | sed 's/^\# .*//' | xargs | sed 's/ /,/g'`
+
+echo "VARS:"
+echo $VARS
+
+eb create $1 -c $1 --envvars $VARS

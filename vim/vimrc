@@ -133,10 +133,6 @@ Bundle 'tpope/vim-fugitive'
 
 Bundle 'tpope/vim-endwise'
 
-" Airline
-Bundle 'bling/vim-airline'
-let g:airline_powerline_fonts = 1
-
 Bundle 'airblade/vim-gitgutter'
 
 " Snipmate
@@ -156,9 +152,12 @@ Bundle 'troydm/easybuffer.vim'
 
 " Fancy
 Bundle 'bling/vim-airline'
+Bundle 'powerline/fonts'
+let g:airline_powerline_fonts = 1
 let g:airline_left_sep = ''
 let g:airline_right_sep = ''
 let g:airline_branch_prefix = ''
+let g:airline#extensions#tabline#enabled = 1
 
 " Bundle 'Yggdroot/indentLine'
 " set list lcs=tab:\|\
@@ -180,7 +179,6 @@ vmap <leader># :call NERDComment(0, "invert")<cr>
 " - Bundle 'msanders/snipmate.vim'
 Bundle 'sjl/splice.vim'
 
-Bundle 'tpope/vim-fugitive'
 nmap <leader>g :Ggrep
 " ,f for global git serach for word under the cursor (with highlight)
 nmap <leader>f :let @/="\\<<C-R><C-W>\\>"<CR>:set hls<CR>:silent Ggrep -w "<C-R><C-W>"<CR>:ccl<CR>:cw<CR><CR>
@@ -205,9 +203,16 @@ nnoremap <leader>a :Ack!<space>
 noremap <LocalLeader># "ayiw:Ack <C-r>a<CR>
 vnoremap <LocalLeader># "ay:Ack <C-r>a<CR>
 
+" DelimitMate
+Bundle "raimondi/delimitmate"
+
+" SuperTab
+Bundle "ervandew/supertab"
+
 " Command-T
 Bundle "wincent/command-t.git"
 let g:CommandTMatchWindowAtTop=1 " show window at top
+
 
 " Navigation
 Bundle "gmarik/vim-visual-star-search"
