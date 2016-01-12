@@ -35,6 +35,7 @@
   ap = add --patch
   au = add -u
   b = branch
+  bb = for-each-ref --sort=-committerdate refs/remotes/origin/ --format='%(committerdate) %(refname) %(authorname)'
   co = checkout
   d = diff --patch-with-stat
   df = diff
@@ -49,10 +50,12 @@
   rba = rebase --abort
   rbc = rebase --continue
   rbi = rebase -i
+  recent = "!r() { cur=$(git rev-parse --abbrev-ref HEAD); git for-each-ref --sort=-committerdate refs/heads/ --format='%(color:yellow)%(refname:short)|%(color:bold               green)%(committerdate:relative)|%(color:blue)%(subject)|%(color:magenta)%(authorname)%(color:reset)' | sed \"s/m${cur}|/m* ${cur}|/\" | column -ts'|'; }; r"
+  originrecent = "!r() { cur=$(git rev-parse --abbrev-ref HEAD); git for-each-ref --sort=-committerdate refs/remotes/origin --format='%(color:yellow)%(refname:short)|%(color:bold green)%(committerdate:relative)|%(color:blue)%(subject)|%(color:magenta)%(authorname)%(color:reset)' | sed \"s/m${cur}|/m* ${cur}|/\" | column -ts'|'; }; r"
   rh = reset HEAD
   rhh = reset HEAD --hard
-	# Switch to a branch, creating it if necessary
-	go = checkout -B
+  # Switch to a branch, creating it if necessary
+  go = checkout -B
   wc = whatchanged -p --abbrev-commit --pretty=medium
 	# Undo a `git push`
 	undopush = push -f origin HEAD^:master

@@ -73,6 +73,7 @@ alias ga='git add -A'
 alias gap='ga -p'
 alias gau='git add -u'
 alias gbr='git branch -v'
+alias gbbc="git bb | sed 's/refs\/remotes\/origin\///g' | awk '{for (i=8; i<=NF; i++)printf(\"%s \", \$i); printf(\"\n\");}' | sort | uniq -c | sort -gr"
 alias gc!='git commit -v'
 alias gca='git commit -v -a'
 alias gcam='gca --amend'
