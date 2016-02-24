@@ -8,8 +8,13 @@ cache/
 .ruby-gemset
 .powrc
 .powenv
+
+.rspec
+
 .env
-.env.*
+.env.test
+.env.production
+
 tmp/*.txt
 *.orig
 .capistrano/
