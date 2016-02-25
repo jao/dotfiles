@@ -1,29 +1,29 @@
 #!/bin/sh
 # usage:
-#   eb_dotenv_setenv [custom environment name, [.env.file to read]]
-
-[ -f ".env" ] && source ".env"
+#   eb_dotenv_setenv [custom environment name, [ stage, [.env.file to read] ] ]
 
 BASEDIR=$(basename `pwd`)
 ENV_TYPE=${BASEDIR#*_}
 
 
-FILENAME=${2:-.env}
-[ "$1" != "" ] && FILENAME="$FILENAME.$1"
+FILENAME=${3:-.env}
+[ "$2" != "" ] && FILENAME="$FILENAME.$2"
 [ -f $FILENAME ] || exit 1
 echo "\033[0;33mFile To Read:\033[0m $FILENAME"
 
+source "$FILENAME"
 
-ENVIRONMENT_NAME="${ENV_TYPE:0:3}-${BASEDIR%_*}-${EB_ENV:0:3}"
+
 if [ "$1" != "" ]; then
   ENVIRONMENT_NAME=$1
   echo "\033[0;33mCUSTOM Environment Name:\033[0m $1"
 else
+  ENVIRONMENT_NAME="${ENV_TYPE:0:3}-${BASEDIR%_*}-${EB_ENV:0:3}"
   echo "\033[0;33mEnvironment Name:\033[0m $ENVIRONMENT_NAME"
 fi
 
 
-VARS=`cat $FILENAME | sed '/^# /d' | sed 's/export //g' | xargs | sed 's/ /,/g'`
+VARS=`cat $FILENAME | sed '/^# /d' | sed 's/export //g' | xargs`
 echo "\033[0;33mVariables:\033[0m $VARS"
 
 
