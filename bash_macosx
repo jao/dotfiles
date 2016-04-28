@@ -38,7 +38,7 @@ export PATH=$PATH:$HOME/.rvm/bin                      # rvm
 export PATH=`echo $PATH | tr ':' '\n' | uniq | tr '\n' ':'`
 
 # Homebrew
-source $BREW_PREFIX/Library/Contributions/brew_bash_completion.sh
+# source $BREW_PREFIX/Library/Contributions/brew_bash_completion.sh
 
 # go root
 if [ -d $BREW_PREFIX ]; then
