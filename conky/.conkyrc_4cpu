@@ -1,0 +1,161 @@
+######################
+# - Conky settings - #
+######################
+update_interval 1
+total_run_times 0
+net_avg_samples 1
+cpu_avg_samples 1
+
+imlib_cache_size 0
+double_buffer yes
+no_buffers yes
+
+format_human_readable
+
+border_inner_margin 5
+#####################
+# - Text settings - #
+#####################
+use_xft yes
+xftfont Droid Sans:size=8
+override_utf8_locale yes
+text_buffer_size 2048
+
+#############################
+# - Window specifications - #
+#############################
+
+alignment tr
+default_bar_size 60 8
+gap_y 26
+maximum_width 182
+minimum_size 182 735
+
+own_window yes
+own_window_class Conky
+own_window_transparent no
+own_window_type desktop
+own_window_hints undecorated,below,sticky,skip_taskbar
+own_window_argb_visual yes
+own_window_argb_value 200
+
+#########################
+# - Graphics settings - #
+#########################
+#draw_shades yes
+
+#default_color white
+
+#color0 white
+#color1 white
+#color2 white
+
+###############
+# - DROPBOX - #
+###############
+#${voffset 4}${font Droid Sans:style=Bold:size=8}DROPBOX ${hr 1}${font}
+#${color0}${font Poky:size=13}y${font} ${execpi 5 dropbox status | fold --width=27}
+
+###################
+# DIMETRODON CASA #
+###################
+#${voffset 4}${font Droid Sans:style=Bold:size=8}DIMETRODON CASA ${hr 1}${font}
+#${color0}${font Poky:size=13}y${font} ${execpi 60 ssh rubendebest@dimetrodon.dyndns-at-home.com -p 31022 'python /home/rubendebest/Scripts/dropbox.py status' | #fold --width=27}
+
+#${execpi 60 ssh rubendebest@dimetrodon.dyndns-at-home.com -p 31022 'nmap -sP 192.168.15.1/24 | grep "is up"'}
+
+#${execpi 60 ssh rubendebest@dimetrodon.dyndns-at-home.com -p 31022 '/home/rubendebest/Scripts/deluged_speed_control.sh'}
+
+
+##############
+#   SYSTEM   #
+##############
+TEXT
+
+${font Droid Sans:style=Bold:size=8}SYSTEM ${hr 1}${font}
+${color0}${voffset 6}${font OpenLogos:size=19}J${font}${color}${goto 32}${voffset -14}Kernel:  ${alignr}${color2}${kernel}${color}
+${goto 32}Uptime: ${alignr}${color2}${uptime}${color}
+# |--CPU
+${offset 1}${color0}${font Poky:size=16}P${font}${offset -19}${voffset 9}${cpubar cpu0 4,18}${color}${voffset -16}${goto 32}CPU0: ${font Droid Sans:style=Bold:size=8}${color1}${cpu cpu1}%${color}${font} ${alignr}${color2}${execi 10 sensors | grep 'Core 0' | cut -c14-24}
+${goto 32}CPU1: ${font Droid Sans:style=Bold:size=8}${color1}${cpu cpu2}%${color}${font} ${alignr}${color2}${execi 10 sensors | grep 'Core 0' | cut -c12-24}
+${goto 32}CPU2: ${font Droid Sans:style=Bold:size=8}${color1}${cpu cpu3}%${color}${font} ${alignr}${color2}${execi 10 sensors | grep 'Core 1' | cut -c12-24}
+${goto 32}CPU3: ${font Droid Sans:style=Bold:size=8}${color1}${cpu cpu4}%${color}${font} ${alignr}${color2}${execi 10 sensors | grep 'Core 1' | cut -c12-24}
+# |--MEM
+${color0}${font Poky:size=16}M${font}${color}${goto 32}${voffset -7}RAM: ${font Droid Sans:style=Bold:size=8}${color1}$memperc%${color}${font}
+${offset 1}${voffset 2}${color0}${membar 4,18}${color}${goto 32}${voffset -2}F: ${font Droid Sans:style=Bold:size=8}${color2}${memeasyfree}${color}${font} U: ${font Droid Sans:style=Bold:size=8}${color2}${mem}${color}${font}
+# |--CPU
+${voffset 2}${color0}${font Poky:size=14}s${font}${color}${voffset -8}${goto 32}SWAP: ${font Droid Sans:style=Bold:size=8}${color1}${swapperc}%${color}${font}
+${voffset 4}${offset 1}${color0}${swapbar 4,18}${color}${voffset -4}${goto 32}F: ${font Droid Sans:style=Bold:size=8}${color2}$swapmax${color}${font} U: ${font Droid Sans:style=Bold:size=8}${color2}$swap${color}${font}
+# |--PROC
+${voffset 2}${color0}${font Poky:size=15}a${font}${color}${goto 32}${voffset -10}Process: ${color2}${goto 152}CPU
+${voffset -1}${goto 42}${color2}${font Droid Sans:style=Bold:size=8}${top name 1}${color}${font Droid Sans:style=Bold:size=8}${color1} ${goto 145}${top cpu 1}%
+${voffset -1}${goto 42}${color2}${top name 2}${color}${font Droid Sans:style=Bold:size=8}${color1} ${goto 145}${top cpu 2}%
+${voffset -1}${goto 42}${color2}${top name 3}${color}${font Droid Sans:style=Bold:size=8}${color1} ${goto 145}${top cpu 3}%
+${voffset 2}${color0}${font Poky:size=15}a${font}${color}${goto 32}${voffset -10}Memory: ${color2}${goto 152}MEM
+${voffset -1}${goto 42}${color2}${font Droid Sans:style=Bold:size=8}${top_mem name 1}${color}${font Droid Sans:style=Bold:size=8}${color1} ${goto 145}${top_mem mem 1}%
+${voffset -1}${goto 42}${color2}${top_mem name 2}${color}${font Droid Sans:style=Bold:size=8}${color1} ${goto 145}${top_mem mem 2}%
+${voffset -1}${goto 42}${color2}${top_mem name 3}${color}${font Droid Sans:style=Bold:size=8}${color1} ${goto 145}${top_mem mem 3}%
+
+##########
+# - HD - #
+########## ${voffset 4}${font Droid Sans:style=Bold:size=8}HD ${hr 1}${font} ${execpi 30 ~/Scripts/conky/conkyHD2}
+#DROPBOX
+${font Droid Sans:style=Bold:size=8}TASKS ${hr 1}${font}
+
+${execi 5 cat /home/rubendebest/Dropbox/tasks.txt}
+# - NETWORK - #
+
+${font Droid Sans:style=Bold:size=8}DROPBOX ${hr 1}${font}
+
+${execi 5 dropbox status}
+
+# - NETWORK - #
+###############
+${voffset 4}${font Droid Sans:style=Bold:size=8}NETWORK ${hr 1}${font}
+${if_up wlan0}${if_match "${addrs wlan0}" != "0.0.0.0"}
+Wifi - wlan0
+
+${voffset -13}${color0}${font VariShapes Solid:size=14}q${font}${color}${goto 32}${voffset -6}Up: ${font Droid Sans:style=Bold:size=8}${color1}${upspeed wlan0}${color}${font} ${alignr}${color2}${upspeedgraph wlan0 8,60 000000 000000}${color}
+${goto 32}Total: ${font Droid Sans:style=Bold:size=8}${color2}${totalup wlan0}${color}${font}
+${voffset -2}${color0}${font VariShapes Solid:size=14}Q${font}${color}${goto 32}${voffset -6}Down: ${font Droid Sans:style=Bold:size=8}${color1}${downspeed wlan0}${color}${font} ${alignr}${color2}${downspeedgraph wlan0 8,60 000000 000000}${color}
+${goto 32}Total: ${font Droid Sans:style=Bold:size=8}${color2}${totaldown wlan0}${color}${font}
+${voffset 4}${color0}${font Poky:size=13}w${font}${color}${goto 32}${voffset -8}Local IP: ${alignr}${color2}${addr wlan0}${color}${color}
+#${goto 32}${voffset 0}External IP: ${alignr}${color2}${execi 900 wget -qO- ifconfig.me/ip}${color}${color}
+${goto 32}${voffset 0}GW IP: ${alignr}${color2}${gw_ip}${color}${color}
+${endif}${endif}${if_up eth0}${if_match "${addrs eth0}" != "0.0.0.0"}
+Lan - eth0
+
+${voffset -13}${color0}${font VariShapes Solid:size=14}q${font}${color}${goto 32}${voffset -6}Up: ${font Droid Sans:style=Bold:size=8}${color1}${upspeed eth0}${color}${font} ${alignr}${color2}${upspeedgraph eth0 8,60 000000 000000}${color}
+${goto 32}Total: ${font Droid Sans:style=Bold:size=8}${color2}${totalup eth0}${color}${font}
+${voffset -2}${color0}${font VariShapes Solid:size=14}Q${font}${color}${goto 32}${voffset -6}Down: ${font Droid Sans:style=Bold:size=8}${color1}${downspeed eth0}${color}${font} ${alignr}${color2}${downspeedgraph eth0 8,60 000000 000000}${color}
+${goto 32}Total: ${font Droid Sans:style=Bold:size=8}${color2}${totaldown eth0}${color}${font}
+${voffset -2}${color0}${font Poky:size=13}w${font}${color}${goto 32}${voffset -4}Local IP: ${alignr}${color2}${addr eth0}${color}${color}
+#${goto 32}${voffset 0}External IP: ${alignr}${color2}${execi 900 wget -qO- ifconfig.me/ip}${color}${color}
+${goto 32}${voffset 0}GW IP: ${alignr}${color2}${gw_ip}${color}${color}
+${endif}${endif}${if_up ppp0}${if_match "${addrs ppp0}" != "0.0.0.0"}
+3G
+
+${voffset -13}${color0}${font VariShapes Solid:size=14}q${font}${color}${goto 32}${voffset -6}Up: ${font Droid Sans:style=Bold:size=8}${color1}${upspeed ppp0}${color}${font} ${alignr}${color2}${upspeedgraph ppp0 8,60 000000 000000}${color}
+${goto 32}Total: ${font Droid Sans:style=Bold:size=8}${color2}${totalup ppp0}${color}${font}
+${voffset -2}${color0}${font VariShapes Solid:size=14}Q${font}${color}${goto 32}${voffset -6}Down: ${font Droid Sans:style=Bold:size=8}${color1}${downspeed ppp0}${color}${font} ${alignr}${color2}${downspeedgraph ppp0 8,60 000000 000000}${color}
+${goto 32}Total: ${font Droid Sans:style=Bold:size=8}${color2}${totaldown ppp0}${color}${font}
+${voffset -2}${color0}${font Poky:size=13}w${font}${color}${goto 32}${voffset -4}Local IP: ${alignr}${color2}${addr ppp0}${color}
+#${goto 32}${voffset 0}External IP: ${alignr}${color2}${execi 900 wget -qO- ifconfig.me/ip}${color}${color}
+${goto 32}${voffset 0}GW IP: ${alignr}${color2}${gw_ip}${color}${color}
+${endif}${endif}${if_up easytether0}${if_match "${addrs easytether0}" != "0.0.0.0"}
+Tether
+
+${voffset -13}${color0}${font VariShapes Solid:size=14}q${font}${color}${goto 32}${voffset -6}Up: ${font CaviarDreams:style=Bold:size=8}${color1}${upspeed easytether0}${color}${font} ${alignr}${color2}${upspeedgraph easytether0 8,60 000000 000000}${color}
+${goto 32}Total: ${font CaviarDreams:style=Bold:size=8}${color2}${totalup easytether0}${color}${font}
+${voffset -2}${color0}${font VariShapes Solid:size=14}Q${font}${color}${goto 32}${voffset -6}Down: ${font CaviarDreams:style=Bold:size=8}${color1}${downspeed easytether0}${color}${font} ${alignr}${color2}${downspeedgraph easytether0 8,60 000000 000000}${color}
+${goto 32}Total: ${font CaviarDreams:style=Bold:size=8}${color2}${totaldown easytether0}${color}${font}
+${voffset -2}${color0}${font Poky:size=13}w${font}${color}${goto 32}${voffset -4}Local IP: ${alignr}${color2}${addr easytether0}${color}
+#${goto 32}${voffset 0}External IP: ${alignr}${color2}${execi 900 wget -qO- ifconfig.me/ip}${color}${color}
+${goto 32}${voffset 0}GW IP: ${alignr}${color2}${gw_ip}${color}${color}
+${endif}${endif}
+#A Fazer
+#${font Droid Sans:style=Bold:size=8}A fazer ${hr 1}${font}
+#
+#${execi 15 cat ~/Dropbox/a_fazer.txt}
+#
+${hr 1}

@@ -111,3 +111,7 @@ alias gs='git show'
 alias gs.='git show --color-words="."'
 alias gst='git stash'
 alias gstp='git stash pop'
+
+
+alias grep="/bin/grep $GREP_OPTIONS"
+unset GREP_OPTIONS

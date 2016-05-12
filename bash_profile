@@ -1,18 +1,13 @@
 #!/usr/bin/env bash
 
 # configurations
-export EDITOR="vim -f --nomru -c \"au VimLeave * !open -a iTerm2\""
+export EDITOR="vim -f --nomru "
 
 export SUBL_EDITOR="subl -w"
 
-export VIM_EDITOR="vim -f --nomru -c \"au VimLeave * !open -a iTerm2\""
+export VIM_EDITOR="vim -f --nomru "
 
-export GREP_OPTIONS="--color=auto"
 export GREP_COLOR="1;33;40"
-
-# go root
-export GOROOT=$BREW_PREFIX/Cellar/go/1.2.2/libexec
-export GOPATH=$HOME/go
 
 # Prefer US English and use UTF-8
 export LC_ALL="en_US.UTF-8"

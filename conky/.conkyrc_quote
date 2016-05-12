@@ -1,0 +1,37 @@
+#This conky was made by Xaahu
+#http://xaahudude.deviantart.com/
+background yes
+use_xft yes
+xftfont Liberation Sans:size=9
+xftalpha 1
+update_interval 1
+total_run_times 0
+own_window yes
+own_window_transparent yes
+own_window_type desktop
+#own_window_argb_visual yes
+own_window_hints undecorated,below,sticky,skip_taskbar,skip_pager
+double_buffer yes
+#minimum_size 600 600
+minimum_width 1000
+draw_shades no
+draw_outline no
+draw_borders no
+draw_graph_borders no
+#default_color 656667
+#default_shade_color 000000
+#default_outline_color 828282
+alignment br
+gap_x 5
+gap_y 5
+no_buffers yes
+uppercase no
+cpu_avg_samples 2
+override_utf8_locale no
+
+TEXT
+#${alignr 355}${color grey}${font Quicksand Light - U:pixelsize=50}Words are wind
+#${alignr 450}${color grey}${font Droid Sans - U:pixelsize=20}"Wat geweldig dat niemand ook maar een moment hoeft te wachten met het verbeteren van de wereld."
+#${alignr 785}${color grey}${font Quicksand Light - U:pixelsize=30}If an opportunity comes your way that scares you, take it.
+#${alignr 200}${color grey}${font Droid Sans - U:pixelsize=20}Forget yesterday. Think about tomorrow.
+${alignr 400}${color grey}${font Droid Sans - U:pixelsize=30}Simplicity is prerequisite for reliability.
