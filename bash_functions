@@ -84,7 +84,7 @@ ask() {
 }
 
 # reload source
-reload () { source ~/.bash_profile; }
+reload-source () { source ~/.bash_profile; }
 
 # list directory after cd
 cd () { builtin cd "${@:-$HOME}" && ls; }
@@ -117,6 +117,10 @@ PINK="\[\e[0;35m\]"
 RED="\[\e[0;31m\]"
 WHITE="\[\e[1;37m\]"
 YELLOW="\[\e[0;33m\]"
+YELLOW_BOLD="\[\e[1;33m\]"
+BLUE_BOLD="\[\e[1;34m\]"
+GRAY_BOLD="\[\e[1;30m\]"
+GREEN_BOLD="\[\e[1;32m\]"
 NC="\[\e[0m\]" # no color
 
 export GIT_PS1_SHOWDIRTYSTATE=1
@@ -131,15 +135,15 @@ _my_prompt () {
     local RVM_GEMSET=${RVM_STRING##*@}
     [ "$RVM_RUBY" == "$RVM_GEMSET" ] && RVM_GEMSET=""
     RVM="${CYAN}${RVM_RUBY}${NC}" # rvm ruby
-    [ "$RVM_GEMSET" != "" ] && RVM="$RVM \[\e[1;30m\]${RVM_GEMSET}${NC}"
+    [ "$RVM_GEMSET" != "" ] && RVM="$RVM ${GRAY_BOLD}${RVM_GEMSET}${NC}"
   fi
 
   # battery=$(ioreg -l | awk '$3~/Capacity/{c[$3]=$5}END{OFMT="%.2f%";max=c["\"MaxCapacity\""];print(max>0?100*c["\"CurrentCapacity\""]/max:"?")}')
   # battery=$(pmset -g batt)
 
-  DATERIGHT=$(($COLUMNS + 16))
-  HEADLINE=$(printf "%-${DATERIGHT}s %s" "\[\e[1;33m\]\u$NC|\[\e[1;32m\]\h$NC" "$GRAY\D{%d/%m/%Y} \t$NC")
-  PS1="$HEADLINE\n\[\e[1;34m\]\w$NC" # basic ps1
+  DATERIGHT=$(($COLUMNS + 12))
+  HEADLINE=$(printf "%-${DATERIGHT}s %s" "${YELLOW_BOLD}\u${NC}|${GREEN_BOLD}\h${NC}" "${GRAY}\D{%d/%m/%Y} \t${NC}")
+  PS1="$HEADLINE\n$BLUE_BOLD\w$NC" # basic ps1
 
   local GITBRANCH=`git branch 2>&1 | grep \* | sed 's/* //'`
   # local GITBRANCH=`__git_ps1 "%s" | awk '{print $1;}'`
