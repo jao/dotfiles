@@ -130,7 +130,7 @@ ${voffset 4}${font Droid Sans:style=Bold:size=8}NETWORK ${hr 1}${font}
 
 ${if_up enp7s0}${if_match "${addrs enp7s0}" != "0.0.0.0"}
 ${font Droid Sans:Style=Bold:size=10}Lan${font} (enp7s0)
-${voffset -13}${color0}${font VariShapes Solid:size=14}q${font}${color}${goto 32}${voffset -6}Up: ${font Droid Sans:style=Bold:size=8}${color1}${upspeed enp7s0}${color}${font} ${alignr}${color2}${upspeedgraph enp7s0 8,60 000000 000000}${color}
+${voffset -3}${color0}${font VariShapes Solid:size=14}q${font}${color}${goto 32}${voffset -6}Up: ${font Droid Sans:style=Bold:size=8}${color1}${upspeed enp7s0}${color}${font} ${alignr}${color2}${upspeedgraph enp7s0 8,60 000000 000000}${color}
 ${goto 32}Total: ${font Droid Sans:style=Bold:size=8}${color2}${totalup enp7s0}${color}${font}
 ${voffset -2}${color0}${font VariShapes Solid:size=14}Q${font}${color}${goto 32}${voffset -6}Down: ${font Droid Sans:style=Bold:size=8}${color1}${downspeed enp7s0}${color}${font} ${alignr}${color2}${downspeedgraph enp7s0 8,60 000000 000000}${color}
 ${goto 32}Total: ${font Droid Sans:style=Bold:size=8}${color2}${totaldown enp7s0}${color}${font}
@@ -140,11 +140,12 @@ ${goto 32}${voffset 0}GW IP: ${alignr}${color2}${gw_ip}${color}${color}
 ${endif}${endif}
 
 ${if_up wlp8s0}${if_match "${addrs wlp8s0}" != "0.0.0.0"}
-${voffset -13}${color0}${font VariShapes Solid:size=14}q${font}${color}${goto 32}${voffset -6}Up: ${font Droid Sans:style=Bold:size=8}${color1}${upspeed wlan0}${color}${font} ${alignr}${color2}${upspeedgraph wlan0 8,60 000000 000000}${color}
-${goto 32}Total: ${font Droid Sans:style=Bold:size=8}${color2}${totalup wlan0}${color}${font}
+${font Droid Sans:Style=Bold:size=10}WiFi${font} (wlp8s0)
+${voffset -3}${color0}${font VariShapes Solid:size=14}q${font}${color}${goto 32}${voffset -6}Up: ${font Droid Sans:style=Bold:size=8}${color1}${upspeed wlan0}${color}${font} ${alignr}${color2}${upspeedgraph wlan0 8,60 000000 000000}${color}
+${goto 32}Total: ${font Droid Sans:style=Bold:size=8}${color2}${totalup wlp8s0}${color}${font}
 ${voffset -2}${color0}${font VariShapes Solid:size=14}Q${font}${color}${goto 32}${voffset -6}Down: ${font Droid Sans:style=Bold:size=8}${color1}${downspeed wlan0}${color}${font} ${alignr}${color2}${downspeedgraph wlan0 8,60 000000 000000}${color}
-${goto 32}Total: ${font Droid Sans:style=Bold:size=8}${color2}${totaldown wlan0}${color}${font}
-${voffset 4}${color0}${font Poky:size=13}w${font}${color}${goto 32}${voffset -8}Local IP: ${alignr}${color2}${addr wlan0}${color}${color}
+${goto 32}Total: ${font Droid Sans:style=Bold:size=8}${color2}${totaldown wlp8s0}${color}${font}
+${voffset 4}${color0}${font Poky:size=13}w${font}${color}${goto 32}${voffset -8}Local IP: ${alignr}${color2}${addr wl8s0}${color}${color}
 #${goto 32}${voffset 0}External IP: ${alignr}${color2}${execi 900 wget -qO- ifconfig.me/ip}${color}${color}
 ${goto 32}${voffset 0}GW IP: ${alignr}${color2}${gw_ip}${color}${color}
 ${endif}${endif}
