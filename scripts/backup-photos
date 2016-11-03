@@ -1,0 +1,9 @@
+if [ -d /Volumes/Lacie/Pictures ]; then
+  #  --del --delete-excluded
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs ~/Pictures/ /Volumes/LaCie/Pictures/ --exclude '.DS_Store'
+fi
+
+if [ -d /Volumes/Backup/pictures ]; then
+  #  --del --delete-excluded
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs ~/Pictures/2016 /Volumes/Backup/pictures/2016 --exclude '.DS_Store'
+fi

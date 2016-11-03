@@ -19,3 +19,4 @@ tmp/*.txt
 *.orig
 .capistrano/
 coverage/
+snippets

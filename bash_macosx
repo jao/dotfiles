@@ -18,6 +18,7 @@ export GREP_COLOR="1;33;40"
 export CLICOLOR=1
 # export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 
+export HOMEBREW_GITHUB_API_TOKEN=17fe46fc9c7be164148ef698cd0bddbaca6aabc3
 
 # android sdk
 export ANDROID_HOME=/usr/local/opt/android-sdk
@@ -67,7 +68,8 @@ export GOPATH=$HOME/go
 ################################################################################
 
 # editor related shortcuts
-alias ls="ls -G --color"
+# alias ls="ls -G --color"
+alias ls="ls"
 
 alias v="mvim"
 
