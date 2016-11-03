@@ -63,6 +63,9 @@ export GOPATH=$HOME/go
 # load ack completion
 [ -f $DOTFILES_PATH/ack_completion ] && source $DOTFILES_PATH/ack_completion
 
+# pow completion
+[ -f $BREW_PREFIX/etc/pow_completion ] && complete -C $DOTFILES_PATH/pow_completion -o default pow
+
 ################################################################################
 # Aliases
 ################################################################################
@@ -203,9 +206,6 @@ pow () {
       uninstall";;
   esac
 }
-
-# pow completion
-complete -C $DOTFILES_PATH/pow_completion -o default pow
 
 # iso to img using hdiutil
 iso2img () {
