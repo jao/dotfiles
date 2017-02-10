@@ -53,6 +53,9 @@ github-url () { git config remote.origin.url | sed -En 's/git(@|:\/\/)github.com
 github () { open $(github-url); }
 git-scoreboard () { git log | grep '^Author' | sort | uniq -ci | sort -r; }
 
+# finds and kills a proccess by port
+killport () { lsof -i TCP:$1 | grep LISTEN | awk '{print $2}' | xargs kill -QUIT; }
+
 # https://gist.github.com/davejamesmiller/1965569
 ask() {
   while true; do
