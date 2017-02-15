@@ -61,7 +61,7 @@ export GOPATH=$HOME/go
 [ -f $BREW_PREFIX/etc/bash_completion.d/go-completion.bash ] && source $BREW_PREFIX/etc/bash_completion.d/go-completion.bash
 
 # load ack completion
-[ -f $DOTFILES_PATH/ack_completion ] && source $DOTFILES_PATH/ack_completion
+[ -f $DOTFILES_PATH/ack_completion ] && [[ " $(brew list) " =~ " ack " ]] && source $DOTFILES_PATH/ack_completion
 
 # pow completion
 [ -f $BREW_PREFIX/etc/pow_completion ] && complete -C $DOTFILES_PATH/pow_completion -o default pow
