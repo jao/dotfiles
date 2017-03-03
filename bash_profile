@@ -99,6 +99,9 @@ set convert-meta off
 # load my aliases
 [ -f $DOTFILES_PATH/bash_aliases ] && source $DOTFILES_PATH/bash_aliases
 
+# load petlove config
+[ -f ~/Dropbox/petlove/env/aws ] && source ~/Dropbox/petlove/env/aws
+
 # Do something under Mac OS X platform
 [ "$(uname)" == "Darwin" ] && [ -f $DOTFILES_PATH/bash_macosx ] && source $DOTFILES_PATH/bash_macosx
 
