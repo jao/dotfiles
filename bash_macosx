@@ -6,7 +6,7 @@
 ################################################################################
 
 # configurations
-export EDITOR="mvim -f --nomru -c \"au VimLeave * !open -a iTerm2\""
+export EDITOR="subl -w"
 
 export SUBL_EDITOR="subl -w"
 
@@ -71,7 +71,7 @@ export GOPATH=$HOME/go
 ################################################################################
 
 # editor related shortcuts
-alias ls="ls --color"
+alias ls="ls -G"
 
 alias v="mvim"
 
