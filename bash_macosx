@@ -170,6 +170,20 @@ pow () {
     endpoint)
       curl -H host:pow localhost/status.json
       echo;;
+    log)
+      local pow_app=$(basename `pwd`);
+      case $2 in
+        access)
+          tail -f ~/Library/Logs/Pow/access.log
+          ;;
+        app)
+          tail -f ~/Library/Logs/Pow/apps/${pow_app}.log
+          ;;
+        all|* )
+          tail -f ~/Library/Logs/Pow/access.log ~/Library/Logs/Pow/apps/${pow_app}.log
+          ;;
+      esac
+      ;;
     manual)
       open "http://pow.cx/manual.html";;
     portproxy)
@@ -197,6 +211,8 @@ pow () {
       about
       endpoint
       help
+      log
+        access all app
       manual
       portproxy
         pow portproxy port# appname
