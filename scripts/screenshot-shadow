@@ -1,11 +1,11 @@
 # screenshot-shadow on|off
 
-$killall = 1
-if [ "$1" == "on" ]; then
-  defaults write com.apple.screencapture disable-shadow -bool true
-elif [ "$1" == "off" ]; then
-  defaults write com.apple.screencapture disable-shadow -bool false
+willkillall="1";
+if [ "$1" = "on" ]; then
+  defaults write com.apple.screencapture disable-shadow -bool true;
+elif [ "$1" = "off" ]; then
+  defaults write com.apple.screencapture disable-shadow -bool false;
 else
-  $killall = 0
+  willkillall="0";
 fi
-[ $killall == 1 ] && killall SystemUIServer
+[ "$willkillall" = "1" ] && killall SystemUIServer
