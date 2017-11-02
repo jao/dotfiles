@@ -71,7 +71,7 @@ export GOPATH=$HOME/go
 ################################################################################
 
 # editor related shortcuts
-alias ls="ls -G"
+alias ls="ls --color"
 
 alias v="mvim"
 
