@@ -5,15 +5,16 @@
 --follow
 --group
 
+# add types ack doesn't know about
+
 --type-add=ruby=rake,haml,ru
 --type-add=vim=vimrc
 --type-add=js=.json,.coffee
 --type-set=css=.sass,.scss,.less
+--type-add=elixir=.ex,.mix
 
-# add types ack doesn't know about
 --type-add=MARKDOWN=md,mkd,markdown
 --type-add=RDOC=rdoc
-
 
 --type-add=objc=.pch
 --type-set=xcode=.pbxproj,.pbxuser,.perspectivev3
@@ -25,3 +26,9 @@
 --nonib
 --notmstuff
 --noxcode
+
+# ignore common directories
+--ignore-dir=log
+--ignore-dir=snippets
+--ignore-dir=sql_backup
+--ignore-dir=coverage
