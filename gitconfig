@@ -82,9 +82,6 @@
   prune = true
 [branch]
   autosetupmerge = true
-[branch "master"]
-  remote = origin
-  merge = refs/heads/master
 [apply]
 	# Detect whitespace errors when applying a patch
 	whitespace = fix

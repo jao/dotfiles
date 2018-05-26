@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # ls aliases
-alias ls="ls -G"
+alias ls="ls --color"
 alias ll="ls -lh"
 alias lah="ls -lAh" # list all but hide . and ..
 alias la="ls -la" # List all files colorized in long format, including dot files

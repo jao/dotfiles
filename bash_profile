@@ -26,8 +26,8 @@ export HISTSIZE=10000
 # PATH
 export PATH=/usr/local/bin:$PATH
 export PATH=$PATH:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/bin
-export PATH=$PATH:${DOTFILES_PATH}/scripts            # dotfiles scripts
-export PATH=$PATH:$HOME/.rvm/bin
+[ -d "${DOTFILES_PATH}/scripts" ] && export PATH=$PATH:${DOTFILES_PATH}/scripts
+[ -d "$HOME/.rvm" ] && export PATH=$PATH:$HOME/.rvm/bin
 export PATH=`echo $PATH | tr ':' '\n' | uniq | tr '\n' ':'`
 
 # Case-insensitive globbing (used in pathname expansion)
@@ -118,7 +118,14 @@ set convert-meta off
 [ -f $DOTFILES_PATH/project_completion ] && complete -C $DOTFILES_PATH/project_completion -o default pcd
 
 # Load RVM into a shell session *as a function*
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
+[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
 
 # load rvm stuff
-[ -d "$HOME/.rvm" ] && source "$HOME/.rvm/scripts/completion"
+[ -d $HOME/.rvm ] && source $HOME/.rvm/scripts/completion
+
+# load asdf stuff
+[ -d $HOME/.asdf ] && source $HOME/.asdf/asdf.sh
+[ -d $HOME/.asdf ] && source $HOME/.asdf/completions/asdf.bash
+
+# load petlove related tools
+[ -f $DOTFILES_PATH/petlove_functions ] && source $DOTFILES_PATH/petlove_functions

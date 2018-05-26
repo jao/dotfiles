@@ -111,6 +111,8 @@ colors () { ruby ~/dotfiles/scripts/colors; }
 # clear ASL logs
 clean_asl_logs () { sudo rm -f /private/var/log/asl/*.asl; }
 
+fill_ebignore_docker () { ls -Ap | sort -u | grep -vE '.ebextensions|Dockerrun.aws.json' > .ebignore; }
+
 # Colors
 BLUE="\[\e[0;34m\]"
 CYAN="\[\e[0;36m\]"
