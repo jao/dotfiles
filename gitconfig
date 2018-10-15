@@ -36,6 +36,7 @@
   au = add -u
   b = branch
   bb = for-each-ref --sort=-committerdate refs/remotes/origin/ --format='%(committerdate) %(refname) %(authorname)'
+  dedoduro = "!r() { if [ "$1" ]; then git bb | grep $1 | awk '{ print $7 \" \"  $8 \" \" $9 \" \" $10 };' | sort; else git bb | awk '{ print $8 \" \" $9 \" \" $10 };' | sort | uniq -c | sort -r; fi }; r"
   co = checkout
   d = diff --patch-with-stat
   df = diff
@@ -54,6 +55,7 @@
   originrecent = "!r() { cur=$(git rev-parse --abbrev-ref HEAD); git for-each-ref --sort=-committerdate refs/remotes/origin --format='%(color:yellow)%(refname:short)|%(color:bold green)%(committerdate:relative)|%(color:blue)%(subject)|%(color:magenta)%(authorname)%(color:reset)' | sed \"s/m${cur}|/m* ${cur}|/\" | column -ts'|'; }; r"
   rh = reset HEAD
   rhh = reset HEAD --hard
+  touch = commit -m "" --allow-empty --allow-empty-message
   # Switch to a branch, creating it if necessary
   go = checkout -B
   wc = whatchanged -p --abbrev-commit --pretty=medium

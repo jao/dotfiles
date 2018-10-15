@@ -30,6 +30,8 @@ export PATH=$PATH:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/b
 [ -d "$HOME/.rvm" ] && export PATH=$PATH:$HOME/.rvm/bin
 export PATH=`echo $PATH | tr ':' '\n' | uniq | tr '\n' ':'`
 
+export GOROOT=
+
 # Case-insensitive globbing (used in pathname expansion)
 shopt -s nocaseglob
 
@@ -125,7 +127,10 @@ set convert-meta off
 
 # load asdf stuff
 [ -d $HOME/.asdf ] && source $HOME/.asdf/asdf.sh
-[ -d $HOME/.asdf ] && source $HOME/.asdf/completions/asdf.bash
 
 # load petlove related tools
+[ -f $HOME/.petlove_vars ] && source $HOME/.petlove_vars
 [ -f $DOTFILES_PATH/petlove_functions ] && source $DOTFILES_PATH/petlove_functions
+
+# load codefresh completion
+[ -f $DOTFILES_PATH/codefresh_completion ] && source $DOTFILES_PATH/codefresh_completion

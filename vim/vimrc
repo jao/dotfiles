@@ -90,11 +90,6 @@ autocmd FileType ruby,eruby,yaml set tw=80 ai sw=2 sts=2 et
 autocmd FileType ruby,eruby,yaml setlocal foldmethod=manual
 autocmd User Rails set tabstop=2 shiftwidth=2 softtabstop=2 expandtab
 
-Bundle 'klen/python-mode'
-Bundle 'python.vim'
-Bundle 'python_match.vim'
-Bundle 'pythoncomplete'
-
 Bundle 'tpope/vim-haml'
 Bundle 'juvenn/mustache.vim'
 Bundle 'tpope/vim-markdown'

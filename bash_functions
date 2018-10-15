@@ -86,6 +86,19 @@ ask() {
   done
 }
 
+# kubectl ssh to pod
+function kubessh() {
+  local pos="head";
+  local which=${3};
+  local namespace=${2};
+  if [ ${which} = 2 ]; then
+   local pos="tail";
+  fi
+  local first_env=$(kubectl get pods -n ${namespace} -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}' | grep ${1} | ${pos} -n 1);
+  echo "${first_env}";
+  kubectl exec -it ${first_env} bash -n ${namespace};
+}
+
 # reload source
 reload-source () { source ~/.bash_profile; }
 
@@ -107,6 +120,9 @@ googl () {
 # ascii character table
 ascii () { for i in {32..255}; do printf "\e[0;33m$i\e[0m "\\$(($i/64*100+$i%64/8*10+$i%8))"\n"; done | column; }
 colors () { ruby ~/dotfiles/scripts/colors; }
+
+# port used
+port_used () { lsof -nP -i4TCP:${1:-3000} | grep LISTEN; lsof -nP -i4TCP:${1:-3000} | grep LISTEN | awk '{print $2}' | xargs; }
 
 # clear ASL logs
 clean_asl_logs () { sudo rm -f /private/var/log/asl/*.asl; }
@@ -134,21 +150,30 @@ _my_prompt () {
   # basic variables
   local STATE=''; local RVM=''; local STATUS=''; local ini=''; local end='';
   local BC=$GREEN # base color
+
+  # battery=$(ioreg -l | awk '$3~/Capacity/{c[$3]=$5}END{OFMT="%.2f%";max=c["\"MaxCapacity\""];print(max>0?100*c["\"CurrentCapacity\""]/max:"?")}')
+  # battery=$(pmset -g batt)
+
+  DATERIGHT=$(($COLUMNS + 8))
+  HEADLINE=$(printf "%-${DATERIGHT}s %s" "${YELLOW_BOLD}\u${NC}|${GREEN_BOLD}\h${NC}" "${GRAY}\D{%d/%m/%Y} \t${NC}")
+  PS1="$HEADLINE\n$BLUE_BOLD\w$NC" # basic ps1
+
+  if [[ `pwd` =~ /petlove/ ]]; then
+    kube_context=$(kubectl config current-context &2> /dev/null)
+    PS1="${PS1} ${PINK}${kube_context}${NC}"
+  fi
+
   if [ -f ~/.rvm/bin/rvm-prompt ]; then
     local RVM_STRING=$(~/.rvm/bin/rvm-prompt v g)
     local RVM_RUBY=${RVM_STRING%%@*}
     local RVM_GEMSET=${RVM_STRING##*@}
     [ "$RVM_RUBY" == "$RVM_GEMSET" ] && RVM_GEMSET=""
     RVM="${CYAN}${RVM_RUBY}${NC}" # rvm ruby
-    [ "$RVM_GEMSET" != "" ] && RVM="$RVM ${GRAY_BOLD}${RVM_GEMSET}${NC}"
+    [ "$RVM_GEMSET" != "" ] && RVM="$RVM@${GRAY_BOLD}${RVM_GEMSET}${NC}"
   fi
 
-  # battery=$(ioreg -l | awk '$3~/Capacity/{c[$3]=$5}END{OFMT="%.2f%";max=c["\"MaxCapacity\""];print(max>0?100*c["\"CurrentCapacity\""]/max:"?")}')
-  # battery=$(pmset -g batt)
-
-  DATERIGHT=$(($COLUMNS + 12))
-  HEADLINE=$(printf "%-${DATERIGHT}s %s" "${YELLOW_BOLD}\u${NC}|${GREEN_BOLD}\h${NC}" "${GRAY}\D{%d/%m/%Y} \t${NC}")
-  PS1="$HEADLINE\n$BLUE_BOLD\w$NC" # basic ps1
+  # ruby
+  [ "$RVM" != "" ] && PS1="${PS1} ${RVM}";
 
   local GITBRANCH=`git branch 2>&1 | grep \* | sed 's/* //'`
   # local GITBRANCH=`__git_ps1 "%s" | awk '{print $1;}'`
@@ -183,7 +208,7 @@ _my_prompt () {
 
     [ -z "$STATE" ] && BC=$GREEN
 
-    PS1="${PS1} ${ini}${RVM}${separator}${BC}${GITBRANCH}${NC}${STATE}${end}"
+    PS1="${PS1} ${BC}${GITBRANCH}${NC}${STATE}${end}"
   else
     PS1="${PS1} ${ini}${RVM}${end}"
   fi

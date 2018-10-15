@@ -18,12 +18,16 @@ export GREP_COLOR="1;33;40"
 export CLICOLOR=1
 # export LSCOLORS=gxBxhxDxfxhxhxhxhxcxcx
 
-export HOMEBREW_GITHUB_API_TOKEN=17fe46fc9c7be164148ef698cd0bddbaca6aabc3
-
 # android sdk
 export ANDROID_HOME=/usr/local/opt/android-sdk
 
 BREW_PREFIX=$(brew --prefix)
+
+# go root
+if [ -d $BREW_PREFIX ]; then
+  export GOROOT=$BREW_PREFIX/Cellar/go/1.10.3/libexec
+fi
+export GOPATH=$HOME/go
 
 # PATH
 export PATH=/usr/local/bin:$PATH
@@ -41,30 +45,23 @@ export PATH=`echo $PATH | tr ':' '\n' | uniq | tr '\n' ':'`
 # Homebrew
 # source $BREW_PREFIX/Library/Contributions/brew_bash_completion.sh
 
-# go root
-if [ -d $BREW_PREFIX ]; then
-  export GOROOT=$BREW_PREFIX/Cellar/go/1.2.2/libexec
-fi
-export GOPATH=$HOME/go
-
 # load bash completion from brew
 [ -f $BREW_PREFIX/etc/bash_completion ] && source $BREW_PREFIX/etc/bash_completion
-
-# load git awesomeness
-[ -f $BREW_PREFIX/etc/bash_completion.d/git-completion.bash ] && source $BREW_PREFIX/etc/bash_completion.d/git-completion.bash
-[ -f $BREW_PREFIX/etc/bash_completion.d/git-prompt.sh ] && source $BREW_PREFIX/etc/bash_completion.d/git-prompt.sh
-
-# load android adb
-[ -f $BREW_PREFIX/etc/bash_completion.d/adb-completion.bash ] && source $BREW_PREFIX/etc/bash_completion.d/adb-completion.bash
-
-# go lang completion
-[ -f $BREW_PREFIX/etc/bash_completion.d/go-completion.bash ] && source $BREW_PREFIX/etc/bash_completion.d/go-completion.bash
 
 # load ack completion
 [ -f $DOTFILES_PATH/ack_completion ] && [[ " $(brew list) " =~ " ack " ]] && source $DOTFILES_PATH/ack_completion
 
-# pow completion
-[ -f $BREW_PREFIX/etc/pow_completion ] && complete -C $DOTFILES_PATH/pow_completion -o default pow
+# google cloud
+google_cloud_path=$BREW_PREFIX/Caskroom/google-cloud-sdk/latest/google-cloud-sdk
+[ -f $google_cloud_path/path.bash.inc ] && source $google_cloud_path/path.bash.inc
+[ -f $google_cloud_path/completion.bash.inc ] && source $google_cloud_path/completion.bash.inc
+
+# bash completion files
+if [ -d ${BREW_PREFIX}/etc/bash_completion.d ]; then
+  for file in `\ls ${BREW_PREFIX}/etc/bash_completion.d`; do
+    [ -e "${BREW_PREFIX}/etc/bash_completion.d/${file}" ] && source "${BREW_PREFIX}/etc/bash_completion.d/${file}";
+  done
+fi
 
 ################################################################################
 # Aliases
@@ -112,9 +109,6 @@ alias emptytrash="sudo rm -rfv /Volumes/*/.Trashes; sudo rm -rfv ~/.Trash; sudo 
 # Functions
 ################################################################################
 
-# reload source
-reload () { source ~/.bash_profile; }
-
 # open man page in Preview
 man2pdf () { man -t $* | open -f -a Preview; }
 
@@ -125,107 +119,6 @@ show_downloads() {
 
 clear_downloads() {
   sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'
-}
-
-# pow
-pow () {
-  case $1 in
-    about)
-      open "http://pow.cx";;
-    app)
-      local pow_app=`pwd`;
-      case $2 in
-        delete)
-          if [ -z "$3" ]; then
-            rm -i ~/.pow/$3
-          else
-            rm -i ~/.pow/$pow_app
-          fi;;
-        list)
-          ls -la ~/.pow/;;
-        new)
-          ln -sf $pow_app ~/.pow/${pow_app##*/}
-          ls -lA ~/.pow/ | grep ${pow_app##*/}
-        ;;
-        restart)
-          echo "restarting app..."
-          touch tmp/restart.txt;;
-        *)
-          echo "App info"
-          echo $pow_app;;
-      esac;;
-    powrc)
-      case $2 in
-        show)
-          if [ -f .powrc ]; then
-            _style_colorize ".powrc contents" 33
-            cat .powrc
-          else
-            _style_colorize ".powrc not found" 31
-          fi
-          ;;
-        write)
-          cp $DOTFILES_PATH/powrc_base .powrc
-          _style_colorize ".powrc contents" 32
-          cat .powrc
-          ;;
-      esac
-      ;;
-    endpoint)
-      curl -H host:pow localhost/status.json
-      echo;;
-    log)
-      local pow_app=$(basename `pwd`);
-      case $2 in
-        access)
-          tail -f ~/Library/Logs/Pow/access.log
-          ;;
-        app)
-          tail -f ~/Library/Logs/Pow/apps/${pow_app}.log
-          ;;
-        all|* )
-          tail -f ~/Library/Logs/Pow/access.log ~/Library/Logs/Pow/apps/${pow_app}.log
-          ;;
-      esac
-      ;;
-    manual)
-      open "http://pow.cx/manual.html";;
-    portproxy)
-      echo $2 > ~/.pow/$3;;
-    restart)
-      echo "restarting Pow..."
-      touch ~/.pow/restart.txt;;
-    rvm)
-      if [ ! -f .ruby-version ] || [ ! -f .ruby-gemset ]; then
-        _style_colorize "Creating rvm files" 33
-        rvm use $(cat .rvmrc.example | grep @ | awk -F' ' '{ print $2 }') --ruby-version --create
-      else
-        _style_colorize ".ruby-version contents" 33
-        cat .ruby-version
-        _style_colorize ".ruby-gemset contents" 33
-        cat .ruby-gemset
-      fi
-      ;;
-    uninstall)
-      curl get.pow.cx/uninstall.sh | sh;;
-    upgrade)
-      curl get.pow.cx | sh;;
-    help|*)
-      echo "Pow Rack Server:
-      about
-      endpoint
-      help
-      log
-        access all app
-      manual
-      portproxy
-        pow portproxy port# appname
-      powrc
-        show write
-      restart
-      upgrade
-      uninstall";;
-  esac
 }
 
 # iso to img using hdiutil
@@ -243,6 +136,6 @@ _battery_status () {
 }
 
 _archey () {
-  archey --color
+  archey --color --offline
 }
 _archey

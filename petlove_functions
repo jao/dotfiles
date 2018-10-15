@@ -6,3 +6,26 @@ petlove-ssh() {
   ./ssh-config-builder/create_ssh_config.rb 2>&1;
   cd - 2>&1 1> /dev/null;
 }
+
+beagle-web () { csshX beagle-web-prod-sp-h2-[1-"${@:-4}"] --screen 2; }
+beagle-worker () { csshX beagle-wrk-prod-sp-h2-[1-"${@:-2}"] --screen 2; }
+
+petdev ()  { [ `kubectl config current-context` != "gcloud-dev" ] && kubectl config use-context gcloud-dev; }
+petstag () { [ `kubectl config current-context` != "gcloud-staging" ] && kubectl config use-context gcloud-staging; }
+petprod () { [ `kubectl config current-context` != "gcloud-production" ] && kubectl config use-context gcloud-production; }
+
+gpdev ()   { petdev; kubectl get pods | grep "$1"; }
+gpalpha () { petdev; kubectl -n alpha get pods | grep "$1"; }
+gpstag ()  { petstag; kubectl -n staging get pods | grep "$1"; }
+gpprod ()  { petprod; kubectl -n production get pods | grep "$1"; }
+
+logdev()   { petdev; kubectl logs "$1"; }
+logalpha() { petdev; kubectl logs "$1" -n alpha; }
+logstag()  { petstag; kubectl logs "$1" -n staging; }
+logprod()  { petprod; kubectl logs "$1" -n production; }
+
+exedev ()   { petdev; kubectl exec -it "$1" bash; }
+exealpha () { petdev; kubectl exec -it "$1" bash -n alpha; }
+exestag ()  { petstag; kubectl exec -it "$1" bash -n staging; }
+exeprod ()  { petprod; kubectl exec -it "$1" bash -n production; }
+
