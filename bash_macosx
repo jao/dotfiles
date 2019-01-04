@@ -36,7 +36,6 @@ export PATH=$PATH:${DOTFILES_PATH}/scripts            # dotfiles scripts
 export PATH=$PATH:${ANDROID_HOME}/tools               # android sdk
 export PATH=$PATH:${GOROOT}/libexec/bin:${GOPATH}/bin # go lang
 export PATH=$PATH:/usr/local/heroku/bin               # heroku
-export PATH=$PATH:$HOME/.rvm/bin                      # rvm
 
 [ -d $BREW_PREFIX ] && export PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
 
@@ -68,11 +67,7 @@ fi
 ################################################################################
 
 # editor related shortcuts
-if [[ -s "$HOME/.rvm/scripts/rvm" ]]; then
-  alias ls="ls --color"
-else
-  alias ls="ls -G"
-fi
+alias ls="ls --color"
 
 alias v="mvim"
 

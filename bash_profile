@@ -27,7 +27,6 @@ export HISTSIZE=10000
 export PATH=/usr/local/bin:$PATH
 export PATH=$PATH:/usr/local/sbin:/bin:/sbin:/usr/bin:/usr/sbin:~/bin:/usr/X11/bin
 [ -d "${DOTFILES_PATH}/scripts" ] && export PATH=$PATH:${DOTFILES_PATH}/scripts
-[ -d "$HOME/.rvm" ] && export PATH=$PATH:$HOME/.rvm/bin
 export PATH=`echo $PATH | tr ':' '\n' | uniq | tr '\n' ':'`
 
 export GOROOT=
@@ -119,11 +118,6 @@ set convert-meta off
 # projects completion
 [ -f $DOTFILES_PATH/project_completion ] && complete -C $DOTFILES_PATH/project_completion -o default pcd
 
-# Load RVM into a shell session *as a function*
-[[ -s $HOME/.rvm/scripts/rvm ]] && source $HOME/.rvm/scripts/rvm
-
-# load rvm stuff
-[ -d $HOME/.rvm ] && source $HOME/.rvm/scripts/completion
 
 # load asdf stuff
 [ -d $HOME/.asdf ] && source $HOME/.asdf/asdf.sh

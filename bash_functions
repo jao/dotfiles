@@ -129,6 +129,18 @@ clean_asl_logs () { sudo rm -f /private/var/log/asl/*.asl; }
 
 fill_ebignore_docker () { ls -Ap | sort -u | grep -vE '.ebextensions|Dockerrun.aws.json' > .ebignore; }
 
+_find_tool_versions_file () {
+  local INITIAL_DIR=$PWD;
+  while [[ $PWD != / ]]; do
+    if [ -f .tool-versions ]; then
+      cat .tool-versions
+      break;
+    fi
+    builtin cd ..;
+  done
+  builtin cd $INITIAL_DIR;
+}
+
 # Colors
 BLUE="\[\e[0;34m\]"
 CYAN="\[\e[0;36m\]"
@@ -147,38 +159,25 @@ NC="\[\e[0m\]" # no color
 export GIT_PS1_SHOWDIRTYSTATE=1
 _my_prompt () {
   local last_command=$?
-  # basic variables
-  local STATE=''; local RVM=''; local STATUS=''; local ini=''; local end='';
+  local STATE=''; local ASDF=''; local STATUS=''; local ini=''; local end='';
   local BC=$GREEN # base color
 
-  # battery=$(ioreg -l | awk '$3~/Capacity/{c[$3]=$5}END{OFMT="%.2f%";max=c["\"MaxCapacity\""];print(max>0?100*c["\"CurrentCapacity\""]/max:"?")}')
-  # battery=$(pmset -g batt)
-
-  DATERIGHT=$(($COLUMNS + 8))
+  DATERIGHT=$(($COLUMNS + 1))
   HEADLINE=$(printf "%-${DATERIGHT}s %s" "${YELLOW_BOLD}\u${NC}|${GREEN_BOLD}\h${NC}" "${GRAY}\D{%d/%m/%Y} \t${NC}")
   PS1="$HEADLINE\n$BLUE_BOLD\w$NC" # basic ps1
 
+  # ASDF related
+  [ -d $HOME/.asdf ] && ASDF=`_find_tool_versions_file | awk '{ print $1":"$2; }'`;
+  [ "$ASDF" != "" ] && PS1="${PS1} "${CYAN}`echo -e ${ASDF}`${NC}"";
+
   if [[ `pwd` =~ /petlove/ ]]; then
     kube_context=$(kubectl config current-context &2> /dev/null)
-    PS1="${PS1} ${PINK}${kube_context}${NC}"
+    [ "$kube_context" != "" ] && PS1="${PS1} ${PINK}${kube_context}${NC}";
   fi
-
-  if [ -f ~/.rvm/bin/rvm-prompt ]; then
-    local RVM_STRING=$(~/.rvm/bin/rvm-prompt v g)
-    local RVM_RUBY=${RVM_STRING%%@*}
-    local RVM_GEMSET=${RVM_STRING##*@}
-    [ "$RVM_RUBY" == "$RVM_GEMSET" ] && RVM_GEMSET=""
-    RVM="${CYAN}${RVM_RUBY}${NC}" # rvm ruby
-    [ "$RVM_GEMSET" != "" ] && RVM="$RVM@${GRAY_BOLD}${RVM_GEMSET}${NC}"
-  fi
-
-  # ruby
-  [ "$RVM" != "" ] && PS1="${PS1} ${RVM}";
 
   local GITBRANCH=`git branch 2>&1 | grep \* | sed 's/* //'`
   # local GITBRANCH=`__git_ps1 "%s" | awk '{print $1;}'`
   if [ "$GITBRANCH" != "" ]; then
-    # delimiters
     ini=""; end=""; separator=" "
 
     local BEHIND="Your branch is behind"
@@ -202,15 +201,10 @@ _my_prompt () {
       BC=$YELLOW; STATE="${STATE}${YELLOW}+${NC}"
     fi
 
-    if [[ "$STATUS" =~ "$UNTRACKED" ]]; then
-      STATE="${STATE}${CYAN}?${NC}"
-    fi
+    [[ "$STATUS" =~ "$UNTRACKED" ]] && STATE="${STATE}${CYAN}?${NC}";
 
     [ -z "$STATE" ] && BC=$GREEN
-
     PS1="${PS1} ${BC}${GITBRANCH}${NC}${STATE}${end}"
-  else
-    PS1="${PS1} ${ini}${RVM}${end}"
   fi
 
   if [[ $last_command == 0 ]]; then
