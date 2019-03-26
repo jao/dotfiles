@@ -1,9 +1,16 @@
-if [ -d /Volumes/Lacie/Pictures ]; then
-  #  --del --delete-excluded
-  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs ~/Pictures/ /Volumes/LaCie/Pictures/ --exclude '.DS_Store'
+#!/bin/sh
+
+if [ -d /Volumes/Lacie/Pictures -a -w /Volumes/Lacie/Pictures ]; then
+  echo -e "\033[0;33mBackup from hdd to Lacie disk\033[0m";
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 ~/Pictures/ /Volumes/LaCie/Pictures/ --exclude '.DS_Store';
 fi
 
-if [ -d /Volumes/Backup/pictures ]; then
-  #  --del --delete-excluded
-  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs ~/Pictures/2016 /Volumes/Backup/pictures/2016 --exclude '.DS_Store'
+if [ -d /Volumes/Backup/Pictures -a -w /Volumes/Backup/Pictures ]; then
+  echo "\033[0;33mBackup from hdd to Seagate disk\033[0m";
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 ~/Pictures/ /Volumes/Backup/Pictures/ --exclude '.DS_Store';
+fi
+
+if [[ -d /Volumes/Lacie/Pictures && -d /Volumes/Backup/Pictures ]]; then
+  echo -e "\033[0;33m\]Backup from Lacie disk to Seagate disk\033[0m";
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 /Volumes/Lacie/Pictures/ /Volumes/Backup/Pictures/ --exclude '.DS_Store';
 fi
