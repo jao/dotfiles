@@ -6,7 +6,6 @@ cache/
 .rvmrc
 .ruby-version
 .ruby-gemset
-.tool-versions
 .powrc
 .powenv
 
