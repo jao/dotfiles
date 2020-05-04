@@ -1,0 +1,31 @@
+#!/bin/sh
+
+if [ -d /Volumes/Files/projects -a -w /Volumes/Files/projects ]; then
+  echo "\033[0;33mBackup from hdd to Files disk\033[0m";
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 ~/projects/ /Volumes/Files/projects/ --exclude '.DS_Store';
+fi
+
+if [ -d /Volumes/Lacie/projects -a -w /Volumes/Lacie/projects ]; then
+  echo "\033[0;33mBackup from hdd to Lacie disk\033[0m";
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 ~/projects/ /Volumes/LaCie/projects/ --exclude '.DS_Store';
+fi
+
+if [ -d /Volumes/Backup/projects -a -w /Volumes/Backup/projects ]; then
+  echo "\033[0;33mBackup from hdd to Backup disk\033[0m";
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 ~/projects/ /Volumes/Backup/projects/ --exclude '.DS_Store';
+fi
+
+if [[ -d /Volumes/Files/projects && -d /Volumes/LaCie/projects ]]; then
+  echo "\033[0;33mBackup from Files disk to LaCie disk \033[0m";
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 /Volumes/Files/projects/ /Volumes/LaCie/projects/ --exclude '.DS_Store';
+fi
+
+if [[ -d /Volumes/Files/projects && -d /Volumes/Backup/projects ]]; then
+  echo "\033[0;33mBackup from Files disk to Backup disk\033[0m";
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 /Volumes/Files/projects/ /Volumes/Backup/projects/ --exclude '.DS_Store';
+fi
+
+if [[ -d /Volumes/Lacie/projects && -d /Volumes/Backup/projects ]]; then
+  echo "\033[0;33mBackup from Lacie disk to Backup disk\033[0m";
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 /Volumes/Lacie/projects/ /Volumes/Backup/projects/ --exclude '.DS_Store';
+fi

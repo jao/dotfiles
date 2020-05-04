@@ -35,4 +35,6 @@
 --ignore-dir=cover
 --ignore-dir=deps
 --ignore-dir=tmp
-
+--ignore-dir=dist
+--ignore-dir=test
+--ignore-dir=priv

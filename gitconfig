@@ -1,7 +1,7 @@
 [user]
 	name = joao paulo
   email = jpcamargo+github@gmail.com
-	signingkey = 37679CDD
+	signingkey = D2C80241A2E654AD
 [diff]
   color = true
 [color]
@@ -63,7 +63,8 @@
 	# Undo a `git push`
 	undopush = push -f origin HEAD^:master
 [mergetool "Kaleidoscope"]
-  cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
+  cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+  # trustexitcode = true
 [mergetool]
   prompt = false
 [merge]

@@ -1,16 +1,31 @@
 #!/bin/sh
 
+if [ -d /Volumes/Files/Pictures -a -w /Volumes/Files/Pictures ]; then
+  echo "\033[0;33mBackup from hdd to Files disk\033[0m";
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 ~/Pictures/ /Volumes/Files/Pictures/ --exclude '.DS_Store';
+fi
+
 if [ -d /Volumes/Lacie/Pictures -a -w /Volumes/Lacie/Pictures ]; then
-  echo -e "\033[0;33mBackup from hdd to Lacie disk\033[0m";
+  echo "\033[0;33mBackup from hdd to Lacie disk\033[0m";
   rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 ~/Pictures/ /Volumes/LaCie/Pictures/ --exclude '.DS_Store';
 fi
 
 if [ -d /Volumes/Backup/Pictures -a -w /Volumes/Backup/Pictures ]; then
-  echo "\033[0;33mBackup from hdd to Seagate disk\033[0m";
+  echo "\033[0;33mBackup from hdd to Backup disk\033[0m";
   rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 ~/Pictures/ /Volumes/Backup/Pictures/ --exclude '.DS_Store';
 fi
 
+if [[ -d /Volumes/Files/Pictures && -d /Volumes/LaCie/Pictures ]]; then
+  echo "\033[0;33mBackup from Files disk to LaCie disk \033[0m";
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 /Volumes/Files/Pictures/ /Volumes/LaCie/Pictures/ --exclude '.DS_Store';
+fi
+
+if [[ -d /Volumes/Files/Pictures && -d /Volumes/Backup/Pictures ]]; then
+  echo "\033[0;33mBackup from Files disk to Backup disk\033[0m";
+  rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 /Volumes/Files/Pictures/ /Volumes/Backup/Pictures/ --exclude '.DS_Store';
+fi
+
 if [[ -d /Volumes/Lacie/Pictures && -d /Volumes/Backup/Pictures ]]; then
-  echo -e "\033[0;33m\]Backup from Lacie disk to Seagate disk\033[0m";
+  echo "\033[0;33mBackup from Lacie disk to Backup disk\033[0m";
   rsync --archive --update --recursive --progress --human-readable --prune-empty-dirs --info=progress2 /Volumes/Lacie/Pictures/ /Volumes/Backup/Pictures/ --exclude '.DS_Store';
 fi
